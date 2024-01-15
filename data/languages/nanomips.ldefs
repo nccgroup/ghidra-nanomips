@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- See Relax specification: Ghidra/Framework/SoftwareModeling/data/languages/language_definitions.rxg -->
+
+<language_definitions>
+<!-- Uncomment the following to make the language available in Ghidra -->
+
+   <language processor="Nanomips"
+            endian="little"
+            size="32"
+            variant="default"
+            version="1.0"
+            slafile="nanomips.sla"
+            processorspec="nanomips.pspec"
+            id="nanomips:LE:32:default">
+    <description>Nanomips Language Module</description>
+    <compiler name="default" spec="nanomips.cspec" id="default"/>
+  </language> 
+
+</language_definitions>
