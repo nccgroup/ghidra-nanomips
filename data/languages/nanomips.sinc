@@ -1,6 +1,6 @@
 # sleigh include file for Skeleton language instructions
 
-define token instr(16)
+define token instrhi(16)
 	hi_pool10_6 = (10, 15)  # MAJOR / P32 / P16
 	hi_pool9_1 = (9, 9)
 	hi_pool8_1 = (8, 8)
@@ -26,7 +26,10 @@ define token instr(16)
 	rt3 = (7, 9)
 	rs3 = (4, 6)
 	
+	eu_imm7 = (0, 6)
+	;
 	
+define token instrlo(16)
 	lo_pool14_2 = (14, 15)
 	lo_pool12_4 = (12, 15)
 	lo_pool11_4 = (11, 14)
@@ -53,10 +56,7 @@ define token instr(16)
 	shift = (0, 4)
 	
 	rd = (11, 15)
-	
-	eu_imm7 = (0, 6)
 	;
-
 	
 define token data16(16)
 	hi_imm16 = (0, 15) signed
