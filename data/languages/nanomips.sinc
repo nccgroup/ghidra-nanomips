@@ -42,6 +42,7 @@ define token instr(16)
 	lo_pool6_1 = (6, 6)
 	lo_pool5_4 = (5, 8)
 	lo_pool5_1 = (5, 5)
+	lo_pool3_7 = (3, 9)
 	lo_pool3_3 = (3, 5)
 	lo_pool3_2 = (3, 4)
 	lo_pool1_1 = (1, 1)
@@ -60,6 +61,7 @@ define token instr(16)
 define token data16(16)
 	hi_imm16 = (0, 15) signed
 	lo_imm16 = (0, 15)
+	uimm16 = (0, 15)
 	;
 
 attach variables [ rt rs rd ] [
@@ -158,8 +160,24 @@ attach variables [ rt3 rs3 ] [
 # cc2: "C"             is bits3_3=0x7                              { c:1 = $(C_flag); export c; }
 # ################################################################
 
+# ADD
+## ADD rd, rs, rt
+:ADD rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0100010 & lo_pool0_3 = 0b000 {
+	rd = rs + rt;
+	# TODO: trap on overflow
+	# TODO: sign extend?
+}
 
-# LI[16]
+# ADDIU rt, rs, imm
+
+## ADDIU[32]
+#:ADDIU rt, rs, uimm16 is hi_pool10_6 = 0b000000 & rt != 0 & rs; uimm16 {
+#	rt = rs + uimm16;
+#}
+
+
+# LI
+## LI[16]
 :LI rt3, s is hi_pool10_6 = 0b110100 & rt3 & eu_imm7 = 127 [s = -1;] {
 	rt3 = s;
 }
@@ -168,10 +186,10 @@ attach variables [ rt3 rs3 ] [
 	rt3 = eu_imm7;
 } 
 
-# LI[48]
-# TODO: is signedness maintained correctly?
+## LI[48]
 :LI rt, s32 is hi_pool10_6 = 0b011000 & rt & hi_pool0_5 = 0b00000; lo_imm16; hi_imm16 [s32 = (hi_imm16 << 16) | lo_imm16;] {
 	rt = s32;
+	# TODO: is signedness maintained correctly?
 }
 
 
