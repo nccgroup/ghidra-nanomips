@@ -1,3 +1,6 @@
+# Compiled sla file
+*.sla
+
 .metadata
 bin/
 tmp/
