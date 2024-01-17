@@ -233,4 +233,10 @@ attach variables [ rt3 rs3 ] [
 	rt3 = rs3 ^ rt3;
 }
 
+# MOVE
+## MOVE rt, rs
+:MOVE rt, rs is hi_pool10_6 = 0b000100 & rt & rs {
+	rt = rs;
+}
+
 
