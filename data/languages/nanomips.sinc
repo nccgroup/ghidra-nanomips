@@ -35,6 +35,9 @@ define token instrhi(16)
 	
 	hi_simm4_1 = (4, 4)
 	hi_simm0_3 = (0, 2)
+	u_imm5 = (0, 4)
+	eu_imm4 = (0, 3)
+	u_imm4 = (0, 3)
 	;
 	
 define token instrlo(16)
@@ -67,6 +70,7 @@ define token instrlo(16)
 	rd = (11, 15)
 	
 	lo_uimm0_12 = (0, 11)
+	u_imm12 = (0, 11)
 	;
 	
 define token data16(16)
@@ -279,6 +283,19 @@ attach variables [ rt3 rs3 ] [
 	rt3 = rs3 & rt3;
 }
 
+# ANDI
+## ANDI rt, rs, u
+:ANDI rt, rs, u_imm12 is hi_pool10_6 = 0b100000 & rt & rs; lo_pool12_4 = 0b0010 & u_imm12 {
+	rt = rs & u_imm12;
+}
+
+# ANDI16
+## ANDI16 rt, rs, u
+:ANDI rt3, rs3, eu_imm4 is hi_pool10_6 = 0b111100 & rt3 & rs3 & eu_imm4 {
+	rt3 = rs3 & eu_imm4;
+}
+
+
 # OR
 ## OR rd, rs, rt
 :OR rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b1010010 & lo_pool0_3 = 0b000 {
@@ -306,6 +323,24 @@ attach variables [ rt3 rs3 ] [
 ## XOR[16]
 :XOR rt3, rs3 is hi_pool10_6 = 0b010100 & rt3 & rs3 & hi_pool2_2 = 0b01 & hi_pool1_1 = 0 & hi_pool0_1 = 0 {
 	rt3 = rs3 ^ rt3;
+}
+
+# LW
+## LW rt, offset(rs)
+:LW rt, u_imm12(rs) is hi_pool10_6 = 0b100001 & rt & rs; lo_pool12_4 = 0b1000 & u_imm12 {
+	rt = *(rs + u_imm12); # TODO: currently updating this to be correct, this is not correct atm
+}
+
+# LW16
+## LW16 rt3, offset(rs3)
+:LW rt3, u_imm4(rs3) is hi_pool10_6 = 0b000101 & rt3 & rs3 & u_imm4 {
+	rt3 = *(rs3 + u_imm4); # TODO: currently updating this to be correct, this is not correct atm
+}
+
+# LW[SP]
+## LW rt, offset(sp)
+:LW rt, off(sp) is hi_pool10_6 = 0b001101 & rt & u_imm5 & sp [off = (u_imm5 * 4);] {
+	rt = *(sp + off); # TODO: update this to point to certain regions of space (i.e. ram, etc.), this syntax is seemingly wrong
 }
 
 # MOVE
