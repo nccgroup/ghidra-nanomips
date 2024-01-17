@@ -27,6 +27,13 @@ define token instrhi(16)
 	rs3 = (4, 6)
 	
 	eu_imm7 = (0, 6)
+	hi_uimm0_2 = (0, 1)
+	hi_uimm0_5 = (0, 4)
+	hi_uimm0_6 = (0, 5)
+	hi_uimm0_3 = (0, 2)
+	
+	hi_simm4_1 = (4, 4)
+	hi_simm0_3 = (0, 2)
 	;
 	
 define token instrlo(16)
@@ -57,12 +64,16 @@ define token instrlo(16)
 	shift = (0, 4)
 	
 	rd = (11, 15)
+	
+	lo_uimm0_12 = (0, 11)
 	;
 	
 define token data16(16)
 	hi_imm16 = (0, 15) signed
 	lo_imm16 = (0, 15)
 	uimm16 = (0, 15)
+	uimm2_14 = (2, 15)
+	uimm0_2 = (0, 1)
 	;
 
 attach variables [ rt rs rd ] [
@@ -161,8 +172,7 @@ attach variables [ rt3 rs3 ] [
 # cc2: "C"             is bits3_3=0x7                              { c:1 = $(C_flag); export c; }
 # ################################################################
 
-# ADD
-## ADD rd, rs, rt
+# ADD rd, rs, rt
 :ADD rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0100010 & lo_pool0_3 = 0b000 {
 	rd = rs + rt;
 	# TODO: trap on overflow
@@ -170,12 +180,68 @@ attach variables [ rt3 rs3 ] [
 }
 
 # ADDIU rt, rs, imm
-
 ## ADDIU[32]
-#:ADDIU rt, rs, uimm16 is hi_pool10_6 = 0b000000 & rt != 0 & rs; uimm16 {
-#	rt = rs + uimm16;
-#}
+# TODO: rt != 0 constraint doesn't work here
+:ADDIU rt, rs, uimm16 is hi_pool10_6 = 0b000000 & rt & rs; uimm16 {
+	rt = rs + uimm16;
+}
 
+## ADDIU[48]
+:ADDIU rt, rs, s32 is hi_pool10_6 = 0b011000 & rt & hi_pool0_5 = 0b00001; lo_imm16; hi_imm16
+	[rs = rt; s32 = (hi_imm16 << 16) | lo_imm16;] {
+	# TODO signedness
+	rt = rs + s32;
+}
+
+## ADDIU[GP48]
+# TODO: not available in P64 mode
+:ADDIU rt, rs, s32 is hi_pool10_6 = 0b011000 & rt & hi_pool0_5 = 0b00010; lo_imm16; hi_imm16
+	[rs = gp; s32 = (hi_imm16 << 16) | lo_imm16;] {
+	# TODO signedness
+	# rs = $r28 = gp
+	rt = rs + s32;
+}
+
+## ADDIU[GP.B]
+# TODO: not available in P64 mode
+:ADDIU rt, rs, u18 is hi_pool10_6 = 0b010001 & rt & hi_pool2_3 = 0b011 & hi_uimm0_2; uimm16
+	[rs = gp; u18 = (hi_uimm0_2 << 16) | uimm16;] {
+	rt = rs + u18;
+}
+
+## ADDIU[GP.W]
+# TODO: not available in P64 mode
+:ADDIU rt, rs, u21 is hi_pool10_6 = 0b010000 & rt & hi_uimm0_5; uimm2_14 & uimm0_2 = 0b00
+	[rs = gp; u21 = (hi_uimm0_5 << 18) | (uimm2_14 << 2);] {
+	rt = rs + u21;
+}
+
+## ADDIU[R1.SP]
+# TODO: not available in P64 mode
+:ADDIU rt3, rs, u8 is hi_pool10_6 = 0b011100 & rt3 & hi_pool6_1 = 0b1 & hi_uimm0_6
+	[rs = sp; u8 = hi_uimm0_6 << 2;] {
+		rt3 = rs + u8;
+}
+
+## ADDIU[R2]
+:ADDIU rt3, rs3, u5 is hi_pool10_6 = 0b100100 & rt3 & rs3 & hi_pool3_1 = 0b0 & hi_uimm0_3
+	[u5 = hi_uimm0_3 << 2;] {
+		rt3 = rs3 + u5;
+}
+
+## ADDIU[RS5]
+# TODO: rt != 0 constraint doesn't work here
+# TODO: ADDIU[RS5] with rt=0 is used to provide a 16 bit NOP instruction.
+:ADDIU rt, rs, s4 is hi_pool10_6 = 0b100100 & rt & hi_simm4_1 & hi_pool3_1 = 0b1 & hi_simm0_3
+	[rs = rt; s4 = (hi_simm4_1 << 3) | hi_simm0_3;] {
+	rt = rs + s4;
+	# TODO s4 is signed
+}
+
+## ADDIU[NEG]
+:ADDIU rt, rs, lo_uimm0_12 is hi_pool10_6 = 0b100000 & rt & rs; lo_pool12_4 = 0b1000 & lo_uimm0_12 {
+	rt = rs - lo_uimm0_12;
+}
 
 # LI
 ## LI[16]
