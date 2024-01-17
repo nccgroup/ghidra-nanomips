@@ -21,6 +21,7 @@ define token instrhi(16)
 	u4_1 = (0, 4)  # u[4:1] - naming convention conflict
 	
 	rt = (5, 9)
+	rs_from_rt = (5, 9)  # :'(
 	rs = (0, 4)
 	
 	rt3 = (7, 9)
@@ -76,7 +77,7 @@ define token data16(16)
 	uimm0_2 = (0, 1)
 	;
 
-attach variables [ rt rs rd ] [
+attach variables [ rt rs rs_from_rt rd ] [
 	zero
 	at
 	t4 t5
@@ -187,10 +188,10 @@ attach variables [ rt3 rs3 ] [
 }
 
 ## ADDIU[48]
-:ADDIU rt, rs, s32 is hi_pool10_6 = 0b011000 & rt & hi_pool0_5 = 0b00001; lo_imm16; hi_imm16
-	[rs = rt; s32 = (hi_imm16 << 16) | lo_imm16;] {
+:ADDIU rt, rs_from_rt, s32 is hi_pool10_6 = 0b011000 & rt & rs_from_rt & hi_pool0_5 = 0b00001; lo_imm16; hi_imm16
+	[s32 = (hi_imm16 << 16) | lo_imm16;] {
 	# TODO signedness
-	rt = rs + s32;
+	rt = rs_from_rt + s32;
 }
 
 ## ADDIU[GP48]
@@ -234,9 +235,9 @@ attach variables [ rt3 rs3 ] [
 :NOP is hi_pool10_6 = 0b100100 & rt = 0 & hi_simm4_1 & hi_pool3_1 = 0b1 & hi_simm0_3 {}
 
 # TODO: rt != 0 constraint doesn't work here (OK with NOP rule?)
-:ADDIU rt, rs, s4 is hi_pool10_6 = 0b100100 & rt & hi_simm4_1 & hi_pool3_1 = 0b1 & hi_simm0_3
-	[rs = rt; s4 = (hi_simm4_1 << 3) | hi_simm0_3;] {
-	rt = rs + s4;
+:ADDIU rt, rs_from_rt, s4 is hi_pool10_6 = 0b100100 & rt & rs_from_rt & hi_simm4_1 & hi_pool3_1 = 0b1 & hi_simm0_3
+	[s4 = (hi_simm4_1 << 3) | hi_simm0_3;] {
+	rt = rs_from_rt + s4;
 	# TODO s4 is signed
 }
 
