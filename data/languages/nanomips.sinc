@@ -196,32 +196,32 @@ attach variables [ rt3 rs3 ] [
 
 ## ADDIU[GP48]
 # TODO: not available in P64 mode
-:ADDIU rt, rs, s32 is hi_pool10_6 = 0b011000 & rt & hi_pool0_5 = 0b00010; lo_imm16; hi_imm16
-	[rs = gp; s32 = (hi_imm16 << 16) | lo_imm16;] {
+:ADDIU rt, "gp", s32 is hi_pool10_6 = 0b011000 & rt & hi_pool0_5 = 0b00010; lo_imm16; hi_imm16
+	[s32 = (hi_imm16 << 16) | lo_imm16;] {
 	# TODO signedness
 	# rs = $r28 = gp
-	rt = rs + s32;
+	rt = gp + s32;
 }
 
 ## ADDIU[GP.B]
 # TODO: not available in P64 mode
-:ADDIU rt, rs, u18 is hi_pool10_6 = 0b010001 & rt & hi_pool2_3 = 0b011 & hi_uimm0_2; uimm16
-	[rs = gp; u18 = (hi_uimm0_2 << 16) | uimm16;] {
-	rt = rs + u18;
+:ADDIU rt, "gp", u18 is hi_pool10_6 = 0b010001 & rt & hi_pool2_3 = 0b011 & hi_uimm0_2; uimm16
+	[u18 = (hi_uimm0_2 << 16) | uimm16;] {
+	rt = gp + u18;
 }
 
 ## ADDIU[GP.W]
 # TODO: not available in P64 mode
-:ADDIU rt, rs, u21 is hi_pool10_6 = 0b010000 & rt & hi_uimm0_5; uimm2_14 & uimm0_2 = 0b00
-	[rs = gp; u21 = (hi_uimm0_5 << 18) | (uimm2_14 << 2);] {
-	rt = rs + u21;
+:ADDIU rt, "gp", u21 is hi_pool10_6 = 0b010000 & rt & hi_uimm0_5; uimm2_14 & uimm0_2 = 0b00
+	[u21 = (hi_uimm0_5 << 18) | (uimm2_14 << 2);] {
+	rt = gp + u21;
 }
 
 ## ADDIU[R1.SP]
 # TODO: not available in P64 mode
-:ADDIU rt3, rs, u8 is hi_pool10_6 = 0b011100 & rt3 & hi_pool6_1 = 0b1 & hi_uimm0_6
-	[rs = sp; u8 = hi_uimm0_6 << 2;] {
-		rt3 = rs + u8;
+:ADDIU rt3, "sp", u8 is hi_pool10_6 = 0b011100 & rt3 & hi_pool6_1 = 0b1 & hi_uimm0_6
+	[u8 = hi_uimm0_6 << 2;] {
+		rt3 = sp + u8;
 }
 
 ## ADDIU[R2]
