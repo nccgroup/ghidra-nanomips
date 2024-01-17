@@ -206,7 +206,7 @@ attach variables [ rt3 rs3 ] [
 }
 
 ## AND[16]
-:AND rs3, rt3 is hi_pool10_6 = 0b010100 & rt3 & rs3 & hi_pool2_2 = 0b10 & hi_pool1_1 = 0 & hi_pool0_1 = 0 {
+:AND rt3, rs3 is hi_pool10_6 = 0b010100 & rt3 & rs3 & hi_pool2_2 = 0b10 & hi_pool1_1 = 0 & hi_pool0_1 = 0 {
 	rt3 = rs3 & rt3;
 }
 
@@ -217,7 +217,7 @@ attach variables [ rt3 rs3 ] [
 }
 
 ## OR[16]
-:OR rs3, rt3 is hi_pool10_6 = 0b010100 & rt3 & rs3 & hi_pool2_2 = 0b11 & hi_pool1_1 = 0 & hi_pool0_1 = 0 {
+:OR rt3, rs3 is hi_pool10_6 = 0b010100 & rt3 & rs3 & hi_pool2_2 = 0b11 & hi_pool1_1 = 0 & hi_pool0_1 = 0 {
 	rt3 = rs3 ^ rt3;
 }
 
@@ -229,7 +229,7 @@ attach variables [ rt3 rs3 ] [
 }
 
 ## XOR[16]
-:XOR rs3, rt3 is hi_pool10_6 = 0b010100 & rt3 & rs3 & hi_pool2_2 = 0b01 & hi_pool1_1 = 0 & hi_pool0_1 = 0 {
+:XOR rt3, rs3 is hi_pool10_6 = 0b010100 & rt3 & rs3 & hi_pool2_2 = 0b01 & hi_pool1_1 = 0 & hi_pool0_1 = 0 {
 	rt3 = rs3 ^ rt3;
 }
 
