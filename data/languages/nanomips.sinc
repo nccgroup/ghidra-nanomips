@@ -230,8 +230,10 @@ attach variables [ rt3 rs3 ] [
 }
 
 ## ADDIU[RS5]
-# TODO: rt != 0 constraint doesn't work here
-# TODO: ADDIU[RS5] with rt=0 is used to provide a 16 bit NOP instruction.
+### ADDIU[RS5] with rt=0 is used to provide a 16 bit NOP instruction.
+:NOP is hi_pool10_6 = 0b100100 & rt = 0 & hi_simm4_1 & hi_pool3_1 = 0b1 & hi_simm0_3 {}
+
+# TODO: rt != 0 constraint doesn't work here (OK with NOP rule?)
 :ADDIU rt, rs, s4 is hi_pool10_6 = 0b100100 & rt & hi_simm4_1 & hi_pool3_1 = 0b1 & hi_simm0_3
 	[rs = rt; s4 = (hi_simm4_1 << 3) | hi_simm0_3;] {
 	rt = rs + s4;
