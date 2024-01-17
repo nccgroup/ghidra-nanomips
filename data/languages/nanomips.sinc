@@ -291,6 +291,12 @@ attach variables [ rt3 rs3 ] [
 }
 
 
+# SIGRIE code
+# TODO: Signal Reserved Instruction Exception
+:SIGRIE code is hi_pool10_6 = 0b000000 & rt = 0 & hi_pool3_2 = 0b00 & hi_uimm0_3; uimm16
+	[code = (hi_uimm0_3 << 16) | uimm16;] unimpl
+
+
 # XOR
 ## XOR rd, rs, rt
 :XOR rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b1100010 & lo_pool0_3 = 0b000 {
