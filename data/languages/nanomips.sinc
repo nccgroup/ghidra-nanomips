@@ -48,6 +48,7 @@ define token instrlo(16)
 	lo_pool3_7 = (3, 9)
 	lo_pool3_3 = (3, 5)
 	lo_pool3_2 = (3, 4)
+	lo_pool2_2 = (2, 3)
 	lo_pool1_1 = (1, 1)
 	lo_pool0_3 = (0, 2)
 	lo_pool0_2 = (0, 1)
@@ -196,6 +197,40 @@ attach variables [ rt3 rs3 ] [
 # JRC
 :JRC rt is hi_pool10_6 = 0b110110 & rt & hi_pool4_1 = 0 & hi_pool0_4 = 0b0000 {
 	pc = rt;
+}
+
+# AND
+## AND rd, rs, rt
+:AND rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b1001010 & lo_pool0_3 = 0b000 {
+	rd = rs & rt;
+}
+
+## AND[16]
+:AND rs3, rt3 is hi_pool10_6 = 0b010100 & rt3 & rs3 & hi_pool2_2 = 0b10 & hi_pool1_1 = 0 & hi_pool0_1 = 0 {
+	rt3 = rs3 & rt3;
+}
+
+# OR
+## OR rd, rs, rt
+:OR rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b1010010 & lo_pool0_3 = 0b000 {
+	rd = rs | rt;
+}
+
+## OR[16]
+:OR rs3, rt3 is hi_pool10_6 = 0b010100 & rt3 & rs3 & hi_pool2_2 = 0b11 & hi_pool1_1 = 0 & hi_pool0_1 = 0 {
+	rt3 = rs3 ^ rt3;
+}
+
+
+# XOR
+## XOR rd, rs, rt
+:XOR rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b1100010 & lo_pool0_3 = 0b000 {
+	rd = rs ^ rt;
+}
+
+## XOR[16]
+:XOR rs3, rt3 is hi_pool10_6 = 0b010100 & rt3 & rs3 & hi_pool2_2 = 0b01 & hi_pool1_1 = 0 & hi_pool0_1 = 0 {
+	rt3 = rs3 ^ rt3;
 }
 
 
