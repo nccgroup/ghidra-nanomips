@@ -39,9 +39,11 @@ define token instrhi(16)
 	hi_uimm0_3 = (0, 2)
 	
 	hi_simm4_1 = (4, 4)
+	hi_simm1_9 = (1, 9)
 	hi_simm0_9 = (0, 8)
 	hi_simm0_5 = (0, 4)
 	hi_simm0_3 = (0, 2)
+	hi_simm0_1 = (0, 0)
 	u_imm5 = (0, 4)
 	eu_imm4 = (0, 3)
 	u_imm4 = (0, 3)
@@ -68,6 +70,7 @@ define token instrlo(16)
 	lo_pool3_2 = (3, 4)
 	lo_pool2_2 = (2, 3)
 	lo_pool1_1 = (1, 1)
+	lo_pool0_5 = (0, 4)
 	lo_pool0_3 = (0, 2)
 	lo_pool0_2 = (0, 1)
 	lo_pool0_1 = (0, 0)
@@ -86,7 +89,7 @@ define token data16(16)
 	uimm16 = (0, 15)
 	uimm2_14 = (2, 15)
 	uimm0_2 = (0, 1)
-	
+
 	lo_simm12_4 = (12, 15)
 	lo_simm2_10 = (2, 11)
 	lo_simm1_15 = (1, 15)
@@ -335,7 +338,6 @@ attach variables [ rt4x rs4x rd4x_from_rt4x ] [
 		pc = addr;
 }
 
-
 # LI
 ## LI[16]
 :LI rt3, s is hi_pool10_6 = 0b110100 & rt3 & eu_imm7 = 127 [s = -1;] {
@@ -428,10 +430,28 @@ attach variables [ rt4x rs4x rd4x_from_rt4x ] [
 	rt = *(sp + off); # TODO: update this to point to certain regions of space (i.e. ram, etc.), this syntax is seemingly wrong
 }
 
+# MOD
+## MOD rd, rs, rt
+:MOD rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0101011 & lo_pool0_3 = 0b000 {
+	rd = rs % rt;
+}
+
 # MOVE
 ## MOVE rt, rs
 :MOVE rt, rs is hi_pool10_6 = 0b000100 & rt & rs {
 	rt = rs;
+}
+
+# MUL
+## MUL rd, rs, rt
+:MUL rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0000011 & lo_pool0_3 = 0b000 {
+	rd = rs * rt;
+}
+
+# SRA
+## SRA rd, rs, shift
+:SRA rt, rs, lo_pool0_5 is hi_pool10_6 = 0b100000 & rt & rs; lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0100 & lo_pool0_5 {
+	rt = rs >> lo_pool0_5;
 }
 
 
@@ -453,6 +473,4 @@ attach variables [ rt4x rs4x rd4x_from_rt4x ] [
 :SW rt, off(sp) is hi_pool10_6 = 0b101101 & rt & u_imm5 & sp [off = (u_imm5 * 4);] {
 	*(sp + off) = rt; # TODO: update this to point to certain regions of space (i.e. ram, etc.), this syntax is seemingly wrong
 }
-
-
 
