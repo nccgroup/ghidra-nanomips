@@ -25,6 +25,10 @@ define token instrhi(16)
 	rs_from_rt = (5, 9)  # :'(
 	rs = (0, 4)
 	
+	c0s = (0, 4) # for MFC0
+
+	rt1 = (9, 9)
+
 	rt3 = (7, 9)
 	rs3 = (4, 6)
 	rd3 = (1, 3)
@@ -47,6 +51,7 @@ define token instrhi(16)
 	hi_simm0_1 = (0, 0)
 	u_imm5 = (0, 4)
 	eu_imm4 = (0, 3)
+	u_imm4_4 = (4, 7)
 	u_imm4 = (0, 3)
 	;
 	
@@ -66,10 +71,12 @@ define token instrlo(16)
 	lo_pool6_1 = (6, 6)
 	lo_pool5_4 = (5, 8)
 	lo_pool5_1 = (5, 5)
+	lo_pool3_9 = (3, 11)
 	lo_pool3_7 = (3, 9)
 	lo_pool3_3 = (3, 5)
 	lo_pool3_2 = (3, 4)
 	lo_pool2_2 = (2, 3)
+	lo_pool2_1 = (2, 2)
 	lo_pool1_1 = (1, 1)
 	lo_pool0_5 = (0, 4)
 	lo_pool0_3 = (0, 2)
@@ -80,6 +87,8 @@ define token instrlo(16)
 	
 	rd = (11, 15)
 	
+	sel = (11, 15) # for MFC0
+
 	lo_uimm0_12 = (0, 11)
 	u_imm12 = (0, 11)
 	;
@@ -431,6 +440,18 @@ attach variables [ rt4x rs4x rd4x_from_rt4x ] [
 	rt = *(sp + off); # TODO: update this to point to certain regions of space (i.e. ram, etc.), this syntax is seemingly wrong
 }
 
+# MFC0
+## MFC0 rt, c0s, sel
+:MFC0 rt, c0s, sel is hi_pool10_6 = 0b001000 & rt & c0s; sel & lo_pool3_7 = 0b0000110 & lo_pool0_3 = 0b000 {
+	#TODO: read register and sign extend
+}
+
+# MTC0
+## MTC0 rt, c0s, sel
+:MTC0 rt, c0s, sel is hi_pool10_6 = 0b001000 & rt & c0s; sel & lo_pool3_7 = 0b0001110 & lo_pool0_3 = 0b000 {
+	#TODO: read register and sign extend
+}
+
 # MOD
 ## MOD rd, rs, rt
 :MOD rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0101011 & lo_pool0_3 = 0b000 {
@@ -443,10 +464,30 @@ attach variables [ rt4x rs4x rd4x_from_rt4x ] [
 	rt = rs;
 }
 
+# MOVZ
+## MOVZ rd, rs, rt
+:MOVZ rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool10_1 = 0 & lo_pool3_7 = 0b1000010 & lo_pool0_3 = 0b000 {
+	#TODO: work out zero logic with rt
+	rd = rs;
+}
+
 # MUL
 ## MUL rd, rs, rt
 :MUL rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0000011 & lo_pool0_3 = 0b000 {
 	rd = rs * rt;
+}
+
+# NOR
+## NOR rd, rs, rt
+:NOR rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b1011010 & lo_pool0_3 = 0b000 {
+	rt = ~(rs | rt);
+}
+
+# ROTR
+## ROTR rd, rs, shift
+:ROTR rt, rs, lo_pool0_5 is hi_pool10_6 = 0b100000 & rt & rs; lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0110 & lo_pool0_5 {
+	# TODO: sign extend
+	rt = rs >> lo_pool0_5;
 }
 
 # SLL
@@ -500,4 +541,44 @@ attach variables [ rt4x rs4x rd4x_from_rt4x ] [
 :SW rt, off(sp) is hi_pool10_6 = 0b101101 & rt & u_imm5 & sp [off = (u_imm5 * 4);] {
 	*(sp + off) = rt; # TODO: update this to point to certain regions of space (i.e. ram, etc.), this syntax is seemingly wrong
 }
+
+# SAVE
+## SAVE[16] u, [ src1 [, src2 [ ..,]]
+## TODO: figure out how to display registers (seems complicated)
+:SAVE is hi_pool10_6 = 0b000111 & rt1 & hi_pool8_1 = 0 &  u_imm4_4 & u_imm4 {
+
+}
+
+# SAVE
+## SAVE[32] u, [ src1 [, src2 [ ..,]]
+## TODO: figure out how to display registers (seems complicated)
+:SAVE is hi_pool10_6 = 0b100000  & rt & hi_pool4_1 = 0 & hi_pool0_4; lo_pool12_4 = 0b0011 & lo_pool3_9 = 0 & lo_pool2_1 & lo_pool0_2 = 0b00 {
+
+}
+
+# RESTORE.JRC
+## RESTORE>JRC[16] u, [ src1 [, src2 [ ..,]]
+## TODO: figure out how to display registers (seems complicated)
+:RESTORE.JRC is hi_pool10_6 = 0b000111 & rt1 & hi_pool8_1 = 1 &  u_imm4_4 & u_imm4 {
+
+}
+
+# RESTORE
+## RESTORE[32] u, [ src1 [, src2 [ ..,]]
+## TODO: figure out how to display registers (seems complicated)
+:RESTORE is hi_pool10_6 = 0b100000  & rt & hi_pool4_1 = 0 & hi_pool0_4; lo_pool12_4 = 0b0011 & lo_pool3_9 = 0 & lo_pool2_1 & lo_pool0_2 = 0b10 {
+
+}
+
+# RESTORE
+## RESTORE.JRC[32] u, [ src1 [, src2 [ ..,]]
+## TODO: figure out how to display registers (seems complicated)
+:RESTORE.JRC is hi_pool10_6 = 0b100000  & rt & hi_pool4_1 & hi_pool0_4; lo_pool12_4 = 0b0011 & lo_pool3_9 = 0 & lo_pool2_1 & lo_pool0_2 = 0b11 {
+
+}
+
+
+
+
+
 
