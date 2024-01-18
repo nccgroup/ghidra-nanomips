@@ -14,6 +14,7 @@ define token instrhi(16)
 	hi_pool1_1 = (1, 1)
 	hi_pool0_5 = (0, 4)  # P48I, P.BR3A
 	hi_pool0_4 = (0, 3)  # P16.BR u[4:1]
+	hi_pool0_3 = (0, 2)
 	hi_pool0_1 = (0, 0)
 	
 	hint = (5, 9)  # hi_pool5_5
@@ -446,6 +447,32 @@ attach variables [ rt4x rs4x rd4x_from_rt4x ] [
 ## MUL rd, rs, rt
 :MUL rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0000011 & lo_pool0_3 = 0b000 {
 	rd = rs * rt;
+}
+
+# SLL
+## SLL rd, rs, shift
+:SLL rt, rs, lo_pool0_5 is hi_pool10_6 = 0b100000 & rt & rs; lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0000 & lo_pool0_5 {
+	rt = rs << lo_pool0_5;
+}
+
+# SLL
+## SLL[16] rt3, rs3, shift
+:SLL rt3, rs3, hi_pool0_3 is hi_pool10_6 = 0b001100 & rt3 & rs3 & hi_pool3_1 = 0 & hi_pool0_3 {
+	rt3 = rs3 << hi_pool0_3;
+}
+
+# SRL
+## SRL rd, rs, shift
+:SRL rt, rs, lo_pool0_5 is hi_pool10_6 = 0b100000 & rt & rs; lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0010 & lo_pool0_5 {
+    # TODO: incorporate signed extend
+	rt = rs >> lo_pool0_5;
+}
+
+# SRL
+## SRL[16] rt3, rs3, shift
+:SRL rt3, rs3, hi_pool0_3 is hi_pool10_6 = 0b001100 & rt3 & rs3 & hi_pool3_1 = 1 & hi_pool0_3 {
+	# TODO: incorporate signe extend
+	rt3 = rs3 >> hi_pool0_3;
 }
 
 # SRA
