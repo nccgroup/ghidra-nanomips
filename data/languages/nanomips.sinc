@@ -104,7 +104,7 @@ define token data16(16)
 	lo_simm2_10 = (2, 11)
 	lo_simm1_15 = (1, 15)
 	lo_simm1_1 = (1, 1)
-	lo_simm0_1 = (0, 0)
+	lo_signbit0_1 = (0, 0) signed
 	;
 
 attach variables [ rt rs rs_from_rt rd ] [
@@ -293,10 +293,9 @@ attach variables [ rt4x rs4x rd4x_from_rt4x ] [
 
 # ADDIUPC rt, imm
 ## ADDIUPC[32], TODO not available in P64 mode
-:ADDIUPC rt, simm22 is hi_pool10_6 = 0b000001 & rt & hi_simm0_5; lo_simm1_15 & lo_simm0_1
-	[simm22 = ((lo_simm0_1 << 21) | (lo_simm1_15 << 1)) + 4;] {
+:ADDIUPC rt, simm22 is hi_pool10_6 = 0b000001 & rt & hi_simm0_5; lo_simm1_15 & lo_signbit0_1
+	[simm22 = ((lo_signbit0_1 << 21) | (lo_simm1_15 << 1)) + 4;] {
 	# TODO effective_address() - exception on overflowing 32 bits
-	# TODO sign extend
 	rt = inst_next + simm22;
 }
 
@@ -304,7 +303,6 @@ attach variables [ rt4x rs4x rd4x_from_rt4x ] [
 :ADDIUPC rt, simm32 is hi_pool10_6 = 0b011000 & rt & hi_pool0_5 = 0b00011; lo_imm16; hi_imm16
 	[simm32 = ((hi_imm16 << 16) | lo_imm16) + 6;] {
 	# TODO effective_address()
-	# TODO sign extend
 	rt = inst_next + simm32;
 }
 
@@ -329,21 +327,17 @@ attach variables [ rt4x rs4x rd4x_from_rt4x ] [
 
 # ALUIPC rt, %pcrel_hi(address)
 :ALUIPC rt, "%pcrel_hi"(addr) is hi_pool10_6 = 0b111000 & rt & hi_simm0_5;
-	lo_simm12_4 & lo_simm2_10 & lo_simm1_1 = 0b1 & lo_simm0_1
-	[addr = (((lo_simm0_1 << 31) | (lo_simm2_10 << 21) | (hi_simm0_5 << 16) | (lo_simm12_4 << 12)) + inst_next) & ~0xfff;] {
-		# TODO: sign extend addr
+	lo_simm12_4 & lo_simm2_10 & lo_simm1_1 = 0b1 & lo_signbit0_1
+	[addr = (((lo_signbit0_1 << 31) | (lo_simm2_10 << 21) | (hi_simm0_5 << 16) | (lo_simm12_4 << 12)) + inst_next) & ~0xfff;] {
 		rt = addr;
 }
 
 
 # BALC address
 ## BALC[32]
-:BALC addr is hi_pool10_6 = 0b001010 & hi_pool9_1 = 0b1 & hi_simm0_9; lo_simm1_15 & lo_simm0_1
-	[addr = (lo_simm0_1 * -2 + 1) * ((hi_simm0_9 << 16) | (lo_simm1_15 << 1)) + inst_next;] {
+:BALC addr is hi_pool10_6 = 0b001010 & hi_pool9_1 = 0b1 & hi_simm0_9; lo_simm1_15 & lo_signbit0_1
+	[addr = ((lo_signbit0_1 << 25) | (hi_simm0_9 << 16) | (lo_simm1_15 << 1)) + inst_next;] {
 		# TODO should be effective_address(addr)
-		# sign bit hack
-		# 0 * -2 =  0 + 1 =  1
-		# 1 * -2 = -2 + 1 = -1
 		ra = inst_next;
 		pc = addr;
 }
