@@ -49,6 +49,8 @@ define token instrhi(16)
 	hi_simm0_5 = (0, 4)
 	hi_simm0_3 = (0, 2)
 	hi_simm0_1 = (0, 0)
+	hi_signbit0_1 = (0, 0) signed
+
 	u_imm5 = (0, 4)
 	eu_imm4 = (0, 3)
 	u_imm4_4 = (4, 7)
@@ -337,6 +339,14 @@ attach variables [ rt4x rs4x rd4x_from_rt4x ] [
 ## BALC[32]
 :BALC addr is hi_pool10_6 = 0b001010 & hi_pool9_1 = 0b1 & hi_simm0_9; lo_simm1_15 & lo_signbit0_1
 	[addr = ((lo_signbit0_1 << 25) | (hi_simm0_9 << 16) | (lo_simm1_15 << 1)) + inst_next;] {
+		# TODO should be effective_address(addr)
+		ra = inst_next;
+		pc = addr;
+}
+
+## BALC[16]
+:BALC addr is hi_pool10_6 = 0b001110 & hi_simm1_9 & hi_signbit0_1
+	[addr = ((hi_signbit0_1 << 10) | (hi_simm1_9 << 1)) + inst_next;] {
 		# TODO should be effective_address(addr)
 		ra = inst_next;
 		pc = addr;
