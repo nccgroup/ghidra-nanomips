@@ -129,7 +129,6 @@ attach variables [ rt4x rs4x rd4x_from_rt4x ] [
 	_ _ _ _
 ];
 
-
 ################################################################
 # Macros
 ################################################################
@@ -353,7 +352,6 @@ attach variables [ rt4x rs4x rd4x_from_rt4x ] [
 	# TODO: is signedness maintained correctly?
 }
 
-
 # JRC
 :JRC rt is hi_pool10_6 = 0b110110 & rt & hi_pool4_1 = 0 & hi_pool0_4 = 0b0000 {
 	pc = rt;
@@ -435,5 +433,26 @@ attach variables [ rt4x rs4x rd4x_from_rt4x ] [
 :MOVE rt, rs is hi_pool10_6 = 0b000100 & rt & rs {
 	rt = rs;
 }
+
+
+# SW
+## SW rt, offset(rs)
+:SW rt, u_imm12(rs) is hi_pool10_6 = 0b100001 & rt & rs; lo_pool12_4 = 0b1001 & u_imm12 {
+	*(rs + u_imm12) = rt; # TODO: currently updating this to be correct, this is not correct atm
+}
+
+# SW16
+## SW16 rt3, offset(rs3)
+## TODO: swap rt3 with rtz3
+:SW rt3, u_imm4(rs3) is hi_pool10_6 = 0b100101 & rt3 & rs3 & u_imm4 {
+	*(rs3 + u_imm4) = rt3; # TODO: currently updating this to be correct, this is not correct atm
+}
+
+# SW[SP]
+## SW rt, offset(sp)
+:SW rt, off(sp) is hi_pool10_6 = 0b101101 & rt & u_imm5 & sp [off = (u_imm5 * 4);] {
+	*(sp + off) = rt; # TODO: update this to point to certain regions of space (i.e. ram, etc.), this syntax is seemingly wrong
+}
+
 
 
