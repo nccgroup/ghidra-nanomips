@@ -86,7 +86,10 @@ define token data16(16)
 	uimm2_14 = (2, 15)
 	uimm0_2 = (0, 1)
 	
+	lo_simm12_4 = (12, 15)
+	lo_simm2_10 = (2, 11)
 	lo_simm1_15 = (1, 15)
+	lo_simm1_1 = (1, 1)
 	lo_simm0_1 = (0, 0)
 	;
 
@@ -281,6 +284,7 @@ attach variables [ rt4x rs4x rd4x_from_rt4x ] [
 	[simm22 = ((lo_simm0_1 << 21) | (lo_simm1_15 << 1)) + 4;] {
 	# TODO effective_address() - exception on overflowing 32 bits
 	# TODO sign extend
+	# TODO is pc equiv to CPU.next_pc?
 	rt = pc + simm22;
 }
 
@@ -289,6 +293,7 @@ attach variables [ rt4x rs4x rd4x_from_rt4x ] [
 	[simm32 = ((hi_imm16 << 16) | lo_imm16) + 6;] {
 	# TODO effective_address()
 	# TODO sign extend
+	# TODO is pc equiv to CPU.next_pc?
 	rt = pc + simm32;
 }
 
@@ -310,6 +315,16 @@ attach variables [ rt4x rs4x rd4x_from_rt4x ] [
 	# TODO sign extend sum?
 	rd4x_from_rt4x = rt4x + rs4x;
 }
+
+# ALUIPC rt, %pcrel_hi(address)
+:ALUIPC rt, "%pcrel_hi"(addr) is hi_pool10_6 = 0b111000 & rt & hi_simm0_5;
+	lo_simm12_4 & lo_simm2_10 & lo_simm1_1 = 0b1 & lo_simm0_1
+	[addr = (((lo_simm0_1 << 31) | (lo_simm2_10 << 21) | (hi_simm0_5 << 16) | (lo_simm12_4 << 12)) + pc) & ~0xfff;] {
+		# TODO: sign extend addr
+		# TODO is pc equiv to CPU.next_pc?
+		rt = addr;
+}
+
 
 # LI
 ## LI[16]
