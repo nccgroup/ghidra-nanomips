@@ -603,6 +603,22 @@ lo_saddr15: addr is lo_simm1_13 & lo_signbit0_1
 	}
 
 
+# BREAK code
+## BREAK[32]
+:BREAK code is
+	hi_pool10_6 = 0b000000 & rt = 0 & hi_pool3_2 = 0b10 & hi_uimm0_3;
+	uimm16
+	[
+		code = (hi_uimm0_3 << 16) | uimm16;
+	]
+	unimpl # TODO raise breakpoint exception ("BP")
+
+## BREAK[16]
+:BREAK hi_uimm0_3 is
+	hi_pool10_6 = 0b000100 & rt = 0 & hi_pool3_2 = 0b10 & hi_uimm0_3
+	unimpl # TODO raise breakpoint exception ("BP")
+
+
 # LI
 ## LI[16]
 :LI rt3, s is hi_pool10_6 = 0b110100 & rt3 & eu_imm7 = 127 [s = -1;] {
