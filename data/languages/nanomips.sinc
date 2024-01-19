@@ -594,6 +594,15 @@ lo_saddr15: addr is lo_simm1_13 & lo_signbit0_1
 	}
 
 
+# BNEZC rt, address
+## BNEZC[16]
+:BNEZC rt3, hi_saddr8 is
+	hi_pool10_6 = 0b101110 & rt3 & hi_saddr8
+	{
+		if (rt3 != 0) goto hi_saddr8;
+	}
+
+
 # LI
 ## LI[16]
 :LI rt3, s is hi_pool10_6 = 0b110100 & rt3 & eu_imm7 = 127 [s = -1;] {
