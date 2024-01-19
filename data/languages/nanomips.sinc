@@ -585,6 +585,15 @@ lo_saddr15: addr is lo_simm1_13 & lo_signbit0_1
 	}
 
 
+# BNEIC rt, u, address
+:BNEIC rt, buimm7, lo_saddr12 is
+	(hi_pool10_6 = 0b110010 & rt & hi_pool2_3 = 0b100; lo_saddr12)
+	& buimm7
+	{
+		if (rt != buimm7) goto lo_saddr12;
+	}
+
+
 # LI
 ## LI[16]
 :LI rt3, s is hi_pool10_6 = 0b110100 & rt3 & eu_imm7 = 127 [s = -1;] {
