@@ -485,6 +485,15 @@ lo_saddr15: addr is lo_simm1_13 & lo_signbit0_1
 	}
 
 
+# BGEC rs, rt, address
+:BGEC rs, rt, lo_saddr15 is
+	hi_pool10_6 = 0b100010 & rt & rs;
+	lo_pool14_2 = 0b10 & lo_saddr15
+	{
+		if (rs >= rt) goto lo_saddr15;
+	}
+
+
 # LI
 ## LI[16]
 :LI rt3, s is hi_pool10_6 = 0b110100 & rt3 & eu_imm7 = 127 [s = -1;] {
