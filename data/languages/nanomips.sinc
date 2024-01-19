@@ -230,6 +230,13 @@ attach variables [ rt4x rs4x rd4x_from_rt4x ] [
 # cc2: "C"             is bits3_3=0x7                              { c:1 = $(C_flag); export c; }
 # ################################################################
 
+rs_scale2: rs is rs
+	{
+		# TODO effective_address
+		local addr:4 = rs * 2 + inst_next;
+		export *[ram]:4 addr;
+	}
+
 buimm7: uimm7 is
 	hi_uimm0_2; lo_uimm11_5
 	[
@@ -421,13 +428,13 @@ lo_saddr15: addr is lo_simm1_13 & lo_signbit0_1
 
 
 # BALRSC rt, rs
-:BALRSC rt, rs is hi_pool10_6 = 0b010010 & rt & rt_raw != 0 & rs; lo_pool12_4 = 0b1000 {
-	# TODO effective_address
-	local addr:4 = 2 * rs + inst_next;
-	rt = inst_next;
-	# TODO call
-	pc = addr;
-}
+:BALRSC rt, rs_scale2 is
+	hi_pool10_6 = 0b010010 & rt & rt_raw != 0 & rs_scale2;
+	lo_pool12_4 = 0b1000
+	{
+		rt = inst_next;
+		call rs_scale2;
+	}
 
 
 # BBEQZC rt, bit, address
@@ -617,6 +624,15 @@ lo_saddr15: addr is lo_simm1_13 & lo_signbit0_1
 :BREAK hi_uimm0_3 is
 	hi_pool10_6 = 0b000100 & rt = 0 & hi_pool3_2 = 0b10 & hi_uimm0_3
 	unimpl # TODO raise breakpoint exception ("BP")
+
+
+# BRSC rs
+:BRSC rs_scale2 is
+	hi_pool10_6 = 0b010010 & rt = 0 & rs_scale2;
+	lo_pool12_4 = 0b1000
+	{
+		goto rs_scale2;
+	}
 
 
 # LI
