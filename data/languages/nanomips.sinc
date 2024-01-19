@@ -490,7 +490,7 @@ lo_saddr15: addr is lo_simm1_13 & lo_signbit0_1
 	hi_pool10_6 = 0b100010 & rt & rs;
 	lo_pool14_2 = 0b10 & lo_saddr15
 	{
-		if (rs >= rt) goto lo_saddr15;
+		if (rs s>= rt) goto lo_saddr15;
 	}
 
 
@@ -502,6 +502,19 @@ lo_saddr15: addr is lo_simm1_13 & lo_signbit0_1
 		uimm7 = (hi_uimm0_2 << 5) | lo_uimm11_5;
 	]
 	{
+		if (rt s>= uimm7) goto lo_saddr12;
+	}
+
+
+# BGEIUC rt, u, address
+:BGEIUC rt, uimm7, lo_saddr12 is
+	hi_pool10_6 = 0b110010 & rt & hi_pool2_3 = 0b011 & hi_uimm0_2;
+	lo_uimm11_5 & lo_saddr12
+	[
+		uimm7 = (hi_uimm0_2 << 5) | lo_uimm11_5;
+	]
+	{
+		# rt explicitly treated as unsigned
 		if (rt >= uimm7) goto lo_saddr12;
 	}
 
