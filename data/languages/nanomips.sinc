@@ -31,7 +31,9 @@ define token instrhi(16)
 	rt1 = (9, 9)
 
 	rt3 = (7, 9)
+	rt3_raw = (7, 9)
 	rs3 = (4, 6)
+	rs3_raw = (4, 6)
 	rd3 = (1, 3)
 	
 	rt4x = (5, 9)
@@ -42,6 +44,7 @@ define token instrhi(16)
 	hi_uimm0_2 = (0, 1)
 	hi_uimm0_5 = (0, 4)
 	hi_uimm0_6 = (0, 5)
+	hi_uimm0_4 = (0, 3)
 	hi_uimm0_3 = (0, 2)
 	hi_uimm0_1 = (0, 0)
 	
@@ -225,6 +228,15 @@ attach variables [ rt4x rs4x rd4x_from_rt4x ] [
 # cc2: "NC"            is bits3_3=0x6                              { c:1 = ($(C_flag) == 0); export c; }
 # cc2: "C"             is bits3_3=0x7                              { c:1 = $(C_flag); export c; }
 # ################################################################
+
+hi_uaddr5: addr is hi_uimm0_4
+	[
+		addr = inst_next + (hi_uimm0_4 << 1);
+	]
+	{
+		# TODO effective_address
+		export *[ram]:4 addr;
+	}
 
 hi_saddr11: addr is hi_simm1_9 & hi_signbit0_1
 	[
@@ -420,6 +432,24 @@ lo_saddr15: addr is lo_simm1_13 & lo_signbit0_1
 	{
 		local testbit:4 = (rt >> bitpos) & 1;
 		if (testbit == 1) goto lo_saddr12;
+	}
+
+
+# BEQC rs, rt, address
+## BEQC[32]
+:BEQC rs, rt, lo_saddr15 is
+	hi_pool10_6 = 0b100010 & rt & rs;
+	lo_pool14_2 = 0b00 & lo_saddr15
+	{
+		# TODO "not_in_mms = False" ?
+		if (rs == rt) goto lo_saddr15;
+	}
+
+## BEQC[16], not available in NMS (with rs3<rt3 && u!=0)
+:BEQC rs3, rt3, hi_uaddr5 is
+	hi_pool10_6 = 0b110110 & rt3 & rs3 & rs3_raw < rt3_raw & hi_uimm0_4 != 0 & hi_uaddr5
+	{
+		if (rs3 == rt3) goto hi_uaddr5;
 	}
 
 
