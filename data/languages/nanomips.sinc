@@ -475,14 +475,11 @@ lo_saddr15: addr is lo_simm1_13 & lo_signbit0_1
 
 
 # BEQIC rt, u, address
-:BEQIC rt, uimm7, lo_saddr12 is
-	hi_pool10_6 = 0b110010 & rt & hi_pool2_3 = 0b000 & hi_uimm0_2;
-	lo_uimm11_5 & lo_saddr12
-	[
-		uimm7 = (hi_uimm0_2 << 5) | lo_uimm11_5;
-	]
+:BEQIC rt, buimm7, lo_saddr12 is
+	(hi_pool10_6 = 0b110010 & rt & hi_pool2_3 = 0b000; lo_saddr12)
+	& buimm7
 	{
-		if (rt == uimm7) goto lo_saddr12;
+		if (rt == buimm7) goto lo_saddr12;
 	}
 
 
@@ -505,27 +502,21 @@ lo_saddr15: addr is lo_simm1_13 & lo_signbit0_1
 
 
 # BGEIC rt, u, address
-:BGEIC rt, uimm7, lo_saddr12 is
-	hi_pool10_6 = 0b110010 & rt & hi_pool2_3 = 0b010 & hi_uimm0_2;
-	lo_uimm11_5 & lo_saddr12
-	[
-		uimm7 = (hi_uimm0_2 << 5) | lo_uimm11_5;
-	]
+:BGEIC rt, buimm7, lo_saddr12 is
+	(hi_pool10_6 = 0b110010 & rt & hi_pool2_3 = 0b010; lo_saddr12)
+	& buimm7
 	{
-		if (rt s>= uimm7) goto lo_saddr12;
+		if (rt s>= buimm7) goto lo_saddr12;
 	}
 
 
 # BGEIUC rt, u, address
-:BGEIUC rt, uimm7, lo_saddr12 is
-	hi_pool10_6 = 0b110010 & rt & hi_pool2_3 = 0b011 & hi_uimm0_2;
-	lo_uimm11_5 & lo_saddr12
-	[
-		uimm7 = (hi_uimm0_2 << 5) | lo_uimm11_5;
-	]
+:BGEIUC rt, buimm7, lo_saddr12 is
+	(hi_pool10_6 = 0b110010 & rt & hi_pool2_3 = 0b011; lo_saddr12)
+	& buimm7
 	{
 		# rt explicitly treated as unsigned
-		if (rt >= uimm7) goto lo_saddr12;
+		if (rt >= buimm7) goto lo_saddr12;
 	}
 
 
@@ -551,10 +542,12 @@ lo_saddr15: addr is lo_simm1_13 & lo_signbit0_1
 # BLTIC rt, u, address
 :BLTIC rt, buimm7, lo_saddr12 is
 	(hi_pool10_6 = 0b110010 & rt & hi_pool2_3 = 0b110; lo_saddr12)
-	& (buimm7)
+	& buimm7
 	{
 		if (rt s< buimm7) goto lo_saddr12;
 	}
+
+
 
 
 # LI
