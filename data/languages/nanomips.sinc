@@ -230,6 +230,16 @@ attach variables [ rt4x rs4x rd4x_from_rt4x ] [
 # cc2: "C"             is bits3_3=0x7                              { c:1 = $(C_flag); export c; }
 # ################################################################
 
+buimm7: uimm7 is
+	hi_uimm0_2; lo_uimm11_5
+	[
+		uimm7 = (hi_uimm0_2 << 5) | lo_uimm11_5;
+	]
+	{
+		local tmp:4 = uimm7;
+		export tmp;
+	}
+
 hi_uaddr5: addr is hi_uimm0_4
 	[
 		addr = inst_next + (hi_uimm0_4 << 1);
@@ -535,6 +545,15 @@ lo_saddr15: addr is lo_simm1_13 & lo_signbit0_1
 	lo_pool14_2 = 0b10 & lo_saddr15
 	{
 		if (rs s< rt) goto lo_saddr15;
+	}
+
+
+# BLTIC rt, u, address
+:BLTIC rt, buimm7, lo_saddr12 is
+	(hi_pool10_6 = 0b110010 & rt & hi_pool2_3 = 0b110; lo_saddr12)
+	& (buimm7)
+	{
+		if (rt s< buimm7) goto lo_saddr12;
 	}
 
 
