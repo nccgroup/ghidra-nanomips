@@ -43,6 +43,7 @@ define token instrhi(16)
 	hi_uimm0_5 = (0, 4)
 	hi_uimm0_6 = (0, 5)
 	hi_uimm0_3 = (0, 2)
+	hi_uimm0_1 = (0, 0)
 	
 	hi_simm4_1 = (4, 4)
 	hi_simm1_9 = (1, 9)
@@ -102,10 +103,13 @@ define token data16(16)
 	uimm16 = (0, 15)
 	uimm2_14 = (2, 15)
 	uimm0_2 = (0, 1)
+	
+	lo_uimm11_5 = (11, 15)
 
 	lo_simm12_4 = (12, 15)
 	lo_simm2_10 = (2, 11)
 	lo_simm1_15 = (1, 15)
+	lo_simm1_10 = (1, 10)
 	lo_simm1_1 = (1, 1)
 	lo_signbit0_1 = (0, 0) signed
 	;
@@ -367,6 +371,41 @@ balc16dest: addr is hi_simm1_9 & hi_signbit0_1
 	# TODO call
 	pc = addr;
 }
+
+
+# BBEQZC rt, bit, address
+bbeqzcdest: addr is lo_simm1_10 & lo_signbit0_1
+	[
+		addr = inst_next + ((lo_signbit0_1 << 11) | (lo_simm1_10 << 1));
+	]
+	{
+		# TODO effective_address
+		export *[ram]:4 addr;
+	}
+
+:BBEQZC rt, bitpos, bbeqzcdest is
+	hi_pool10_6 = 0b110010 & rt & hi_pool2_3 = 0b001 & hi_uimm0_1;
+	lo_uimm11_5 & bbeqzcdest
+	[
+		bitpos = (hi_uimm0_1 << 5) | lo_uimm11_5;
+	]
+	{
+		local testbit:4 = (rt >> bitpos) & 1;
+		if (testbit == 0) goto bbeqzcdest;
+	}
+
+
+# BBNEZC rt, bit, address
+:BBNEZC rt, bitpos, bbeqzcdest is
+	hi_pool10_6 = 0b110010 & rt & hi_pool2_3 = 0b101 & hi_uimm0_1;
+	lo_uimm11_5 & bbeqzcdest
+	[
+		bitpos = (hi_uimm0_1 << 5) | lo_uimm11_5;
+	]
+	{
+		local testbit:4 = (rt >> bitpos) & 1;
+		if (testbit == 1) goto bbeqzcdest;
+	}
 
 
 # LI
