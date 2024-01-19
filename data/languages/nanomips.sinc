@@ -93,25 +93,26 @@ define token instrlo(16)
 	
 	sel = (11, 15) # for MFC0
 
+	lo_uimm11_5 = (11, 15)
 	lo_uimm0_12 = (0, 11)
-	u_imm12 = (0, 11)
+	
+	lo_simm12_4 = (12, 15)
+	lo_simm2_10 = (2, 11)
+	lo_simm1_15 = (1, 15)
+	lo_simm1_13 = (1, 13)
+	lo_simm1_10 = (1, 10)
+	lo_simm1_1 = (1, 1)
+	lo_signbit0_1 = (0, 0) signed
 	;
 	
 define token data16(16)
 	hi_imm16 = (0, 15) signed
 	lo_imm16 = (0, 15)
+	
+	# TODO move/rename any immediate fields that can be mixed with opcode bits
 	uimm16 = (0, 15)
 	uimm2_14 = (2, 15)
 	uimm0_2 = (0, 1)
-	
-	lo_uimm11_5 = (11, 15)
-
-	lo_simm12_4 = (12, 15)
-	lo_simm2_10 = (2, 11)
-	lo_simm1_15 = (1, 15)
-	lo_simm1_10 = (1, 10)
-	lo_simm1_1 = (1, 1)
-	lo_signbit0_1 = (0, 0) signed
 	;
 
 attach variables [ rt rs rs_from_rt rd ] [
@@ -442,8 +443,8 @@ bbeqzcdest: addr is lo_simm1_10 & lo_signbit0_1
 
 # ANDI
 ## ANDI rt, rs, u
-:ANDI rt, rs, u_imm12 is hi_pool10_6 = 0b100000 & rt & rs; lo_pool12_4 = 0b0010 & u_imm12 {
-	rt = rs & u_imm12;
+:ANDI rt, rs, lo_uimm0_12 is hi_pool10_6 = 0b100000 & rt & rs; lo_pool12_4 = 0b0010 & lo_uimm0_12 {
+	rt = rs & lo_uimm0_12;
 }
 
 # ANDI16
@@ -484,8 +485,8 @@ bbeqzcdest: addr is lo_simm1_10 & lo_signbit0_1
 
 # LW
 ## LW rt, offset(rs)
-:LW rt, u_imm12(rs) is hi_pool10_6 = 0b100001 & rt & rs; lo_pool12_4 = 0b1000 & u_imm12 {
-	rt = *(rs + u_imm12); # TODO: currently updating this to be correct, this is not correct atm
+:LW rt, lo_uimm0_12(rs) is hi_pool10_6 = 0b100001 & rt & rs; lo_pool12_4 = 0b1000 & lo_uimm0_12 {
+	rt = *(rs + lo_uimm0_12); # TODO: currently updating this to be correct, this is not correct atm
 }
 
 # LW16
@@ -585,8 +586,8 @@ bbeqzcdest: addr is lo_simm1_10 & lo_signbit0_1
 
 # SW
 ## SW rt, offset(rs)
-:SW rt, u_imm12(rs) is hi_pool10_6 = 0b100001 & rt & rs; lo_pool12_4 = 0b1001 & u_imm12 {
-	*(rs + u_imm12) = rt; # TODO: currently updating this to be correct, this is not correct atm
+:SW rt, lo_uimm0_12(rs) is hi_pool10_6 = 0b100001 & rt & rs; lo_pool12_4 = 0b1001 & lo_uimm0_12 {
+	*(rs + lo_uimm0_12) = rt; # TODO: currently updating this to be correct, this is not correct atm
 }
 
 # SW16
