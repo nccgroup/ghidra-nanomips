@@ -22,6 +22,7 @@ define token instrhi(16)
 	u4_1 = (0, 4)  # u[4:1] - naming convention conflict
 	
 	rt = (5, 9)
+	rt_raw = (5, 9)  # :'(
 	rs_from_rt = (5, 9)  # :'(
 	rs = (0, 4)
 	
@@ -356,6 +357,17 @@ balc16dest: addr is hi_simm1_9 & hi_signbit0_1
 		ra = inst_next;
 		call balc16dest;
 }
+
+
+# BALRSC rt, rs
+:BALRSC rt, rs is hi_pool10_6 = 0b010010 & rt & rt_raw != 0 & rs; lo_pool12_4 = 0b1000 {
+	# TODO effective_address
+	local addr:4 = *[ram]:4 (2 * rs + inst_next);
+	rt = inst_next;
+	# TODO call
+	pc = addr;
+}
+
 
 # LI
 ## LI[16]
