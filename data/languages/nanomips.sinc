@@ -568,6 +568,23 @@ lo_saddr15: addr is lo_simm1_13 & lo_signbit0_1
 	}
 
 
+# BNEC rs, rt, address
+## BNEC[32]
+:BNEC rs, rt, lo_saddr15 is
+	hi_pool10_6 = 0b101010 & rt & rs;
+	lo_pool14_2 = 0b00 & lo_saddr15
+	{
+		if (rs != rt) goto lo_saddr15;
+	}
+
+## BNEC[16], not available in NMS
+:BNEC rs3, rt3, hi_uaddr5 is
+	hi_pool10_6 = 0b110110 & rt3 & rs3 & rs3_raw >= rt3_raw & hi_uimm0_4 != 0 & hi_uaddr5
+	{
+		if (rs3 != rt3) goto hi_uaddr5;
+	}
+
+
 # LI
 ## LI[16]
 :LI rt3, s is hi_pool10_6 = 0b110100 & rt3 & eu_imm7 = 127 [s = -1;] {
