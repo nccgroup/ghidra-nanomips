@@ -73,6 +73,7 @@ define token instrlo(16)
 	lo_pool9_7 = (9, 15)
 	lo_pool9_5 = (9, 13)
 	lo_pool8_3 = (8, 10)
+	lo_pool8_2 = (8, 9)
 	lo_pool7_4 = (7, 10)
 	lo_pool6_4 = (6, 9)
 	lo_pool6_3 = (6, 8)
@@ -106,6 +107,9 @@ define token instrlo(16)
 	lo_simm1_13 = (1, 13)
 	lo_simm1_10 = (1, 10)
 	lo_simm1_1 = (1, 1)
+	lo_simm0_8 = (0, 7)
+
+	lo_signbit15_1 = (15, 15) signed
 	lo_signbit0_1 = (0, 0) signed
 	;
 	
@@ -291,6 +295,15 @@ lo_saddr15: addr is lo_simm1_13 & lo_signbit0_1
 	{
 		# TODO effective_address
 		export *[ram]:4 addr;
+	}
+
+lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
+	[
+		offs = (lo_signbit15_1 << 8) | lo_simm0_8;
+	]
+	{
+		local tmp:4 = offs;
+		export tmp;
 	}
 
 
@@ -633,6 +646,22 @@ lo_saddr15: addr is lo_simm1_13 & lo_signbit0_1
 	{
 		goto rs_scale2;
 	}
+
+
+# CACHE/CACHEE op, offset(rs)
+# TODO "Requires CP0 privilege, availability varies by format."
+
+## CACHE
+:CACHE rt_raw, lo_soffset9(rs) is
+	hi_pool10_6 = 0b101001 & rt_raw & rs;
+	lo_pool11_4 = 0b0111 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b01 & lo_soffset9
+	unimpl
+
+## CACHEE, present when Config5.EVA=1.
+:CACHEE rt_raw, lo_soffset9(rs) is
+	hi_pool10_6 = 0b101001 & rt_raw & rs;
+	lo_pool11_4 = 0b0111 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10 & lo_soffset9
+	unimpl
 
 
 # LI
