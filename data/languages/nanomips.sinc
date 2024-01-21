@@ -1523,6 +1523,18 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 	[code = (hi_uimm0_3 << 16) | uimm16;] unimpl
 
 
+# WRPGPR rt, rs
+# "Write Previous GPR. Write the value of register $rs from the current shadow register set (SRSCtl.CSS) to register $rt in the previous shadow register set (SRSCtl.PSS). If shadow register sets are not implemented, just copy the value from register $rs to register $rt."
+# TODO "Requires CP0 privilege."
+:WRPGPR rt, rs is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	lo_pool14_2 = 0b11 & lo_pool9_5 = 0b11000 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
+	{
+		# TODO shadow register stuff
+		rt = rs;
+	}
+
+
 # XOR rd, rs, rt
 ## XOR[32]
 :XOR rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b1100010 & lo_pool0_3 = 0b000 {
