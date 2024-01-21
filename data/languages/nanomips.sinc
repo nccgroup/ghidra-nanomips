@@ -1528,6 +1528,13 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 	[code = (hi_uimm0_3 << 16) | uimm16;] unimpl
 
 
+# TLBWR
+:TLBWR is
+	hi_pool10_6 = 0b001000;
+	lo_pool14_2 = 0b00 & lo_pool9_5 = 0b11001 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
+	unimpl
+
+
 # TNE rs, rt, code
 :TNE rs, rt, lo_uimm11_5 is
 	hi_pool10_6 = 0b001000 & rt & rs;
