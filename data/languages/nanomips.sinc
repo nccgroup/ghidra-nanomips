@@ -1528,6 +1528,22 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 	[code = (hi_uimm0_3 << 16) | uimm16;] unimpl
 
 
+# SYSCALL code
+## SYSCALL[32]
+:SYSCALL code is
+	hi_pool10_6 = 0b000000 & rt = 0 & hi_pool3_2 = 0b01 & hi_pool2_1 = 0b0 & hi_uimm0_2;
+	uimm16
+	[
+		code = (hi_uimm0_2 << 16) | uimm16;
+	]
+	unimpl
+
+## SYSCALL[16]
+:SYSCALL hi_uimm0_2 is
+	hi_pool10_6 = 0b000100 & rt = 0 & hi_pool3_2 = 0b01 & hi_pool2_1 = 0b0 & hi_uimm0_2
+	unimpl
+
+
 # TEQ rs, rt, code
 :TEQ rs, rt, lo_uimm11_5 is
 	hi_pool10_6 = 0b001000 & rt & rs;
