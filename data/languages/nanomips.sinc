@@ -995,6 +995,47 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 	# TODO: is signedness maintained correctly?
 }
 
+# LL
+## LL rt, offset(rs)
+:LL rt, lo_pool2_6(rs) is hi_pool10_6 = 0b101001  & rt & rs ; lo_pool15_1 & lo_pool11_4 = 0b1010  & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b01 & lo_pool2_6 & lo_pool0_2 = 0b00 {
+	# TODO: chage lo_pool to usim
+	# TODO: complete loading functionality
+}
+
+# LLE
+## LLE rt, offset(rs)
+:LLE rt, lo_pool2_6(rs) is hi_pool10_6 = 0b101001  & rt & rs ; lo_pool15_1 & lo_pool11_4 = 0b1010  & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10 & lo_pool2_6 & lo_pool0_2 = 0b00 {
+	# TODO: chage lo_pool to usim
+	# TODO: complete loading functionality
+}
+
+# LLWP
+## LLWP rt, offset(rs)
+:LLWP rt, lo_pool3_5(rs) is hi_pool10_6 = 0b101001  & rt & rs ; lo_pool11_4 = 0b1010  & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b01 & lo_pool3_5 & lo_pool0_2 = 0b01 {
+	# TODO: chage lo_pool to usim
+	# TODO: complete loading functionality
+}
+
+# LLWPE
+## LLWPE rt, offset(rs)
+:LLWPE rt, lo_pool3_5(rs) is hi_pool10_6 = 0b101001  & rt & rs ; lo_pool11_4 = 0b1010  & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10 & lo_pool3_5 & lo_pool0_2 = 0b01 {
+	# TODO: chage lo_pool to usim
+	# TODO: complete loading functionality
+}
+
+# LSA
+## LSA rd, rs, rt, u2
+:LHXS rd, rs, rt, lo_pool9_2 is hi_pool10_6 = 0b001000 & rt & rs; rd  & lo_pool9_2 & lo_pool3_3 = 0b001 & lo_pool0_3 = 0b111 {
+	# NOTE: finsish the operation
+}
+
+# LUI()
+## LUI rt, offset(rs)
+:LUI  rt is hi_pool10_6 = 0b111000 & rt & hi_pool0_5; lo_pool12_4 & lo_pool2_10 & lo_pool1_1 = 0b0 & lo_pool0_1 {
+	# TODO: finish out constructing the number 's'
+	# TODO: finish out operation
+}
+
 # JRC
 :JRC rt is hi_pool10_6 = 0b110110 & rt & hi_pool4_1 = 0 & hi_pool0_4 = 0b0000 {
 	pc = rt;
