@@ -712,8 +712,7 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 # CLZ
 ## CLZ rt, rs
 :CLZ rt, rs is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool9_7 = 0b0101101 & lo_pool6_3 = 0b100 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111 {
-	# TODO: figure out how to implement this
-	rt = sext(rs);
+	rt = lzcount(rs);
 }
 
 # CRC32B
