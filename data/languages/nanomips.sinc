@@ -1041,6 +1041,62 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 	pc = rt;
 }
 
+# LW[GP16]
+## LW rt, offset(sp)
+:LW rt3, off(gp) is hi_pool10_6 = 0b0010101 & rt3 & eu_imm7 & gp [off = (eu_imm7 * 4);] {
+	rt3 = *(gp + off); # TODO: update this to point to certain regions of space (i.e. ram, etc.), this syntax is seemingly wrong
+}
+
+# LW[GP]
+## LW rt, offset(sp)
+:LW rt, off(gp) is hi_pool10_6 = 0b010000 & rt & u_imm5; lo_pool2_14 & lo_pool0_2 = 0b10 & gp [off = (u_imm5 * 4);] {
+	rt = *(gp + off); # TODO: update this to point to certain regions of space (i.e. ram, etc.), this syntax is seemingly wrong
+}
+
+# LW[S9]
+## LW rt, offset(sp)
+:LW rt, lo_pool0_8(rs) is hi_pool10_6 = 0b101001 & rt & rs; lo_pool15_1 & lo_pool11_4 = 0b1000 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b00 & lo_pool0_8 {
+	#rt = *(rs + lo_uimm0_12); # TODO: currently updating this to be correct, this is not correct atm
+	#TODO: make the number
+	#TODO: finish out the logic
+}
+
+# LWE
+## LWE rt, offset(sp)
+:LWE rt, lo_pool0_8(rs) is hi_pool10_6 = 0b101001 & rt & rs; lo_pool15_1 & lo_pool11_4 = 0b1000 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10 & lo_pool0_8 {
+	#rt = *(rs + lo_uimm0_12); # TODO: currently updating this to be correct, this is not correct atm
+	#TODO: make the number
+	#TODO: finish out the logic
+}
+
+# LWM
+## LWM rt, offset(sp)
+:LWM rt, lo_pool0_8(rs) is hi_pool10_6 = 0b101001 & rt & rs; lo_pool15_1 & lo_pool12_3 & lo_pool11_1 = 0b0 & lo_pool10_1 = 0b1 & lo_pool8_2 = 0b00 & lo_pool0_8 {
+	#rt = *(rs + lo_uimm0_12); # TODO: currently updating this to be correct, this is not correct atm
+	#TODO: make the number
+	#TODO: finish out the logic
+}
+
+# LWPC
+## LWPC rt, offset(sp)
+#:LWPC rt, lo_pool0_8(rs) is hi_pool10_6 = 0b101001 & rt & rs; lo_pool15_1 & lo_pool12_3 & lo_pool11_1 = 0b0 & lo_pool10_1 = 0b1 & lo_pool8_2 = 0b00 & lo_pool0_8 {
+#	#rt = *(rs + lo_uimm0_12); # TODO: currently updating this to be correct, this is not correct atm
+#	#TODO: make the number
+#	#TODO: finish out the logic
+#}
+
+# LWX
+## LWX rt, offset(sp)
+:LWX rd, rs(rt) is hi_pool10_6 = 0b001000 & rt & rs; rd  & lo_pool7_4 = 0b1000 & lo_pool6_1 = 0b0 & lo_pool3_3 = 0b000 & lo_pool0_3 = 0b111 {
+	# NOTE: not sure how to handle coprocessor instructions
+}
+
+# LWXS
+## LWXS rt, offset(sp)
+:LWX rd, rs(rt) is hi_pool10_6 = 0b001000 & rt & rs; rd  & lo_pool7_4 = 0b1000 & lo_pool6_1 = 0b1 & lo_pool3_3 = 0b000 & lo_pool0_3 = 0b111 {
+	# NOTE: not sure how to handle coprocessor instructions
+}
+
 # AND
 ## AND rd, rs, rt
 :AND rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b1001010 & lo_pool0_3 = 0b000 {
