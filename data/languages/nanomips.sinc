@@ -45,6 +45,7 @@ define token instrhi(16)
 	rs4x = (0, 4)
 	
 	eu_imm7 = (0, 6)
+	hi_uimm0_10 = (0, 9)
 	hi_uimm0_2 = (0, 1)
 	hi_uimm0_5 = (0, 4)
 	hi_uimm0_6 = (0, 5)
@@ -1521,6 +1522,13 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 # TODO: Signal Reserved Instruction Exception
 :SIGRIE code is hi_pool10_6 = 0b000000 & rt = 0 & hi_pool3_2 = 0b00 & hi_uimm0_3; uimm16
 	[code = (hi_uimm0_3 << 16) | uimm16;] unimpl
+
+
+# WAIT code
+:WAIT hi_uimm0_10 is
+	hi_pool10_6 = 0b001000 & hi_uimm0_10;
+	lo_pool14_2 = 0b11 & lo_pool9_5 = 0b00001 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
+	unimpl
 
 
 # WRPGPR rt, rs
