@@ -1534,3 +1534,11 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 	rd3_from_rt3 = rs3 ^ rt3;
 }
 
+
+# XORI rt, rs, u
+:XORI rt, rs, lo_uimm0_12 is
+	hi_pool10_6 = 0b100000 & rt & rs;
+	lo_pool12_4 = 0b0001 & lo_uimm0_12
+	{
+		rt = rs ^ lo_uimm0_12;
+	}
