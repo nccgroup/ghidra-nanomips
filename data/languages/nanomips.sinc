@@ -114,6 +114,8 @@ define token instrlo(16)
 	
 	sel = (11, 15) # for MFC0
 
+	count3 = (12, 14)
+
 	lo_uimm11_5 = (11, 15)
 	lo_uimm0_12 = (0, 11)
 	
@@ -173,6 +175,8 @@ attach variables [ rt4x rs4x rd4x_from_rt4x ] [
 	_ _ _ _
 	_ _ _ _
 ];
+
+attach values [count3] [8 1 2 3 4 5 6 7];
 
 ################################################################
 # Macros
@@ -1522,6 +1526,28 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 # TODO: Signal Reserved Instruction Exception
 :SIGRIE code is hi_pool10_6 = 0b000000 & rt = 0 & hi_pool3_2 = 0b00 & hi_uimm0_3; uimm16
 	[code = (hi_uimm0_3 << 16) | uimm16;] unimpl
+
+
+# UASH rt, offset(rs)
+:UASH rt, lo_soffset9(rs) is
+	hi_pool10_6 = 0b101001 & rt & rs;
+	lo_pool11_4 = 0b0101 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b01 & lo_soffset9
+	unimpl
+
+
+# UASW rt, offset(rs)
+## alias for UASWM count=1
+:UASW rt, lo_soffset9(rs) is
+	hi_pool10_6 = 0b101001 & rt & rs;
+	count3 = 1 & lo_pool11_1 = 0b1 & lo_pool10_1 = 0b1 & lo_pool8_2 = 0b01 & lo_soffset9
+	unimpl
+
+
+# UASWM rt, offset(rs), count
+:UASWM rt, lo_soffset9(rs), count3 is
+	hi_pool10_6 = 0b101001 & rt & rs;
+	count3 & lo_pool11_1 = 0b1 & lo_pool10_1 = 0b1 & lo_pool8_2 = 0b01 & lo_soffset9
+	unimpl
 
 
 # WAIT code
