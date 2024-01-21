@@ -1528,6 +1528,13 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 	[code = (hi_uimm0_3 << 16) | uimm16;] unimpl
 
 
+# UALH rt, offset(rs)
+:UALH rt, lo_soffset9(rs) is
+	hi_pool10_6 = 0b101001 & rt & rs;
+	lo_pool11_4 = 0b0100 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b01 & lo_soffset9
+	unimpl
+
+
 # UALW rt, offset(rs)
 ## alias for UALWM count=1
 :UALW rt, lo_soffset9(rs) is
