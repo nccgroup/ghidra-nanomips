@@ -979,6 +979,16 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 	# NOTE: not sure how to handle coprocessor instructions
 }
 
+# CLO rt, rs
+:CLO rt, rs is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	lo_pool9_7 = 0b0100101 & lo_pool6_3 = 0b100 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
+	{
+		# count leading 1s
+		rt = lzcount(~rs);
+	}
+
+
 # LI
 ## LI[16]
 :LI rt3, s is hi_pool10_6 = 0b110100 & rt3 & eu_imm7 = 127 [s = -1;] {
