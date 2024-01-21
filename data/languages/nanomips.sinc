@@ -700,6 +700,15 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 	lo_pool11_4 = 0b0111 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10 & lo_soffset9
 	unimpl
 
+# CLO rt, rs
+:CLO rt, rs is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	lo_pool9_7 = 0b0100101 & lo_pool6_3 = 0b100 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
+	{
+		# count leading 1s
+		rt = lzcount(~rs);
+	}
+
 # CLZ
 ## CLZ rt, rs
 :CLZ rt, rs is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool9_7 = 0b0101101 & lo_pool6_3 = 0b100 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111 {
@@ -1008,16 +1017,6 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 :LHXS rd, rs(rt) is hi_pool10_6 = 0b001000 & rt & rs; rd  & lo_pool7_4 = 0b0100 & lo_pool6_1 = 0b1 & lo_pool3_3 = 0b000 & lo_pool0_3 = 0b111 {
 	# NOTE: not sure how to handle coprocessor instructions
 }
-
-# CLO rt, rs
-:CLO rt, rs is
-	hi_pool10_6 = 0b001000 & rt & rs;
-	lo_pool9_7 = 0b0100101 & lo_pool6_3 = 0b100 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
-	{
-		# count leading 1s
-		rt = lzcount(~rs);
-	}
-
 
 # LI
 ## LI[16]
