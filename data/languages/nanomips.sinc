@@ -1156,9 +1156,22 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 	#TODO: read register and sign extend
 }
 
+# MFHC0
+## MFHC0 rt, c0s, sel
+:MFHC0 rt, c0s, sel is hi_pool10_6 = 0b001000 & rt & c0s; sel & lo_pool3_7 = 0b0000111 & lo_pool0_3 = 0b000 {
+	#TODO: read register and sign extend
+}
+
 # MOD
 ## MOD rd, rs, rt
 :MOD rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0101011 & lo_pool0_3 = 0b000 {
+	rd = rs % rt;
+}
+
+# MODU
+## MOD rd, rs, rt
+:MODU rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0111011 & lo_pool0_3 = 0b000 {
+	# TODO :zero extend
 	rd = rs % rt;
 }
 
@@ -1166,6 +1179,25 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 ## MOVE rt, rs
 :MOVE rt, rs is hi_pool10_6 = 0b000100 & rt & rs {
 	rt = rs;
+}
+
+# MOVE.BALC ()
+## MOVE.BALC rt, rs
+#:MOVE.BALC rt, rs is hi_pool10_6 = 0b000100 & rt & rs {
+#	rt = rs;
+#}
+
+# MOVEP ()
+## MOVE rt, rs
+#:MOVE rt, rs is hi_pool10_6 = 0b000100 & rt & rs {
+#	rt = rs;
+#}
+
+# MOVN
+## MOVN rd, rs, rt
+:MOVN rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool10_1 = 1 & lo_pool3_7 = 0b1000010 & lo_pool0_3 = 0b000 {
+	#TODO: work out zero logic with rt
+	rd = rs;
 }
 
 # MOVZ
@@ -1181,6 +1213,23 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 	#TODO: read register and sign extend
 }
 
+# MTHC0
+## MTHC0 rt, c0s, sel
+:MTHC0 rt, c0s, sel is hi_pool10_6 = 0b001000 & rt & c0s; sel & lo_pool3_7 = 0b0001111 & lo_pool0_3 = 0b000 {
+	#TODO: read register and sign extend
+}
+
+# MUH
+## MUH rd, rs, rt
+:MUH rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0001011 & lo_pool0_3 = 0b000 {
+	rd = rs * rt;
+}
+
+# MUHU
+## MUHU  rd, rs, rt
+:MUHU rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0011011 & lo_pool0_3 = 0b000 {
+	rd = rs * rt;
+}
 
 # MUL
 ## MUL rd, rs, rt
@@ -1188,10 +1237,30 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 	rd = rs * rt;
 }
 
+# MULU
+## MUL rd, rs, rt
+:MULU rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0010011 & lo_pool0_3 = 0b000 {
+	rd = rs * rt;
+}
+
+# NOP
+## NOP
+:NOP is hi_pool10_6 = 0b100000 & hi_pool5_5 = 0b00000; lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0000 & lo_pool0_5 = 0b00000 { }
+
+# NOP
+## NOP
+:NOP is hi_pool10_6 = 0b100100 & hi_pool5_5 = 0b00000 & hi_pool3_1 = 0b0 { }
+
 # NOR
 ## NOR rd, rs, rt
 :NOR rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b1011010 & lo_pool0_3 = 0b000 {
 	rt = ~(rs | rt);
+}
+
+# NOT
+## NOT[16] rt, rs
+:NOT rt3, rs3 is hi_pool10_6 = 0b001000 & rt3 & rs3 {
+	rt3 = ~(rs3);
 }
 
 # OR
@@ -1204,6 +1273,49 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 :OR rt3, rs3 is hi_pool10_6 = 0b010100 & rt3 & rs3 & hi_pool2_2 = 0b11 & hi_pool1_1 = 0 & hi_pool0_1 = 0 {
 	rt3 = rs3 ^ rt3;
 }
+
+# ORI
+## OR rd, rs, rt
+:ORI rt, rs, lo_uimm0_12 is hi_pool10_6 = 0b100000 & rt & rs; lo_pool12_4 = 0b0000 & lo_uimm0_12 {
+	rt = rs | lo_uimm0_12;
+}
+
+# PAUSE
+## PAUSE rd, rs, rt
+:PAUSE is hi_pool10_6 = 0b100000 & hi_pool5_5 = 0b00000; lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0000 & lo_pool0_5 = 0b00101 unimpl
+
+# PREF
+## PREF hint, offset(rs)
+## TODO: make a custom hint register
+:PREF rt, lo_pool0_8(rs) is hi_pool10_6 = 0b101001 & rt & rs; lo_pool15_1 & lo_pool11_4 = 0b0011 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b00 & lo_pool0_8 {
+	rt = *(rs + lo_pool0_8); # TODO: currently updating this to be correct, this is not correct atm
+	#TODO: make the number
+}
+
+# PREF
+## PREF[U12[ hint, offset(rs)
+## TODO: make a custom hint register
+:PREF rt, lo_uimm0_12(rs) is hi_pool10_6 = 0b100001 & rt & rs; lo_pool12_4 = 0b0011 & lo_uimm0_12 {
+	*(rs + lo_uimm0_12) = rt; # TODO: currently updating this to be correct, this is not correct atm
+}
+
+# PREFE
+## PREFE hint, offset(rs)
+## TODO: make a custom hint register
+:PREFE rt, lo_pool0_8(rs) is hi_pool10_6 = 0b101001 & rt & rs; lo_pool15_1 & lo_pool11_4 = 0b0011 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10 & lo_pool0_8 {
+	rt = *(rs + lo_pool0_8); # TODO: currently updating this to be correct, this is not correct atm
+	#TODO: make the number
+}
+
+# RDHWR ()
+## RDHWR rd, rs, rt
+#:RDHWR rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0000011 & lo_pool0_3 = 0b000 {
+#	rd = rs * rt;
+#}
+
+# RDPGPR
+## RDPGPR rd, rs, rt
+:RDPGPR rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool14_2 = 0b11 & lo_pool9_5 = 0b10000 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111 unimpl
 
 # RESTORE.JRC
 ## RESTORE>JRC[16] u, [ src1 [, src2 [ ..,]]
@@ -1231,6 +1343,113 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 :ROTR rt, rs, lo_pool0_5 is hi_pool10_6 = 0b100000 & rt & rs; lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0110 & lo_pool0_5 {
 	# TODO: sign extend
 	rt = rs >> lo_pool0_5;
+}
+
+# ROTRV
+## ROTRV rd, rs, shift
+:ROTRV rd, rs, rt is hi_pool10_6 = 0b100000 & rt & rs; rd & lo_pool3_7 = 0b0011010 & lo_pool0_3 = 0b000 {
+	# TODO: complete operation
+	# TODO: sign extend
+	rd = rs >> rt;
+}
+
+# ROTX ()
+## ROTX rd, rs, shift
+#:ROTX rt, rs, lo_pool0_5 is hi_pool10_6 = 0b100000 & rt & rs; lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0110 & lo_pool0_5 {
+#	# TODO: sign extend
+#	rt = rs >> lo_pool0_5;
+#}
+
+# SB
+## SB rt, offset(rs)
+:SB rt, lo_uimm0_12(rs) is hi_pool10_6 = 0b100001 & rt & rs; lo_pool12_4 = 0b0001 & lo_uimm0_12 {
+	#TODO: save only a byte? (specify 8 bits?)
+	*(rs + lo_uimm0_12) = rt; # TODO: currently updating this to be correct, this is not correct atm
+}
+
+# SB
+## SB[16] rt, offset(rs)
+## TODO: replace with rtz3
+## TODO: make uim
+:SB rt3, hi_pool0_2(rs3) is hi_pool10_6 = 0b100111 & rt3 & rs3 & hi_pool2_2 = 0b01 & hi_pool0_2 {
+	*(rs3 + hi_pool0_2) = rt3; # TODO: currently updating this to be correct, this is not correct atm
+}
+
+# SB
+## SB[GP] rt, offset(rs)
+##TODO:  SB[GP]/[s9[
+:SB rt, lo_pool0_16(gp) is hi_pool10_6 = 0b010001 & rt & hi_pool2_3 = 0b001 & hi_pool0_2; lo_pool0_16 & gp {
+	#TODO: save only a byte? (specify 8 bits?)
+	#*(rs + lo_uimm0_12) = rt; # TODO: currently updating this to be correct, this is not correct atm
+}
+
+# SB
+## SB[S9] rt, offset(rs)
+:SB rt, lo_pool0_8(rs) is hi_pool10_6 = 0b101001 & rt & rs; lo_pool15_1 & lo_pool11_4 = 0b0001 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b00 & lo_pool0_8 {
+	rt = *(rs + lo_pool0_8); # TODO: currently updating this to be correct, this is not correct atm
+	#TODO: make the number
+}
+
+# SBE
+## SBE rd, rs, shift
+:SBE rt, lo_pool0_8(rs) is hi_pool10_6 = 0b101001 & rt & rs; lo_pool15_1 & lo_pool11_4 = 0b0001 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10 & lo_pool0_8 {
+	rt = *(rs + lo_pool0_8); # TODO: currently updating this to be correct, this is not correct atm
+	#TODO: make the number
+}
+# SBX
+## SBX rd, rs, shift
+:SBX rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool7_4 = 0b0001 & lo_pool6_1 = 0b0 & lo_pool3_3 = 0b000 & lo_pool0_3 = 0b111 {
+
+}
+
+# SC ()
+## SC rd, rs, shift
+:SC rt, lo_pool2_6(rs) is hi_pool10_6 = 0b101001 & rt & rs; lo_pool15_1 & lo_pool11_4 = 0b1011 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b01 & lo_pool2_6 & lo_pool0_2 = 0b00 {
+	#*(rs3 + hi_pool0_2) = rt3; # TODO: currently updating this to be correct, this is not correct atm
+}
+
+# SCE ()
+## SCE rd, rs, shift
+:SCE rt, lo_pool2_6(rs) is hi_pool10_6 = 0b101001 & rt & rs; lo_pool15_1 & lo_pool11_4 = 0b1011 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10 & lo_pool2_6 & lo_pool0_2 = 0b00 {
+	#*(rs3 + hi_pool0_2) = rt3; # TODO: currently updating this to be correct, this is not correct atm
+}
+
+# SCWP ()
+## SCWP rd, rs, shift
+:SCWP rt, lo_pool3_5(rs) is hi_pool10_6 = 0b101001 & rt & rs; lo_pool15_1 & lo_pool11_4 = 0b1011 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b01 & lo_pool3_5 & lo_pool0_2 = 0b01 {
+	#*(rs3 + hi_pool0_2) = rt3; # TODO: currently updating this to be correct, this is not correct atm
+}
+
+# SCWPE ()
+## SCWPE rd, rs, shift
+:SCWPE rt, lo_pool3_5(rs) is hi_pool10_6 = 0b101001 & rt & rs; lo_pool15_1 & lo_pool11_4 = 0b1011 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10 & lo_pool3_5 & lo_pool0_2 = 0b01 {
+	#*(rs3 + hi_pool0_2) = rt3; # TODO: currently updating this to be correct, this is not correct atm
+}
+
+# SDBBP
+## SDBBP
+:SDBBP is hi_pool10_6 = 0b000000 & hi_pool5_5 = 0b00000 & hi_pool3_2 = 0b11 & hi_pool0_3; lo_pool0_16 {
+	# TODO: construct the code
+	#rt = rs >> lo_pool0_5;
+}
+
+# SDBBP
+## SDBBP[16]
+:SDBBP is hi_pool10_6 = 0b001000 & hi_pool5_5 = 0b00000 & hi_pool3_2 = 0b11 & hi_pool0_2 {
+	# TODO: construct the code
+}
+
+# SEB
+## SEB
+:SEB is hi_pool10_6 = 0b001000 & rt & rs; lo_pool3_7 = 0b0000001 & lo_pool0_3 = 0b000 {
+	rt = sext(rs);
+}
+
+# SEH ()
+## SEH
+:SEB is hi_pool10_6 = 0b001000 & rt & rs; lo_pool3_7 = 0b0001001 & lo_pool0_3 = 0b000 {
+	# TODO: sign extend from 16 bits
+	rt = sext(rs);
 }
 
 # SLL
