@@ -5,16 +5,19 @@ define token instrhi(16)
 	hi_pool9_1 = (9, 9)
 	hi_pool8_1 = (8, 8)
 	hi_pool6_1 = (6, 6)
+	hi_pool5_5 = (5, 9)
 	hi_pool4_1 = (4, 4)
 	hi_pool3_2 = (3, 4)
 	hi_pool3_1 = (3, 3)
 	hi_pool2_3 = (2, 4)
 	hi_pool2_2 = (2, 3)
 	hi_pool2_1 = (2, 2)
+	hi_pool1_2 = (1, 2)
 	hi_pool1_1 = (1, 1)
 	hi_pool0_5 = (0, 4)  # P48I, P.BR3A
 	hi_pool0_4 = (0, 3)  # P16.BR u[4:1]
 	hi_pool0_3 = (0, 2)
+	hi_pool0_2 = (0, 1)
 	hi_pool0_1 = (0, 0)
 	
 	hint = (5, 9)  # hi_pool5_5
@@ -64,14 +67,18 @@ define token instrhi(16)
 	;
 	
 define token instrlo(16)
+	lo_pool15_1 = (15, 15)
 	lo_pool14_2 = (14, 15)
 	lo_pool12_4 = (12, 15)
+	lo_pool12_3 = (12, 14)
+	lo_pool11_5 = (11, 15)
 	lo_pool11_4 = (11, 14)
 	lo_pool11_1 = (11, 11)
 	lo_pool10_3 = (10, 12)
 	lo_pool10_1 = (10, 10)
 	lo_pool9_7 = (9, 15)
 	lo_pool9_5 = (9, 13)
+	lo_pool9_2 = (9, 10)
 	lo_pool8_3 = (8, 10)
 	lo_pool8_2 = (8, 9)
 	lo_pool7_4 = (7, 10)
@@ -82,11 +89,18 @@ define token instrlo(16)
 	lo_pool5_1 = (5, 5)
 	lo_pool3_9 = (3, 11)
 	lo_pool3_7 = (3, 9)
+	lo_pool3_5 = (3, 7)
 	lo_pool3_3 = (3, 5)
 	lo_pool3_2 = (3, 4)
+	lo_pool2_14 = (2, 15)
+	lo_pool2_10 = (2, 11)
+	lo_pool2_6 = (2, 7)
 	lo_pool2_2 = (2, 3)
 	lo_pool2_1 = (2, 2)
+	lo_pool1_15 = (1, 15)
 	lo_pool1_1 = (1, 1)
+	lo_pool0_16 = (0, 15)
+	lo_pool0_8 = (0, 7)
 	lo_pool0_5 = (0, 4)
 	lo_pool0_3 = (0, 2)
 	lo_pool0_2 = (0, 1)
@@ -663,6 +677,54 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 	lo_pool11_4 = 0b0111 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10 & lo_soffset9
 	unimpl
 
+# CLZ
+## CLZ rt, rs
+:CLZ rt, rs is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool9_7 = 0b0101101 & lo_pool6_3 = 0b100 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111 {
+	# TODO: figure out how to implement this
+	rt = sext(rs);
+}
+
+# CRC32B
+## CRC32B rt, rs
+:CRC32B rt, rs is hi_pool10_6 = 0b001000 & rt & rs; lo_pool10_3 = 0b000 & lo_pool6_4 = 0b1111 & lo_pool5_1 = 0b1 & lo_pool3_2 = 0b01 & lo_pool0_3 = 0b000 {
+	# TODO: figure out how to implement this
+	rt = sext(rs);
+}
+
+# CRC32CB
+## CRC32CB rt, rs
+:CRC32CB rt, rs is hi_pool10_6 = 0b001000 & rt & rs; lo_pool10_3 = 0b100 & lo_pool6_4 = 0b1111 & lo_pool5_1 = 0b1 & lo_pool3_2 = 0b01 & lo_pool0_3 = 0b000 {
+	# TODO: figure out how to implement this
+	rt = sext(rs);
+}
+
+# CRC32CH
+## CRC32CH rt, rs
+:CRC32CH rt, rs is hi_pool10_6 = 0b001000 & rt & rs; lo_pool10_3 = 0b101 & lo_pool6_4 = 0b1111 & lo_pool5_1 = 0b1 & lo_pool3_2 = 0b01 & lo_pool0_3 = 0b000 {
+	# TODO: figure out how to implement this
+	rt = sext(rs);
+}
+
+# CRC32CW
+## CRC32CW rt, rs
+:CRC32CW rt, rs is hi_pool10_6 = 0b001000 & rt & rs; lo_pool10_3 = 0b110 & lo_pool6_4 = 0b1111 & lo_pool5_1 = 0b1 & lo_pool3_2 = 0b01 & lo_pool0_3 = 0b000 {
+	# TODO: figure out how to implement this
+	rt = sext(rs);
+}
+
+# CRC32H
+## CRC32H rt, rs
+:CRC32H rt, rs is hi_pool10_6 = 0b001000 & rt & rs; lo_pool10_3 = 0b001 & lo_pool6_4 = 0b1111 & lo_pool5_1 = 0b1 & lo_pool3_2 = 0b01 & lo_pool0_3 = 0b000 {
+	# TODO: figure out how to implement this
+	rt = sext(rs);
+}
+
+# CRC32W
+## CRC32W rt, rs
+:CRC32W rt, rs is hi_pool10_6 = 0b001000 & rt & rs; lo_pool10_3 = 0b010 & lo_pool6_4 = 0b1111 & lo_pool5_1 = 0b1 & lo_pool3_2 = 0b01 & lo_pool0_3 = 0b000 {
+	# TODO: figure out how to implement this
+	rt = sext(rs);
+}
 
 # LI
 ## LI[16]
@@ -892,9 +954,4 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 :RESTORE.JRC is hi_pool10_6 = 0b100000  & rt & hi_pool4_1 & hi_pool0_4; lo_pool12_4 = 0b0011 & lo_pool3_9 = 0 & lo_pool2_1 & lo_pool0_2 = 0b11 {
 
 }
-
-
-
-
-
 
