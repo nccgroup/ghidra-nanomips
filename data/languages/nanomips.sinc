@@ -402,8 +402,8 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 		export tmp;
 	}
 
-hilo_gp_uoffset18: offs("gp") is
-	hi_uimm0_2; lo_uimm1_15
+hilo_gp_uoffset18: offs(gp) is
+	gp & hi_uimm0_2; lo_uimm1_15
 	[
 		offs = (hi_uimm0_2 << 16) | (lo_uimm1_15 << 1);
 	]
@@ -412,8 +412,8 @@ hilo_gp_uoffset18: offs("gp") is
 		export *[ram]:4 addr;
 	}
 
-hilo_gp_uoffset21: offs("gp") is
-	hi_uimm0_5; lo_uimm2_14
+hilo_gp_uoffset21: offs(gp) is
+	gp & hi_uimm0_5; lo_uimm2_14
 	[
 		offs = (hi_uimm0_5 << 16) | (lo_uimm2_14 << 2);
 	]
@@ -422,8 +422,8 @@ hilo_gp_uoffset21: offs("gp") is
 		export *[ram]:4 addr;
 	}
 
-hi_gp_uoffset9: offs("gp") is
-	hi_uimm0_7
+hi_gp_uoffset9: offs(gp) is
+	gp & hi_uimm0_7
 	[
 		offs = hi_uimm0_7 << 2;
 	]
@@ -432,8 +432,8 @@ hi_gp_uoffset9: offs("gp") is
 		export *[ram]:4 addr;
 	}
 
-hi_sp_uoffset7: offs("sp") is
-	hi_uimm0_5
+hi_sp_uoffset7: offs(sp) is
+	sp & hi_uimm0_5
 	[
 		offs = hi_uimm0_5 << 2;
 	]
@@ -526,33 +526,52 @@ rt_offset_4rs: rs(rt) is
 
 ## ADDIU[GP48]
 # TODO: not available in P64 mode
-:ADDIU rt, "gp", s32 is hi_pool10_6 = 0b011000 & rt & hi_pool0_5 = 0b00010; lo_imm16; hi_imm16
-	[s32 = (hi_imm16 << 16) | lo_imm16;] {
-	# TODO signedness
-	# rs = $r28 = gp
-	rt = gp + s32;
-}
+:ADDIU rt, gp, s32 is
+	gp & hi_pool10_6 = 0b011000 & rt & hi_pool0_5 = 0b00010;
+	lo_imm16; hi_imm16
+	[
+		s32 = (hi_imm16 << 16) | lo_imm16;
+	]
+	{
+		# TODO signedness
+		# rs = $r28 = gp
+		rt = gp + s32;
+	}
 
 ## ADDIU[GP.B]
 # TODO: not available in P64 mode
-:ADDIU rt, "gp", u18 is hi_pool10_6 = 0b010001 & rt & hi_pool2_3 = 0b011 & hi_uimm0_2; uimm16
-	[u18 = (hi_uimm0_2 << 16) | uimm16;] {
-	rt = gp + u18;
-}
+:ADDIU rt, gp, u18 is
+	gp & hi_pool10_6 = 0b010001 & rt & hi_pool2_3 = 0b011 & hi_uimm0_2;
+	uimm16
+	[
+		u18 = (hi_uimm0_2 << 16) | uimm16;
+	]
+	{
+		rt = gp + u18;
+	}
 
 ## ADDIU[GP.W]
 # TODO: not available in P64 mode
-:ADDIU rt, "gp", u21 is hi_pool10_6 = 0b010000 & rt & hi_uimm0_5; uimm2_14 & uimm0_2 = 0b00
-	[u21 = (hi_uimm0_5 << 18) | (uimm2_14 << 2);] {
-	rt = gp + u21;
-}
+:ADDIU rt, gp, u21 is
+	gp & hi_pool10_6 = 0b010000 & rt & hi_uimm0_5;
+	uimm2_14 & uimm0_2 = 0b00
+	[
+		u21 = (hi_uimm0_5 << 18) | (uimm2_14 << 2);
+	]
+	{
+		rt = gp + u21;
+	}
 
 ## ADDIU[R1.SP]
 # TODO: not available in P64 mode
-:ADDIU rt3, "sp", u8 is hi_pool10_6 = 0b011100 & rt3 & hi_pool6_1 = 0b1 & hi_uimm0_6
-	[u8 = hi_uimm0_6 << 2;] {
+:ADDIU rt3, sp, u8 is
+	sp & hi_pool10_6 = 0b011100 & rt3 & hi_pool6_1 = 0b1 & hi_uimm0_6
+	[
+		u8 = hi_uimm0_6 << 2;
+	]
+	{
 		rt3 = sp + u8;
-}
+	}
 
 ## ADDIU[R2]
 :ADDIU rt3, rs3, u5 is hi_pool10_6 = 0b100100 & rt3 & rs3 & hi_pool3_1 = 0b0 & hi_uimm0_3
