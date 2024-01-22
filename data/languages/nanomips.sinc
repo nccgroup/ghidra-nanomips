@@ -327,6 +327,16 @@ buimm7: uimm7 is
 		export tmp;
 	}
 
+pc_rel_saddr32: addr is
+	lo_imm16; hi_imm16
+	[
+		addr = inst_next + ((hi_imm16 << 16) | lo_imm16);
+	]
+	{
+		# TODO effective_address
+		export *[ram]:4 addr;
+	}
+
 hilo_saddr26: addr is
 	 hi_simm0_9; lo_simm1_15 & lo_signbit0_1
 	[
@@ -1861,6 +1871,16 @@ lo_rs_soffset9: lo_soffset9(rs) is
 	count3 & lo_pool11_1 = 0b1 & lo_pool10_1 = 0b1 & lo_pool8_2 = 0b00)
 	& lo_rs_soffset9
 	unimpl
+
+
+# SWPC rt, address
+## SWPC[48]
+:SWPC rt, pc_rel_saddr32 is
+	hi_pool10_6 = 0b011000 & rt & hi_pool0_5 = 0b01111;
+	pc_rel_saddr32
+	{
+		*:4 pc_rel_saddr32 = rt:4;
+	}
 
 
 # SAVE
