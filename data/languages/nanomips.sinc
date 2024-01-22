@@ -139,9 +139,10 @@ define token instrlo(16)
 
 	# data in same token as opcode bits
 	lo_uimm11_5 = (11, 15)
+	lo_uimm2_14 = (2, 15)
 	lo_uimm1_15 = (1, 15)
 	lo_uimm0_12 = (0, 11)
-	
+
 	lo_simm12_4 = (12, 15)
 	lo_simm2_10 = (2, 11)
 	lo_simm1_15 = (1, 15)
@@ -394,6 +395,16 @@ hilo_gp_uoffset18: offs("gp") is
 	hi_uimm0_2; lo_uimm1_15
 	[
 		offs = (hi_uimm0_2 << 16) | (lo_uimm1_15 << 1);
+	]
+	{
+		local addr = gp + offs;
+		export *[ram]:4 addr;
+	}
+
+hilo_gp_uoffset21: offs("gp") is
+	hi_uimm0_5; lo_uimm2_14
+	[
+		offs = (hi_uimm0_5 << 16) | (lo_uimm2_14 << 2);
 	]
 	{
 		local addr = gp + offs;
@@ -1777,6 +1788,15 @@ lo_rs_soffset9: lo_soffset9(rs) is
 	hi_pool10_6 = 0b111101 & rtz4 & hi_rs4_uoffset4
 	{
 		*:4 hi_rs4_uoffset4 = rtz4:4;
+	}
+
+## SW[GP]
+:SW rt, hilo_gp_uoffset21 is
+	(hi_pool10_6 = 0b010000 & rt;
+	lo_pool0_2 = 0b11)
+	& hilo_gp_uoffset21
+	{
+		*:4 hilo_gp_uoffset21 = rt:4;
 	}
 
 
