@@ -119,6 +119,7 @@ define token instrlo(16)
 	count3 = (12, 14)
 
 	lo_uimm11_5 = (11, 15)
+	lo_uimm1_15 = (1, 15)
 	lo_uimm0_12 = (0, 11)
 	
 	lo_simm12_4 = (12, 15)
@@ -332,6 +333,16 @@ lo_saddr15: addr is lo_simm1_13 & lo_signbit0_1
 	]
 	{
 		# TODO effective_address
+		export *[ram]:4 addr;
+	}
+
+hilo_gp_uoffset18: offs("gp") is
+	hi_uimm0_2; lo_uimm1_15
+	[
+		offs = (hi_uimm0_2 << 16) | (lo_uimm1_15 << 1);
+	]
+	{
+		local addr = gp + offs;
 		export *[ram]:4 addr;
 	}
 
@@ -1522,6 +1533,15 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 	hi_pool10_6 = 0b011111 & rtz3 & hi_uoffset3 & hi_pool3_1 = 0b0 & hi_pool0_1 = 0b1
 	{
 		*:2 hi_uoffset3 = rtz3:2;
+	}
+
+## SH[GP]
+:SH rt, hilo_gp_uoffset18 is
+	(hi_pool10_6 = 0b010001 & rt & hi_pool2_3 = 0b101;
+	lo_pool0_1 = 0b0)
+	& hilo_gp_uoffset18
+	{
+		*:2 hilo_gp_uoffset18 = rt:2;
 	}
 
 
