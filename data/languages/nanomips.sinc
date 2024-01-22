@@ -715,15 +715,16 @@ rt_offset_4rs: rs(rt) is
 		if (testbit == 1) goto lo_saddr12;
 	}
 
+
 # BC address
 ## BC[32]
-:BC addr is hi_pool10_6 = 0b001010 & hi_pool9_1 = 0b0 & hi_simm0_9; lo_simm1_15 & lo_signbit0_1
-	[addr = ((lo_signbit0_1 << 25) | (hi_simm0_9 << 16) | (lo_simm1_15 << 1)) + inst_next;] {
+:BC hilo_saddr26 is
+	(hi_pool10_6 = 0b001010 & hi_pool9_1 = 0b0) ... & hilo_saddr26
+	{
 		# TODO should be effective_address(addr)
 		ra = inst_next;
-		# TODO make into a call
-		pc = addr;
-}
+		call hilo_saddr26;
+	}
 
 ## BC[16]
 :BC hi_saddr11 is hi_pool10_6 = 0b000110 & hi_saddr11 {
