@@ -65,6 +65,7 @@ define token instrhi(16)
 	hi_uimm3_1 = (3, 3)
 	hi_uimm1_2 = (1, 2)
 	hi_uimm0_10 = (0, 9)
+	hi_uimm0_7 = (0, 6)
 	hi_uimm0_2 = (0, 1)
 	hi_uimm0_5 = (0, 4)
 	hi_uimm0_6 = (0, 5)
@@ -405,6 +406,16 @@ hilo_gp_uoffset21: offs("gp") is
 	hi_uimm0_5; lo_uimm2_14
 	[
 		offs = (hi_uimm0_5 << 16) | (lo_uimm2_14 << 2);
+	]
+	{
+		local addr = gp + offs;
+		export *[ram]:4 addr;
+	}
+
+hi_gp_uoffset9: offs("gp") is
+	hi_uimm0_7
+	[
+		offs = hi_uimm0_7 << 2;
 	]
 	{
 		local addr = gp + offs;
@@ -1799,6 +1810,12 @@ lo_rs_soffset9: lo_soffset9(rs) is
 		*:4 hilo_gp_uoffset21 = rt:4;
 	}
 
+## SW[GP16]
+:SW rtz3, hi_gp_uoffset9 is
+	hi_pool10_6 = 0b110101 & rtz3 & hi_gp_uoffset9
+	{
+		*:4 hi_gp_uoffset9 = rtz3:4;
+	}
 
 # SW[SP]
 ## SW rt, offset(sp)
