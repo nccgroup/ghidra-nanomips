@@ -1052,12 +1052,31 @@ rt_offset_4rs: rs(rt) is
 #	# NOTE: not sure how to handle coprocessor instructions
 #}
 
+
+# JALRC dst, src
+## JALRC[32]
+:JALRC rt, rs is
+	hi_pool10_6 = 0b010010 & rt & rs;
+	lo_pool12_4 = 0b0000
+	{
+		rt = inst_next;
+		call rs;
+	}
+
+## JALRC[16]
+:JALRC ra, rt is
+	hi_pool10_6 = 0b110110 & rt & hi_pool4_1 = 0b1 & hi_pool0_4 = 0b0000 & ra
+	{
+		ra = inst_next;
+		call rt;
+	}
+
+
 # JRC
 :JRC rt is hi_pool10_6 = 0b110110 & rt & hi_pool4_1 = 0 & hi_pool0_4 = 0b0000 {
 	pc = rt;
 }
 
-## TODO: JALRC instrs
 
 # LB
 ## LB rt, offset(rs)
