@@ -51,6 +51,8 @@ define token instrhi(16)
 	# disjointed msb requires group per possible bit value (see issue #4140)
 	rt4_msb0 = (5, 7)
 	rt4_msb1 = (5, 7)
+	rtz4_msb0 = (5, 7)
+	rtz4_msb1 = (5, 7)
 	rd4_from_rt4_msb0 = (5, 7)
 	rd4_from_rt4_msb1 = (5, 7)
 
@@ -59,6 +61,8 @@ define token instrhi(16)
 
 	# data in same token as opcode bits
 	eu_imm7 = (0, 6)
+	hi_uimm8_1 = (8, 8)
+	hi_uimm3_1 = (3, 3)
 	hi_uimm1_2 = (1, 2)
 	hi_uimm0_10 = (0, 9)
 	hi_uimm0_2 = (0, 1)
@@ -200,6 +204,19 @@ attach variables [ rt4_msb1 rs4_msb1 rd4_from_rt4_msb1 ] [
 	s4 s5 s6 s7
 ];
 
+# gpr4.zero: Source GPR used by store and movep instructions. Use $0 instead of a7
+# gpr_list = [8, 9, 10, 0, 4, 5, 6, 7, 16, 17, 18, 19, 20, 21, 22, 23]
+attach variables [ rtz4_msb0 ] [
+	a4 a5 a6 zero
+	a0 a1 a2 a3
+];
+
+attach variables [ rtz4_msb1 ] [
+	s0 s1 s2 s3
+	s4 s5 s6 s7
+];
+
+
 attach values [count3] [8 1 2 3 4 5 6 7];
 
 ################################################################
@@ -288,6 +305,8 @@ rd4_from_rt4: rd4_from_rt4_msb1 is hi_pool9_1 = 0b1 & rd4_from_rt4_msb1 {export 
 rs4: rs4_msb0 is hi_pool4_1 = 0b0 & rs4_msb0 {export rs4_msb0;}
 rs4: rs4_msb1 is hi_pool4_1 = 0b1 & rs4_msb1 {export rs4_msb1;}
 
+rtz4: rtz4_msb0 is hi_pool9_1 = 0b0 & rtz4_msb0 {export rtz4_msb0;}
+rtz4: rtz4_msb1 is hi_pool9_1 = 0b1 & rtz4_msb1 {export rtz4_msb1;}
 
 rs_scale2: rs is rs
 	{
@@ -398,6 +417,16 @@ hi_rs3_uoffset3: offs(rs3) is
 	]
 	{
 		local addr = rs3 + offs;
+		export *[ram]:4 addr;
+	}
+
+hi_rs4_uoffset4: offs(rs4) is
+	rs4 & hi_uimm8_1 & hi_uimm3_1
+	[
+		offs = (hi_uimm3_1 << 3) | (hi_uimm8_1 << 2);
+	]
+	{
+		local addr = rs4 + offs;
 		export *[ram]:4 addr;
 	}
 
@@ -1742,6 +1771,14 @@ lo_rs_soffset9: lo_soffset9(rs) is
 	{
 		*:4 hi_rs3_uoffset6 = rtz3:4;
 	}
+
+## SW[4X4]
+:SW rtz4, hi_rs4_uoffset4 is
+	hi_pool10_6 = 0b111101 & rtz4 & hi_rs4_uoffset4
+	{
+		*:4 hi_rs4_uoffset4 = rtz4:4;
+	}
+
 
 # SW[SP]
 ## SW rt, offset(sp)
