@@ -486,6 +486,14 @@ lo_rs_soffset9: lo_soffset9(rs) is
 		export *[ram]:4 addr;
 	}
 
+rt_offset_rs: rs(rt) is
+	rt & rs
+	{
+		# TODO effective_address
+		local addr = rt + rs;
+		export *[ram]:4 addr;
+	}
+
 
 # ADD rd, rs, rt
 :ADD rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0100010 & lo_pool0_3 = 0b000 {
@@ -1898,6 +1906,17 @@ lo_rs_soffset9: lo_soffset9(rs) is
 	pc_rel_saddr32
 	{
 		*:4 pc_rel_saddr32 = rt:4;
+	}
+
+
+# SWX rd, rs(rt)
+:SWX rd, rt_offset_rs is
+	hi_pool10_6 = 0b001000 & rt_offset_rs;
+	rd & lo_pool7_4 = 0b1001 & lo_pool6_1 = 0b0 & lo_pool3_3 = 0b000 & lo_pool0_3 = 0b111
+	{
+		# docs have a possible typo in purpose saying data comes from rt,
+		# but the pseudo-code shows it comes from rd
+		*:4 rt_offset_rs = rd:4;
 	}
 
 
