@@ -1844,6 +1844,17 @@ lo_rs_soffset9: lo_soffset9(rs) is
 	}
 
 
+# SWE rt, offset(rs)
+:SWE rt, lo_rs_soffset9 is
+	(hi_pool10_6 = 0b101001 & rt;
+	lo_pool11_4 = 0b1001 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10)
+	& lo_rs_soffset9
+	{
+		# TODO EVA addressing mode
+		*:4 lo_rs_soffset9 = rt:4;
+	}
+
+
 # SAVE
 ## SAVE[16] u, [ src1 [, src2 [ ..,]]
 ## TODO: figure out how to display registers (seems complicated)
