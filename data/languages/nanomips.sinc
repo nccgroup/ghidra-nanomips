@@ -1855,6 +1855,14 @@ lo_rs_soffset9: lo_soffset9(rs) is
 	}
 
 
+# SWM rt, offset(rs), count
+:SWM rt, lo_rs_soffset9, count3 is
+	(hi_pool10_6 = 0b101001 & rt;
+	count3 & lo_pool11_1 = 0b1 & lo_pool10_1 = 0b1 & lo_pool8_2 = 0b00)
+	& lo_rs_soffset9
+	unimpl
+
+
 # SAVE
 ## SAVE[16] u, [ src1 [, src2 [ ..,]]
 ## TODO: figure out how to display registers (seems complicated)
