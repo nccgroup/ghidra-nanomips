@@ -104,6 +104,7 @@ define token instrlo(16)
 	lo_pool1_15 = (1, 15)
 	lo_pool1_1 = (1, 1)
 	lo_pool0_16 = (0, 15)
+	lo_pool0_12 = (0, 11)
 	lo_pool0_8 = (0, 7)
 	lo_pool0_5 = (0, 4)
 	lo_pool0_3 = (0, 2)
@@ -570,6 +571,23 @@ lo_rs_soffset9: lo_soffset9(rs) is
 		local testbit:4 = (rt >> bitpos) & 1;
 		if (testbit == 1) goto lo_saddr12;
 	}
+
+# BC address
+## BC[32]
+:BC addr is hi_pool10_6 = 0b001010 & hi_pool9_1 = 0b0 & hi_simm0_9; lo_simm1_15 & lo_signbit0_1
+	[addr = ((lo_signbit0_1 << 25) | (hi_simm0_9 << 16) | (lo_simm1_15 << 1)) + inst_next;] {
+		# TODO should be effective_address(addr)
+		ra = inst_next;
+		# TODO make into a call
+		pc = addr;
+}
+
+## BC[16]
+:BC hi_saddr11 is hi_pool10_6 = 0b000110 & hi_saddr11 {
+		# TODO should be effective_address(addr)
+		ra = inst_next;
+		call hi_saddr11;
+}
 
 
 # BEQC rs, rt, address
@@ -1203,7 +1221,7 @@ lo_rs_soffset9: lo_soffset9(rs) is
 
 # LWXS
 ## LWXS rt, offset(sp)
-:LWX rd, rs(rt) is hi_pool10_6 = 0b001000 & rt & rs; rd  & lo_pool7_4 = 0b1000 & lo_pool6_1 = 0b1 & lo_pool3_3 = 0b000 & lo_pool0_3 = 0b111 {
+:LWXS rd, rs(rt) is hi_pool10_6 = 0b001000 & rt & rs; rd  & lo_pool7_4 = 0b1000 & lo_pool6_1 = 0b1 & lo_pool3_3 = 0b000 & lo_pool0_3 = 0b111 {
 	# NOTE: not sure how to handle coprocessor instructions
 }
 
@@ -1384,14 +1402,14 @@ lo_rs_soffset9: lo_soffset9(rs) is
 # RESTORE
 ## RESTORE[32] u, [ src1 [, src2 [ ..,]]
 ## TODO: figure out how to display registers (seems complicated)
-:RESTORE is hi_pool10_6 = 0b100000  & rt & hi_pool4_1 = 0 & hi_pool0_4; lo_pool12_4 = 0b0011 & lo_pool3_9 = 0 & lo_pool2_1 & lo_pool0_2 = 0b10 {
+:RESTORE is hi_pool10_6 = 0b100000  & rt & hi_pool4_1 = 0 & hi_pool0_4; lo_pool12_4 = 0b0011 & lo_pool3_9 & lo_pool2_1 & lo_pool0_2 = 0b10 {
 
 }
 
 # RESTORE
 ## RESTORE.JRC[32] u, [ src1 [, src2 [ ..,]]
 ## TODO: figure out how to display registers (seems complicated)
-:RESTORE.JRC is hi_pool10_6 = 0b100000  & rt & hi_pool4_1 & hi_pool0_4; lo_pool12_4 = 0b0011 & lo_pool3_9 = 0 & lo_pool2_1 & lo_pool0_2 = 0b11 {
+:RESTORE.JRC is hi_pool10_6 = 0b100000  & rt & hi_pool4_1 & hi_pool0_4; lo_pool12_4 = 0b0011 & lo_pool3_9 & lo_pool2_1 & lo_pool0_2 = 0b11 {
 
 }
 
@@ -1573,6 +1591,62 @@ lo_rs_soffset9: lo_soffset9(rs) is
 	rt3 = rs3 << hi_pool0_3;
 }
 
+
+
+
+# SLLV
+## SLLV rd, rs, shift
+:SLLV rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0000010 & lo_pool0_3 = 0b000 {
+	rd = rs << (rt & 0x1f);
+}
+
+# SLT
+## SLT rd, rs, rt
+:SLT rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b1101010 & lo_pool0_3 = 0b000 {
+	#TODO: finish this out
+}
+
+
+
+
+# SLTI
+## SLTI rd, rs, rt
+:SLTI rt, rs, lo_pool0_12 is hi_pool10_6 = 0b100000  & rt & rs; lo_pool12_4 = 0b0100 & lo_pool0_12 {
+	#TODO: finish this out
+}
+
+# SLTIU
+## SLTIU rd, rs, rt
+:SLTIU rt, rs, lo_pool0_12 is hi_pool10_6 = 0b100000  & rt & rs; lo_pool12_4 = 0b0101 & lo_pool0_12 {
+	#TODO: finish this out
+}
+
+# SLTU
+## SLTU rd, rs, rt
+:SLTU rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b1110010 & lo_pool0_3 = 0b000 {
+	sum = rs + rt;
+	#TODO: finish this out
+}
+
+# SOV
+## SOV rd, rs, rt
+:SOV rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b1111010 & lo_pool0_3 = 0b000 {
+	sum = rs + rt;
+	#TODO: finish this out
+}
+
+# SRA
+## SRA rd, rs, shift
+:SRA rt, rs, lo_pool0_5 is hi_pool10_6 = 0b100000 & rt & rs; lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0100 & lo_pool0_5 {
+	rt = rs >> lo_pool0_5;
+}
+
+# SRAV
+## SRAV rd, rs, rt
+:SRAV rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0010010 & lo_pool0_3 = 0b000 {
+	rd = rs >> (rt & 0x1f);
+}
+
 # SRL
 ## SRL rd, rs, shift
 :SRL rt, rs, lo_pool0_5 is hi_pool10_6 = 0b100000 & rt & rs; lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0010 & lo_pool0_5 {
@@ -1587,12 +1661,33 @@ lo_rs_soffset9: lo_soffset9(rs) is
 	rt3 = rs3 >> hi_pool0_3;
 }
 
-# SRA
-## SRA rd, rs, shift
-:SRA rt, rs, lo_pool0_5 is hi_pool10_6 = 0b100000 & rt & rs; lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0100 & lo_pool0_5 {
-	rt = rs >> lo_pool0_5;
+# SRLV
+## SRLV rd, rs, rt
+:SRLV rd, rs, rt is hi_pool10_6 = 0b100000 & rt & rs; rd & lo_pool3_7 = 0b0001010 & lo_pool0_3 = 0b000 {
+    # TODO: incorporate signed extend
+	rd = rs >> (rt & 0x1f);
 }
 
+# SUB rd, rs, rt
+:SUB rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0110010 & lo_pool0_3 = 0b000 {
+	rd = rs - rt;
+	# TODO: trap on overflow
+	# TODO: sign extend?
+}
+
+# SUBU rd, rs, rt
+:SUBU rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0111010 & lo_pool0_3 = 0b000 {
+	rd = rs - rt;
+	# TODO: trap on overflow
+	# TODO: sign extend?
+}
+
+# SUBU rt, rs, imm
+## SUBU[16]
+# TODO: rt != 0 constraint doesn't work here (covered by SIGRIE?)
+:SUBU rd3, rs3, rt3 is hi_pool10_6 = 0b101100  & rt3 & rs3 & rd3 & hi_pool0_1 = 0b1 {
+	rd3 = rs3 + rt3;
+}
 
 # SW
 ## SW rt, offset(rs)
