@@ -1,6 +1,7 @@
 # sleigh include file for Skeleton language instructions
 
 define token instrhi(16)
+	# opcode bits
 	hi_pool10_6 = (10, 15)  # MAJOR / P32 / P16
 	hi_pool9_1 = (9, 9)
 	hi_pool8_1 = (8, 8)
@@ -24,6 +25,7 @@ define token instrhi(16)
 	
 	u4_1 = (0, 4)  # u[4:1] - naming convention conflict
 	
+	# normal register encodings
 	rt = (5, 9)
 	rt_raw = (5, 9)  # :'(
 	rs_from_rt = (5, 9)  # :'(
@@ -31,20 +33,27 @@ define token instrhi(16)
 	
 	c0s = (0, 4) # for MFC0
 
+	# 1 bit register encodings
 	rt1 = (9, 9)
 
+	# 3 bit register encodings
 	rt3 = (7, 9)
 	rt3_raw = (7, 9)
 	rd3_from_rt3 = (7, 9)
 	rtz3 = (7, 9)
+
 	rs3 = (4, 6)
 	rs3_raw = (4, 6)
+
 	rd3 = (1, 3)
-	
+
+	# 4 bit register encodings
 	rt4 = (5, 9)
 	rd4_from_rt4 = (5, 9)
+
 	rs4 = (0, 4)
-	
+
+	# data in same token as opcode bits
 	eu_imm7 = (0, 6)
 	hi_uimm1_2 = (1, 2)
 	hi_uimm0_10 = (0, 9)
@@ -71,6 +80,7 @@ define token instrhi(16)
 	;
 	
 define token instrlo(16)
+	# opcode bits
 	lo_pool15_1 = (15, 15)
 	lo_pool14_2 = (14, 15)
 	lo_pool12_4 = (12, 15)
@@ -119,6 +129,7 @@ define token instrlo(16)
 
 	count3 = (12, 14)
 
+	# data in same token as opcode bits
 	lo_uimm11_5 = (11, 15)
 	lo_uimm1_15 = (1, 15)
 	lo_uimm0_12 = (0, 11)
