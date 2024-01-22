@@ -422,6 +422,16 @@ hi_gp_uoffset9: offs("gp") is
 		export *[ram]:4 addr;
 	}
 
+hi_sp_uoffset7: offs("sp") is
+	hi_uimm0_5
+	[
+		offs = hi_uimm0_5 << 2;
+	]
+	{
+		local addr = sp + offs;
+		export *[ram]:4 addr;
+	}
+
 hi_rs3_uoffset6: offs(rs3) is
 	rs3 & hi_uimm0_4
 	[
@@ -1826,11 +1836,13 @@ lo_rs_soffset9: lo_soffset9(rs) is
 		*:4 lo_rs_soffset9 = rt:4;
 	}
 
-# SW[SP]
-## SW rt, offset(sp)
-:SW rt, off(sp) is hi_pool10_6 = 0b101101 & rt & u_imm5 & sp [off = (u_imm5 * 4);] {
-	*(sp + off) = rt; # TODO: update this to point to certain regions of space (i.e. ram, etc.), this syntax is seemingly wrong
-}
+## SW[SP]
+:SW rt, hi_sp_uoffset7 is
+	hi_pool10_6 = 0b101101 & rt & hi_sp_uoffset7
+	{
+		*:4 hi_sp_uoffset7 = rt:4;
+	}
+
 
 # SAVE
 ## SAVE[16] u, [ src1 [, src2 [ ..,]]
