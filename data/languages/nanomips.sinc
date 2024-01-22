@@ -1817,6 +1817,15 @@ lo_rs_soffset9: lo_soffset9(rs) is
 		*:4 hi_gp_uoffset9 = rtz3:4;
 	}
 
+## SW[S9]
+:SW rt, lo_rs_soffset9 is
+	(hi_pool10_6 = 0b101001 & rt;
+	lo_pool11_4 = 0b1001 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b00)
+	& lo_rs_soffset9
+	{
+		*:4 lo_rs_soffset9 = rt:4;
+	}
+
 # SW[SP]
 ## SW rt, offset(sp)
 :SW rt, off(sp) is hi_pool10_6 = 0b101101 & rt & u_imm5 & sp [off = (u_imm5 * 4);] {
