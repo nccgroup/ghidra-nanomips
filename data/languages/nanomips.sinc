@@ -1543,6 +1543,18 @@ lo_rs_soffset9: lo_soffset9(rs) is
 #	rt = rs >> lo_pool0_5;
 #}
 
+
+# SAVE
+## SAVE[16] u, [ src1 [, src2 [ ..,]]
+## TODO: figure out how to display registers (seems complicated)
+:SAVE is hi_pool10_6 = 0b000111 & rt1 & hi_pool8_1 = 0 &  u_imm4_4 & u_imm4 unimpl
+
+# SAVE
+## SAVE[32] u, [ src1 [, src2 [ ..,]]
+## TODO: figure out how to display registers (seems complicated)
+:SAVE is hi_pool10_6 = 0b100000  & rt & hi_pool4_1 = 0 & hi_pool0_4; lo_pool12_4 = 0b0011 & lo_pool3_9 = 0 & lo_pool2_1 & lo_pool0_2 = 0b00 unimpl
+
+
 # SB
 ## SB rt, offset(rs)
 :SB rt, lo_uimm0_12(rs) is hi_pool10_6 = 0b100001 & rt & rs; lo_pool12_4 = 0b0001 & lo_uimm0_12 {
@@ -1882,20 +1894,6 @@ lo_rs_soffset9: lo_soffset9(rs) is
 		*:4 pc_rel_saddr32 = rt:4;
 	}
 
-
-# SAVE
-## SAVE[16] u, [ src1 [, src2 [ ..,]]
-## TODO: figure out how to display registers (seems complicated)
-:SAVE is hi_pool10_6 = 0b000111 & rt1 & hi_pool8_1 = 0 &  u_imm4_4 & u_imm4 {
-
-}
-
-# SAVE
-## SAVE[32] u, [ src1 [, src2 [ ..,]]
-## TODO: figure out how to display registers (seems complicated)
-:SAVE is hi_pool10_6 = 0b100000  & rt & hi_pool4_1 = 0 & hi_pool0_4; lo_pool12_4 = 0b0011 & lo_pool3_9 = 0 & lo_pool2_1 & lo_pool0_2 = 0b00 {
-
-}
 
 # SIGRIE code
 # TODO: Signal Reserved Instruction Exception
