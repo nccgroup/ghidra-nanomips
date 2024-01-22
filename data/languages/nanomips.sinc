@@ -356,6 +356,16 @@ hilo_gp_uoffset18: offs("gp") is
 		export *[ram]:4 addr;
 	}
 
+hi_rs3_uoffset6: offs(rs3) is
+	rs3 & hi_uimm0_4
+	[
+		offs = hi_uimm0_4 << 2;
+	]
+	{
+		local addr = rs3 + offs;
+		export *[ram]:4 addr;
+	}
+
 hi_rs3_uoffset3: offs(rs3) is
 	rs3 & hi_uimm1_2
 	[
@@ -1689,18 +1699,22 @@ lo_rs_soffset9: lo_soffset9(rs) is
 	rd3 = rs3 + rt3;
 }
 
-# SW
-## SW rt, offset(rs)
-:SW rt, lo_uimm0_12(rs) is hi_pool10_6 = 0b100001 & rt & rs; lo_pool12_4 = 0b1001 & lo_uimm0_12 {
-	*(rs + lo_uimm0_12) = rt; # TODO: currently updating this to be correct, this is not correct atm
-}
+# SW rt, offset(rs)
+## SW[U12]
+:SW rt, lo_rs_uoffset12 is
+	(hi_pool10_6 = 0b100001 & rt;
+	lo_pool12_4 = 0b1001)
+	& lo_rs_uoffset12
+	{
+		*:4 lo_rs_uoffset12 = rt:4;
+	}
 
-# SW16
-## SW16 rt3, offset(rs3)
-## TODO: swap rt3 with rtz3
-:SW rt3, u_imm4(rs3) is hi_pool10_6 = 0b100101 & rt3 & rs3 & u_imm4 {
-	*(rs3 + u_imm4) = rt3; # TODO: currently updating this to be correct, this is not correct atm
-}
+## SW[16]
+:SW rtz3, hi_rs3_uoffset6 is
+	hi_pool10_6 = 0b100101 & rtz3 & hi_rs3_uoffset6
+	{
+		*:4 hi_rs3_uoffset6 = rtz3:4;
+	}
 
 # SW[SP]
 ## SW rt, offset(sp)
