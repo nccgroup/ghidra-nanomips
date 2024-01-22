@@ -271,6 +271,16 @@ buimm7: uimm7 is
 		export tmp;
 	}
 
+hilo_saddr26: addr is
+	 hi_simm0_9; lo_simm1_15 & lo_signbit0_1
+	[
+		addr = inst_next + ((lo_signbit0_1 << 25) | (hi_simm0_9 << 16) | (lo_simm1_15 << 1));
+	]
+	{
+		# TODO should be effective_address(addr)
+		export *[ram]:4 addr;
+	}
+
 hi_uaddr5: addr is hi_uimm0_4
 	[
 		addr = inst_next + (hi_uimm0_4 << 1);
@@ -467,20 +477,20 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 
 # BALC address
 ## BALC[32]
-:BALC addr is hi_pool10_6 = 0b001010 & hi_pool9_1 = 0b1 & hi_simm0_9; lo_simm1_15 & lo_signbit0_1
-	[addr = ((lo_signbit0_1 << 25) | (hi_simm0_9 << 16) | (lo_simm1_15 << 1)) + inst_next;] {
-		# TODO should be effective_address(addr)
+:BALC hilo_saddr26 is
+	(hi_pool10_6 = 0b001010 & hi_pool9_1 = 0b1) ... & hilo_saddr26
+	{
 		ra = inst_next;
-		# TODO make into a call
-		pc = addr;
-}
+		call hilo_saddr26;
+	}
 
 ## BALC[16]
-:BALC hi_saddr11 is hi_pool10_6 = 0b001110 & hi_saddr11 {
-		# TODO should be effective_address(addr)
+:BALC hi_saddr11 is
+	hi_pool10_6 = 0b001110 & hi_saddr11
+	{
 		ra = inst_next;
 		call hi_saddr11;
-}
+	}
 
 
 # BALRSC rt, rs
