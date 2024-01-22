@@ -402,7 +402,7 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 		export tmp;
 	}
 
-hilo_gp_uoffset18: offs(gp) is
+hilo_gp_uoffset18_sl1: offs(gp) is
 	gp & hi_uimm0_2; lo_uimm1_15
 	[
 		offs = (hi_uimm0_2 << 16) | (lo_uimm1_15 << 1);
@@ -1828,12 +1828,12 @@ rt_offset_4rs: rs(rt) is
 	}
 
 ## SH[GP]
-:SH rt, hilo_gp_uoffset18 is
+:SH rt, hilo_gp_uoffset18_sl1 is
 	(hi_pool10_6 = 0b010001 & rt & hi_pool2_3 = 0b101;
 	lo_pool0_1 = 0b0)
-	& hilo_gp_uoffset18
+	& hilo_gp_uoffset18_sl1
 	{
-		*:2 hilo_gp_uoffset18 = rt:2;
+		*:2 hilo_gp_uoffset18_sl1 = rt:2;
 	}
 
 ## SH[S9]
