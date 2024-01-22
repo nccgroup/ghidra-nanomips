@@ -1528,6 +1528,19 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 	[code = (hi_uimm0_3 << 16) | uimm16;] unimpl
 
 
+# SYNC stype
+## stype=0 implied
+:SYNC is
+	hi_pool10_6 = 0b100000 & hi_pool5_5 = 0b00000 & hi_uimm0_5 = 0;
+	lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0000 & lo_pool0_5 = 0b00110
+	{}
+
+:SYNC hi_uimm0_5 is
+	hi_pool10_6 = 0b100000 & hi_pool5_5 = 0b00000 & hi_uimm0_5;
+	lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0000 & lo_pool0_5 = 0b00110
+	{}
+
+
 # SYNCI(E) offset(rs)
 ## SYNCI[S9]
 :SYNCI lo_soffset9(rs) is
