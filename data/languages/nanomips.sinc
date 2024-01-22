@@ -336,6 +336,15 @@ lo_saddr15: addr is lo_simm1_13 & lo_signbit0_1
 		export *[ram]:4 addr;
 	}
 
+lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
+	[
+		offs = (lo_signbit15_1 << 8) | lo_simm0_8;
+	]
+	{
+		local tmp:4 = offs;
+		export tmp;
+	}
+
 hilo_gp_uoffset18: offs("gp") is
 	hi_uimm0_2; lo_uimm1_15
 	[
@@ -346,7 +355,7 @@ hilo_gp_uoffset18: offs("gp") is
 		export *[ram]:4 addr;
 	}
 
-hi_uoffset3: offs(rs3) is
+hi_rs3_uoffset3: offs(rs3) is
 	rs3 & hi_uimm1_2
 	[
 		offs = hi_uimm1_2 << 1;
@@ -356,20 +365,11 @@ hi_uoffset3: offs(rs3) is
 		export *[ram]:4 addr;
 	}
 
-lo_uoffset12: lo_uimm0_12(rs) is
+lo_rs_uoffset12: lo_uimm0_12(rs) is
 	rs; lo_uimm0_12
 	{
 		local addr = rs + lo_uimm0_12;
 		export *[ram]:4 addr;
-	}
-
-lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
-	[
-		offs = (lo_signbit15_1 << 8) | lo_simm0_8;
-	]
-	{
-		local tmp:4 = offs;
-		export tmp;
 	}
 
 lo_rs_soffset9: lo_soffset9(rs) is
@@ -1527,19 +1527,19 @@ lo_rs_soffset9: lo_soffset9(rs) is
 
 # SH rt, offset(rs)
 ## SH[U12]
-:SH rt, lo_uoffset12 is
+:SH rt, lo_rs_uoffset12 is
 	(hi_pool10_6 = 0b100001 & rt;
 	lo_pool12_4 = 0b0101)
-	& lo_uoffset12
+	& lo_rs_uoffset12
 	{
-		*:2 lo_uoffset12 = rt:2;
+		*:2 lo_rs_uoffset12 = rt:2;
 	}
 
 ## SH[16]
-:SH rtz3, hi_uoffset3 is
-	hi_pool10_6 = 0b011111 & rtz3 & hi_uoffset3 & hi_pool3_1 = 0b0 & hi_pool0_1 = 0b1
+:SH rtz3, hi_rs3_uoffset3 is
+	hi_pool10_6 = 0b011111 & rtz3 & hi_rs3_uoffset3 & hi_pool3_1 = 0b0 & hi_pool0_1 = 0b1
 	{
-		*:2 hi_uoffset3 = rtz3:2;
+		*:2 hi_rs3_uoffset3 = rtz3:2;
 	}
 
 ## SH[GP]
