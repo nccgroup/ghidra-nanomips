@@ -1179,11 +1179,15 @@ rt_offset_4rs: rs(rt) is
 }
 
 
-# LB
-## LB rt, offset(rs)
-:LB rt, lo_uimm0_12(rs) is hi_pool10_6 = 0b100001 & rt & rs; lo_pool12_4 = 0b0000 & lo_uimm0_12 {
-	rt = *(rs + lo_uimm0_12); # TODO: currently updating this to be correct, this is not correct atm
-}
+# LB rt, offset(rs)
+## LB[U12]
+:LB rt, lo_rs_uoffset12 is
+	(hi_pool10_6 = 0b100001 & rt;
+	lo_pool12_4 = 0b0000)
+	& lo_rs_uoffset12
+	{
+		rt = sext(*:1 lo_rs_uoffset12);
+	}
 
 # LB
 ## LB[16] rt3, offset(rs3)
