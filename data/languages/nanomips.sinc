@@ -462,6 +462,13 @@ hi_rs3_uoffset3: offs(rs3) is
 		export *[ram]:4 addr;
 	}
 
+hi_rs3_uoffset2: hi_uimm0_2(rs3) is
+	rs3 & hi_uimm0_2
+	{
+		local addr = rs3 + hi_uimm0_2;
+		export *[ram]:4 addr;
+	}
+
 hi_rs4_uoffset4: offs(rs4) is
 	rs4 & hi_uimm8_1 & hi_uimm3_1
 	[
@@ -1189,13 +1196,13 @@ rt_offset_4rs: rs(rt) is
 		rt = sext(*:1 lo_rs_uoffset12);
 	}
 
-# LB
-## LB[16] rt3, offset(rs3)
-:LB rt3, hi_uimm0_2(rs3) is hi_pool10_6 = 0b010111 & rt3 & rs3 & hi_uimm0_2 {
-	rt3 = *(rs3 + hi_uimm0_2); # TODO: currently updating this to be correct, this is not correct atm
-}
+## LB[16]
+:LB rt3, hi_rs3_uoffset2 is
+	hi_pool10_6 = 0b010111 & rt3 & hi_rs3_uoffset2
+	{
+		rt3 = sext(*:1 hi_rs3_uoffset2);
+	}
 
-# LB
 ## LB[GP] rt, offset(gp)
 :LB rt, lo_pool0_16(gp) is hi_pool10_6 = 0b100001 & rt & hi_pool2_3 = 0b000 & hi_pool0_2; lo_pool0_16 & gp{
 	#rt = *(rs + lo_uimm0_12); # TODO: currently updating this to be correct, this is not correct atm
