@@ -1457,17 +1457,20 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 # SEB rt, rs
 :SEB rt, rs is
 	hi_pool10_6 = 0b001000 & rt & rs;
-	lo_pool3_7 = 0b0000001 & lo_pool0_3 = 0b000 {
-	rt = sext(rs & 0xff);
-}
+	lo_pool3_7 = 0b0000001 & lo_pool0_3 = 0b000
+	{
+		rt = sext(rs:1);
+	}
 
 
-# SEH ()
-## SEH
-:SEB is hi_pool10_6 = 0b001000 & rt & rs; lo_pool3_7 = 0b0001001 & lo_pool0_3 = 0b000 {
-	# TODO: sign extend from 16 bits
-	rt = sext(rs);
-}
+# SEH rt, rs
+:SEH rt, rs is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	lo_pool3_7 = 0b0001001 & lo_pool0_3 = 0b000
+	{
+		rt = sext(rs:2);
+	}
+
 
 # SLL
 ## SLL rd, rs, shift
