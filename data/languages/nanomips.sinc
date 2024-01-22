@@ -412,6 +412,16 @@ hilo_gp_uoffset18_sl1: offs(gp) is
 		export *[ram]:4 addr;
 	}
 
+hilo_gp_uoffset18: offs(gp) is
+	gp & hi_uimm0_2; uimm16
+	[
+		offs = (hi_uimm0_2 << 16) | uimm16;
+	]
+	{
+		local addr = gp + offs;
+		export *[ram]:4 addr;
+	}
+
 hilo_gp_uoffset21: offs(gp) is
 	gp & hi_uimm0_5; lo_uimm2_14
 	[
@@ -1203,12 +1213,12 @@ rt_offset_4rs: rs(rt) is
 		rt3 = sext(*:1 hi_rs3_uoffset2);
 	}
 
-## LB[GP] rt, offset(gp)
-:LB rt, lo_pool0_16(gp) is hi_pool10_6 = 0b100001 & rt & hi_pool2_3 = 0b000 & hi_pool0_2; lo_pool0_16 & gp{
-	#rt = *(rs + lo_uimm0_12); # TODO: currently updating this to be correct, this is not correct atm
-	#TODO: make the number
-	#TODO: Need to reference the uim12 example provided by LB
-}
+## LB[GP]
+:LB rt, hilo_gp_uoffset18 is
+	(hi_pool10_6 = 0b010001 & rt & hi_pool2_3 = 0b000) ... & hilo_gp_uoffset18
+	{
+		rt = sext(*:1 hilo_gp_uoffset18);
+	}
 
 # LB
 ## LB[S9] rt, offset(s9)
