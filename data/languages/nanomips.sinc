@@ -504,25 +504,35 @@ rt_offset_4rs: rs(rt) is
 
 
 # ADD rd, rs, rt
-:ADD rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0100010 & lo_pool0_3 = 0b000 {
-	rd = rs + rt;
-	# TODO: trap on overflow
-	# TODO: sign extend?
-}
+:ADD rd, rs, rt is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	rd & lo_pool3_7 = 0b0100010 & lo_pool0_3 = 0b000
+	{
+		rd = rs + rt;
+		# TODO: trap on overflow
+		# TODO: sign extend?
+	}
+
 
 # ADDIU rt, rs, imm
 ## ADDIU[32]
-# TODO: rt != 0 constraint doesn't work here (covered by SIGRIE?)
-:ADDIU rt, rs, uimm16 is hi_pool10_6 = 0b000000 & rt & rs; uimm16 {
-	rt = rs + uimm16;
-}
+:ADDIU rt, rs, uimm16 is
+	hi_pool10_6 = 0b000000 & rt & rt_raw != 0 & rs;
+	uimm16
+	{
+		rt = rs + uimm16;
+	}
 
 ## ADDIU[48]
-:ADDIU rt, rs_from_rt, s32 is hi_pool10_6 = 0b011000 & rt & rs_from_rt & hi_pool0_5 = 0b00001; lo_imm16; hi_imm16
-	[s32 = (hi_imm16 << 16) | lo_imm16;] {
-	# TODO signedness
-	rt = rs_from_rt + s32;
-}
+:ADDIU rt, rs_from_rt, s32 is
+	hi_pool10_6 = 0b011000 & rt & rs_from_rt & hi_pool0_5 = 0b00001;
+	lo_imm16; hi_imm16
+	[
+		s32 = (hi_imm16 << 16) | lo_imm16;
+	] {
+		# TODO signedness
+		rt = rs_from_rt + s32;
+	}
 
 ## ADDIU[GP48]
 # TODO: not available in P64 mode
@@ -574,54 +584,83 @@ rt_offset_4rs: rs(rt) is
 	}
 
 ## ADDIU[R2]
-:ADDIU rt3, rs3, u5 is hi_pool10_6 = 0b100100 & rt3 & rs3 & hi_pool3_1 = 0b0 & hi_uimm0_3
-	[u5 = hi_uimm0_3 << 2;] {
+:ADDIU rt3, rs3, u5 is
+	hi_pool10_6 = 0b100100 & rt3 & rs3 & hi_pool3_1 = 0b0 & hi_uimm0_3
+	[
+		u5 = hi_uimm0_3 << 2;
+	]
+	{
 		rt3 = rs3 + u5;
-}
+	}
 
 ## ADDIU[RS5]
 ### ADDIU[RS5] with rt=0 is used to provide a 16 bit NOP instruction.
-:NOP is hi_pool10_6 = 0b100100 & rt = 0 & hi_pool3_1 = 0b1 {}
+:NOP is
+	hi_pool10_6 = 0b100100 & rt = 0 & hi_pool3_1 = 0b1
+	{}
 
-# TODO: rt != 0 constraint doesn't work here (OK with NOP rule?)
-:ADDIU rt, rs_from_rt, s4 is hi_pool10_6 = 0b100100 & rt & rs_from_rt & hi_simm4_1 & hi_pool3_1 = 0b1 & hi_simm0_3
-	[s4 = (hi_simm4_1 << 3) | hi_simm0_3;] {
-	rt = rs_from_rt + s4;
-	# TODO s4 is signed
-}
+:ADDIU rt, rs_from_rt, s4 is
+	hi_pool10_6 = 0b100100 & rt & rs_from_rt & hi_simm4_1 & hi_pool3_1 = 0b1 & hi_simm0_3
+	[
+		s4 = (hi_simm4_1 << 3) | hi_simm0_3;
+	]
+	{
+		rt = rs_from_rt + s4;
+		# TODO s4 is signed
+	}
 
 ## ADDIU[NEG]
-:ADDIU rt, rs, lo_uimm0_12 is hi_pool10_6 = 0b100000 & rt & rs; lo_pool12_4 = 0b1000 & lo_uimm0_12 {
-	rt = rs - lo_uimm0_12;
-}
+:ADDIU rt, rs, lo_uimm0_12 is
+	hi_pool10_6 = 0b100000 & rt & rs;
+	lo_pool12_4 = 0b1000 & lo_uimm0_12
+	{
+		rt = rs - lo_uimm0_12;
+	}
+
 
 # ADDIUPC rt, imm
 ## ADDIUPC[32], TODO not available in P64 mode
-:ADDIUPC rt, simm22 is hi_pool10_6 = 0b000001 & rt & hi_simm0_5; lo_simm1_15 & lo_signbit0_1
-	[simm22 = ((lo_signbit0_1 << 21) | (lo_simm1_15 << 1)) + 4;] {
-	# TODO effective_address() - exception on overflowing 32 bits
-	rt = inst_next + simm22;
-}
+:ADDIUPC rt, simm22 is
+	hi_pool10_6 = 0b000001 & rt & hi_simm0_5;
+	lo_simm1_15 & lo_signbit0_1
+	[
+		simm22 = ((lo_signbit0_1 << 21) | (lo_simm1_15 << 1)) + 4;
+	]
+	{
+		# TODO effective_address() - exception on overflowing 32 bits
+		rt = inst_next + simm22;
+	}
 
 ## ADDIUPC[48], not available in NMS, TODO not available in P64 mode
-:ADDIUPC rt, simm32 is hi_pool10_6 = 0b011000 & rt & hi_pool0_5 = 0b00011; lo_imm16; hi_imm16
-	[simm32 = ((hi_imm16 << 16) | lo_imm16) + 6;] {
-	# TODO effective_address()
-	rt = inst_next + simm32;
-}
+:ADDIUPC rt, simm32 is
+	hi_pool10_6 = 0b011000 & rt & hi_pool0_5 = 0b00011;
+	lo_imm16; hi_imm16
+	[
+		simm32 = ((hi_imm16 << 16) | lo_imm16) + 6;
+	]
+	{
+		# TODO effective_address()
+		rt = inst_next + simm32;
+	}
+
 
 # ADDU dst, src1, src2
 ## ADDU[32]
-:ADDU rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0101010 & lo_pool0_3 = 0b000 {
-	# TODO sign extend sum?
-	rd = rs + rt;
-}
+:ADDU rd, rs, rt is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	rd & lo_pool3_7 = 0b0101010 & lo_pool0_3 = 0b000
+	{
+		# TODO sign extend sum?
+		rd = rs + rt;
+	}
 
 ## ADDU[16]
-:ADDU rd3, rs3, rt3 is hi_pool10_6 = 0b101100 & rt3 & rs3 & rd3 & hi_pool0_1 = 0b0 {
-	# TODO sign extend sum?
-	rd3 = rs3 + rt3;
-}
+:ADDU rd3, rs3, rt3 is
+	hi_pool10_6 = 0b101100 & rt3 & rs3 & rd3 & hi_pool0_1 = 0b0
+	{
+		# TODO sign extend sum?
+		rd3 = rs3 + rt3;
+	}
 
 ## ADDU[4X4], not available in NMS
 :ADDU rd4_from_rt4, rt4, rs4 is
@@ -631,35 +670,51 @@ rt_offset_4rs: rs(rt) is
 		rd4_from_rt4 = rt4 + rs4;
 	}
 
+
 # AND
 ## AND rd, rs, rt
-:AND rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b1001010 & lo_pool0_3 = 0b000 {
-	rd = rs & rt;
-}
+:AND rd, rs, rt is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	rd & lo_pool3_7 = 0b1001010 & lo_pool0_3 = 0b000
+	{
+		rd = rs & rt;
+	}
 
 ## AND[16]
-:AND rt3, rs3 is hi_pool10_6 = 0b010100 & rt3 & rs3 & hi_pool2_2 = 0b10 & hi_pool1_1 = 0 & hi_pool0_1 = 0 {
-	rt3 = rs3 & rt3;
-}
+:AND rt3, rs3 is
+	hi_pool10_6 = 0b010100 & rt3 & rs3 & hi_pool2_2 = 0b10 & hi_pool1_1 = 0 & hi_pool0_1 = 0
+	{
+		rt3 = rs3 & rt3;
+	}
 
-# ANDI
-## ANDI rt, rs, u
-:ANDI rt, rs, lo_uimm0_12 is hi_pool10_6 = 0b100000 & rt & rs; lo_pool12_4 = 0b0010 & lo_uimm0_12 {
-	rt = rs & lo_uimm0_12;
-}
 
-# ANDI16
-## ANDI16 rt, rs, u
-:ANDI rt3, rs3, eu_imm4 is hi_pool10_6 = 0b111100 & rt3 & rs3 & eu_imm4 {
-	rt3 = rs3 & eu_imm4;
-}
+# ANDI rt, rs, u
+## ANDI[32]
+:ANDI rt, rs, lo_uimm0_12 is
+	hi_pool10_6 = 0b100000 & rt & rs;
+	lo_pool12_4 = 0b0010 & lo_uimm0_12
+	{
+		rt = rs & lo_uimm0_12;
+	}
+
+## ANDI[16]
+:ANDI rt3, rs3, eu_imm4 is
+	hi_pool10_6 = 0b111100 & rt3 & rs3 & eu_imm4
+	{
+		rt3 = rs3 & eu_imm4;
+	}
+
 
 # ALUIPC rt, %pcrel_hi(address)
-:ALUIPC rt, "%pcrel_hi"(addr) is hi_pool10_6 = 0b111000 & rt & hi_simm0_5;
+:ALUIPC rt, "%pcrel_hi"(addr) is
+	hi_pool10_6 = 0b111000 & rt & hi_simm0_5;
 	lo_simm12_4 & lo_simm2_10 & lo_simm1_1 = 0b1 & lo_signbit0_1
-	[addr = (((lo_signbit0_1 << 31) | (lo_simm2_10 << 21) | (hi_simm0_5 << 16) | (lo_simm12_4 << 12)) + inst_next) & ~0xfff;] {
+	[
+		addr = (((lo_signbit0_1 << 31) | (lo_simm2_10 << 21) | (hi_simm0_5 << 16) | (lo_simm12_4 << 12)) + inst_next) & ~0xfff;
+	]
+	{
 		rt = addr;
-}
+	}
 
 
 # BALC address
@@ -727,11 +782,13 @@ rt_offset_4rs: rs(rt) is
 	}
 
 ## BC[16]
-:BC hi_saddr11 is hi_pool10_6 = 0b000110 & hi_saddr11 {
+:BC hi_saddr11 is
+	hi_pool10_6 = 0b000110 & hi_saddr11
+	{
 		# TODO should be effective_address(addr)
 		ra = inst_next;
 		call hi_saddr11;
-}
+	}
 
 
 # BEQC rs, rt, address
@@ -932,115 +989,138 @@ rt_offset_4rs: rs(rt) is
 
 # CLZ
 ## CLZ rt, rs
-:CLZ rt, rs is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool9_7 = 0b0101101 & lo_pool6_3 = 0b100 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111 {
-	rt = lzcount(rs);
-}
+:CLZ rt, rs is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	rd & lo_pool9_7 = 0b0101101 & lo_pool6_3 = 0b100 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
+	{
+		rt = lzcount(rs);
+	}
+
 
 # CRC32B
 ## CRC32B rt, rs
-:CRC32B rt, rs is hi_pool10_6 = 0b001000 & rt & rs; lo_pool10_3 = 0b000 & lo_pool6_4 = 0b1111 & lo_pool5_1 = 0b1 & lo_pool3_2 = 0b01 & lo_pool0_3 = 0b000 {
-	# TODO: figure out how to implement this
-	rt = sext(rs);
-}
+:CRC32B rt, rs is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	lo_pool10_3 = 0b000 & lo_pool6_4 = 0b1111 & lo_pool5_1 = 0b1 & lo_pool3_2 = 0b01 & lo_pool0_3 = 0b000
+	unimpl
 
 # CRC32CB
 ## CRC32CB rt, rs
-:CRC32CB rt, rs is hi_pool10_6 = 0b001000 & rt & rs; lo_pool10_3 = 0b100 & lo_pool6_4 = 0b1111 & lo_pool5_1 = 0b1 & lo_pool3_2 = 0b01 & lo_pool0_3 = 0b000 {
-	# TODO: figure out how to implement this
-	rt = sext(rs);
-}
+:CRC32CB rt, rs is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	lo_pool10_3 = 0b100 & lo_pool6_4 = 0b1111 & lo_pool5_1 = 0b1 & lo_pool3_2 = 0b01 & lo_pool0_3 = 0b000
+	unimpl
 
 # CRC32CH
 ## CRC32CH rt, rs
-:CRC32CH rt, rs is hi_pool10_6 = 0b001000 & rt & rs; lo_pool10_3 = 0b101 & lo_pool6_4 = 0b1111 & lo_pool5_1 = 0b1 & lo_pool3_2 = 0b01 & lo_pool0_3 = 0b000 {
-	# TODO: figure out how to implement this
-	rt = sext(rs);
-}
+:CRC32CH rt, rs is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	lo_pool10_3 = 0b101 & lo_pool6_4 = 0b1111 & lo_pool5_1 = 0b1 & lo_pool3_2 = 0b01 & lo_pool0_3 = 0b000
+	unimpl
 
 # CRC32CW
 ## CRC32CW rt, rs
-:CRC32CW rt, rs is hi_pool10_6 = 0b001000 & rt & rs; lo_pool10_3 = 0b110 & lo_pool6_4 = 0b1111 & lo_pool5_1 = 0b1 & lo_pool3_2 = 0b01 & lo_pool0_3 = 0b000 {
-	# TODO: figure out how to implement this
-	rt = sext(rs);
-}
+:CRC32CW rt, rs is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	lo_pool10_3 = 0b110 & lo_pool6_4 = 0b1111 & lo_pool5_1 = 0b1 & lo_pool3_2 = 0b01 & lo_pool0_3 = 0b000
+	unimpl
 
 # CRC32H
 ## CRC32H rt, rs
-:CRC32H rt, rs is hi_pool10_6 = 0b001000 & rt & rs; lo_pool10_3 = 0b001 & lo_pool6_4 = 0b1111 & lo_pool5_1 = 0b1 & lo_pool3_2 = 0b01 & lo_pool0_3 = 0b000 {
-	# TODO: figure out how to implement this
-	rt = sext(rs);
-}
+:CRC32H rt, rs is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	lo_pool10_3 = 0b001 & lo_pool6_4 = 0b1111 & lo_pool5_1 = 0b1 & lo_pool3_2 = 0b01 & lo_pool0_3 = 0b000
+	unimpl
 
 # CRC32W
 ## CRC32W rt, rs
-:CRC32W rt, rs is hi_pool10_6 = 0b001000 & rt & rs; lo_pool10_3 = 0b010 & lo_pool6_4 = 0b1111 & lo_pool5_1 = 0b1 & lo_pool3_2 = 0b01 & lo_pool0_3 = 0b000 {
-	# TODO: figure out how to implement this
-	rt = sext(rs);
-}
+:CRC32W rt, rs is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	lo_pool10_3 = 0b010 & lo_pool6_4 = 0b1111 & lo_pool5_1 = 0b1 & lo_pool3_2 = 0b01 & lo_pool0_3 = 0b000
+	unimpl
+
 
 # DERET
 ## DERET rt, rs
-:DERET is hi_pool10_6 = 0b001000; lo_pool14_2 = 0b11 & lo_pool9_5 = 0b10001 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111 {
-	# TODO: Just doing the bit pattern for now
-
-}
+:DERET is
+	hi_pool10_6 = 0b001000;
+	lo_pool14_2 = 0b11 & lo_pool9_5 = 0b10001 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
+	unimpl
 
 # DI
 ## DI rt
-:DI is hi_pool10_6 = 0b001000 & rt; lo_pool14_2 = 0b01 & lo_pool9_5 = 0b00011 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111 {
-	# TODO: Just doing the bit pattern for now
-
-}
+:DI is
+	hi_pool10_6 = 0b001000 & rt;
+	lo_pool14_2 = 0b01 & lo_pool9_5 = 0b00011 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
+	unimpl
 
 # DIV
 ## DIV rd, rs, rt
-:DIV is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0100011 & lo_pool0_3 = 0b000 {
-	# TODO: Verify correct to sign extend for 32 bit value
-	# TODO: implement signedness
-	rd = sext(rs / rt);
-}
+:DIV is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	rd & lo_pool3_7 = 0b0100011 & lo_pool0_3 = 0b000
+	{
+		# TODO: Verify correct to sign extend for 32 bit value
+		# TODO: implement signedness
+		rd = sext(rs / rt);
+	}
 
 # DIVU
 ## DIVU rd, rs, rt
-:DIVU is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0110011 & lo_pool0_3 = 0b000 {
-	rd = sext(rs / rt);
-}
+:DIVU is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	rd & lo_pool3_7 = 0b0110011 & lo_pool0_3 = 0b000
+	{
+		rd = sext(rs / rt);
+	}
 
 # DVP
 ## DVP rt
-:DVP is hi_pool10_6 = 0b001000 & rt ; lo_pool11_5 = 0b00000 & lo_pool10_1 = 0b0 & lo_pool3_7 = 0b1110010 & lo_pool0_3 = 0b000 {
-	# NOTE: not sure how to handle coprocessor instructions
-}
+:DVP is
+	hi_pool10_6 = 0b001000 & rt;
+	lo_pool11_5 = 0b00000 & lo_pool10_1 = 0b0 & lo_pool3_7 = 0b1110010 & lo_pool0_3 = 0b000
+	unimpl  # NOTE: not sure how to handle coprocessor instructions
+
 
 # EHB
 ## EHB
-:EHB is hi_pool10_6 = 0b001000 & hi_pool5_5 = 0b00000 ; lo_pool12_4 = 0b1100  & lo_pool5_4 = 0b0000 & lo_pool0_5 = 0b00011 {
-	# NOTE: not sure how to handle coprocessor instructions
-}
+:EHB is
+	hi_pool10_6 = 0b001000 & hi_pool5_5 = 0b00000;
+	lo_pool12_4 = 0b1100  & lo_pool5_4 = 0b0000 & lo_pool0_5 = 0b00011
+	unimpl  # NOTE: not sure how to handle coprocessor instructions
+
 
 # EI
 ## EI rt
-:EI rt is hi_pool10_6 = 0b001000 & rt ; lo_pool14_2 = 0b01  & lo_pool9_5 = 0b01011 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111 {
-	# NOTE: not sure how to handle coprocessor instructions
-}
+:EI rt is
+	hi_pool10_6 = 0b001000 & rt;
+	lo_pool14_2 = 0b01 & lo_pool9_5 = 0b01011 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
+	unimpl # NOTE: not sure how to handle coprocessor instructions
+
 
 # ERET
 ## ERET
-:ERET is hi_pool10_6 = 0b001000 & hi_pool0_1 = 0b0 ; lo_pool14_2 = 0b11 & lo_pool9_5 = 0b11001  & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111 {
-	# NOTE: not sure how to handle coprocessor instructions
-}
+:ERET is
+	hi_pool10_6 = 0b001000 & hi_pool0_1 = 0b0;
+	lo_pool14_2 = 0b11 & lo_pool9_5 = 0b11001 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
+	unimpl  # NOTE: not sure how to handle coprocessor instructions
+
 
 # ERETNC
 ## ERETNC
-:ERETNC is hi_pool10_6 = 0b001000 & hi_pool0_1 = 0b1 ; lo_pool14_2 = 0b11 & lo_pool9_5 = 0b11001  & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111 {
-	# NOTE: not sure how to handle coprocessor instructions
-}
+:ERETNC is
+	hi_pool10_6 = 0b001000 & hi_pool0_1 = 0b1;
+	lo_pool14_2 = 0b11 & lo_pool9_5 = 0b11001  & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
+	unimpl  # NOTE: not sure how to handle coprocessor instructions
+
 
 # EVP
 ## EVP rt
-:EVP rt is hi_pool10_6 = 0b001000 & rt ; lo_pool11_5 = 0b00000  & lo_pool10_1 = 0b1 & lo_pool3_7 = 0b1110010 & lo_pool0_3 = 0b000 {
-	# NOTE: not sure how to handle coprocessor instructions
-}
+:EVP rt is
+	hi_pool10_6 = 0b001000 & rt;
+	lo_pool11_5 = 0b00000  & lo_pool10_1 = 0b1 & lo_pool3_7 = 0b1110010 & lo_pool0_3 = 0b000
+	unimpl  # NOTE: not sure how to handle coprocessor instructions
+
 
 # EXT ()
 ## EXT rt, rs, pos, size
@@ -1056,9 +1136,10 @@ rt_offset_4rs: rs(rt) is
 
 # GINV()
 ## GINV rt
-:GINV rs is hi_pool10_6 = 0b001000 & rs ; lo_pool14_2 = 0b00  & lo_pool9_5 = 0b01111 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111 {
-	# NOTE: not sure how to handle coprocessor instructions
-}
+:GINV rs is
+	hi_pool10_6 = 0b001000 & rs;
+	lo_pool14_2 = 0b00  & lo_pool9_5 = 0b01111 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
+	unimpl  # NOTE: not sure how to handle coprocessor instructions
 
 # GINVT()
 ## GINVT rt
