@@ -372,6 +372,13 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 		export tmp;
 	}
 
+lo_rs_soffset9: lo_soffset9(rs) is
+	rs; lo_soffset9
+	{
+		local addr = rs + lo_soffset9;
+		export *[ram]:4 addr;
+	}
+
 
 # ADD rd, rs, rt
 :ADD rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0100010 & lo_pool0_3 = 0b000 {
@@ -1542,6 +1549,15 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 	& hilo_gp_uoffset18
 	{
 		*:2 hilo_gp_uoffset18 = rt:2;
+	}
+
+## SH[S9]
+:SH rt, lo_rs_soffset9 is
+	(hi_pool10_6 = 0b101001 & rt;
+	lo_pool11_4 = 0b0101 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b00)
+	& lo_rs_soffset9
+	{
+		*:2 lo_rs_soffset9 = rt:2;
 	}
 
 
