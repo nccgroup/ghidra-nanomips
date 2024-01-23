@@ -1174,7 +1174,12 @@ rt_offset_4rs: rs(rt) is
 	[
 		sz = 1 + lo_uimm6_5 - lo_uimm0_5;
 	]
-	unimpl
+	{
+		local pos = lo_uimm0_5;
+		local merge_mask:4 = ((1 << sz) - 1) << pos;
+		local result:4 = (rt & ~merge_mask) | ((rs << pos) & merge_mask);
+		rt = sext(result);
+	}
 
 
 # JALRC dst, src
