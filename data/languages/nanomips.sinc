@@ -1202,9 +1202,11 @@ rt_offset_4rs: rs(rt) is
 
 
 # JRC
-:JRC rt is hi_pool10_6 = 0b110110 & rt & hi_pool4_1 = 0 & hi_pool0_4 = 0b0000 {
-	pc = rt;
-}
+:JRC rt is
+	hi_pool10_6 = 0b110110 & rt & hi_pool4_1 = 0 & hi_pool0_4 = 0b0000
+	{
+		goto [rt];
+	}
 
 
 # LB rt, offset(rs)
