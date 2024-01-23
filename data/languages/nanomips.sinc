@@ -1189,7 +1189,7 @@ rt_offset_4rs: rs(rt) is
 	lo_pool12_4 = 0b0000
 	{
 		rt = inst_next;
-		call rs;
+		call [rs];
 	}
 
 ## JALRC[16]
@@ -1197,7 +1197,7 @@ rt_offset_4rs: rs(rt) is
 	hi_pool10_6 = 0b110110 & rt & hi_pool4_1 = 0b1 & hi_pool0_4 = 0b0000 & ra
 	{
 		ra = inst_next;
-		call rt;
+		call [rt];
 	}
 
 
