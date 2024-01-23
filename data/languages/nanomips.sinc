@@ -140,9 +140,11 @@ define token instrlo(16)
 
 	# data in same token as opcode bits
 	lo_uimm11_5 = (11, 15)
+	lo_uimm6_5 = (6, 10)
 	lo_uimm2_14 = (2, 15)
 	lo_uimm1_15 = (1, 15)
 	lo_uimm0_12 = (0, 11)
+	lo_uimm0_5 = (0, 4)
 
 	lo_simm12_4 = (12, 15)
 	lo_simm2_10 = (2, 11)
@@ -1164,11 +1166,15 @@ rt_offset_4rs: rs(rt) is
 #	# NOTE: not sure how to handle coprocessor instructions
 #}
 
-# INS()
-## INS rt
-#:INS  rt is hi_pool10_6 = 0b001000 & rt ; lo_pool14_2 = 0b01  & lo_pool9_5 = 0b01011 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111 {
-#	# NOTE: not sure how to handle coprocessor instructions
-#}
+
+# INS rt, rs, pos, size
+:INS rt, rs, lo_uimm0_5, sz is
+	hi_pool10_6 = 0b100000 & rt & rs;
+	lo_pool12_4 = 0b1110 & lo_pool11_1 = 0b0 & lo_uimm6_5 & lo_pool5_1 = 0b0 & lo_uimm0_5
+	[
+		sz = 1 + lo_uimm6_5 - lo_uimm0_5;
+	]
+	unimpl
 
 
 # JALRC dst, src
