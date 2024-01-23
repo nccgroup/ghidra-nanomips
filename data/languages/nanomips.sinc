@@ -1456,38 +1456,50 @@ hilo_simm32: simm32 is
 		rt = *:4 lo_rs_uoffset12;
 	}
 
+## LW[16]
+:LW rt3, hi_rs3_uoffset6 is
+	hi_pool10_6 = 0b000101 & rt3 & hi_rs3_uoffset6
+	{
+		rt3 = *:4 hi_rs3_uoffset6;
+	}
 
-# LW16
-## LW16 rt3, offset(rs3)
-:LW rt3, u_imm4(rs3) is hi_pool10_6 = 0b000101 & rt3 & rs3 & u_imm4 {
-	rt3 = *(rs3 + u_imm4); # TODO: currently updating this to be correct, this is not correct atm
-}
+## LW[4X4], not available in NMS
+:LW rt4, hi_rs4_uoffset4 is
+	hi_pool10_6 = 0b011101 & rt4 & hi_rs4_uoffset4
+	{
+		rt4 = *:4 hi_rs4_uoffset4;
+	}
 
-# LW[SP]
-## LW rt, offset(sp)
-:LW rt, off(sp) is hi_pool10_6 = 0b001101 & rt & u_imm5 & sp [off = (u_imm5 * 4);] {
-	rt = *(sp + off); # TODO: update this to point to certain regions of space (i.e. ram, etc.), this syntax is seemingly wrong
-}
+## LW[GP16]
+:LW rt3, hi_gp_uoffset9 is
+	hi_pool10_6 = 0b010101 & rt3 & hi_gp_uoffset9
+	{
+		rt3 = *:4 hi_gp_uoffset9;
+	}
 
-# LW[GP16]
-## LW rt, offset(sp)
-:LW rt3, off(gp) is hi_pool10_6 = 0b0010101 & rt3 & eu_imm7 & gp [off = (eu_imm7 * 4);] {
-	rt3 = *(gp + off); # TODO: update this to point to certain regions of space (i.e. ram, etc.), this syntax is seemingly wrong
-}
+## LW[GP]
+:LW rt, hilo_gp_uoffset21 is
+	(hi_pool10_6 = 0b010000 & rt) ... & hilo_gp_uoffset21
+	{
+		rt = *:4 hilo_gp_uoffset21;
+	}
 
-# LW[GP]
-## LW rt, offset(sp)
-:LW rt, off(gp) is hi_pool10_6 = 0b010000 & rt & u_imm5; lo_pool2_14 & lo_pool0_2 = 0b10 & gp [off = (u_imm5 * 4);] {
-	rt = *(gp + off); # TODO: update this to point to certain regions of space (i.e. ram, etc.), this syntax is seemingly wrong
-}
+## LW[S9]
+:LW rt, lo_rs_soffset9 is
+	(hi_pool10_6 = 0b101001 & rt;
+	lo_pool11_4 = 0b1000 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b00)
+	& lo_rs_soffset9
+	{
+		rt = *:4 lo_rs_soffset9;
+	}
 
-# LW[S9]
-## LW rt, offset(sp)
-:LW rt, lo_pool0_8(rs) is hi_pool10_6 = 0b101001 & rt & rs; lo_pool15_1 & lo_pool11_4 = 0b1000 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b00 & lo_pool0_8 {
-	#rt = *(rs + lo_uimm0_12); # TODO: currently updating this to be correct, this is not correct atm
-	#TODO: make the number
-	#TODO: finish out the logic
-}
+## LW[SP]
+:LW rt, hi_sp_uoffset7 is
+	hi_pool10_6 = 0b001101 & rt & hi_sp_uoffset7
+	{
+		rt = *:4 hi_sp_uoffset7;
+	}
+
 
 # LWE
 ## LWE rt, offset(sp)
