@@ -1396,9 +1396,13 @@ hilo_simm32: simm32 is
 
 # LH
 ## LH rt, offset(rs)
-:LH rt, lo_uimm0_12(rs) is hi_pool10_6 = 0b100001 & rt & rs; lo_pool12_4 = 0b0100 & lo_uimm0_12 {
-	rt = *(rs + lo_uimm0_12); # TODO: currently updating this to be correct, this is not correct atm
-}
+:LH rt, lo_rs_uoffset12 is
+	(hi_pool10_6 = 0b100001 & rt;
+	lo_pool12_4 = 0b0100)
+	& lo_rs_uoffset12
+	{
+		rt = (*:2 lo_rs_uoffset12);
+	}
 
 # LH
 ## LH[16] rt, offset(rs)
