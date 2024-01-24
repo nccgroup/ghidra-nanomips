@@ -65,11 +65,14 @@ define token instrhi(16)
 	rtz4_msb1 = (5, 7)
 	rd4_from_rt4_msb0 = (5, 7)
 	rd4_from_rt4_msb1 = (5, 7)
+	rt4_msb = (9, 9)
+	rtz4_msb = (9, 9)
 
 	rs4_msb0 = (0, 2)
 	rs4_msb1 = (0, 2)
 	rsz4_msb0 = (0, 2)
 	rsz4_msb1 = (0, 2)
+	rs4_msb = (4, 4)
 	rsz4_msb = (4, 4)
 
 	# data in same token as opcode bits
@@ -342,20 +345,20 @@ rd2_reg1: rd2_msb1 is rd2_msb = 0b1 & rd2_msb1 {export rd2_msb1;}
 rd2_reg2: rd2_msb0_reg2 is rd2_msb = 0b0 & rd2_msb0_reg2 {export rd2_msb0_reg2;}
 rd2_reg2: rd2_msb1_reg2 is rd2_msb = 0b1 & rd2_msb1_reg2 {export rd2_msb1_reg2;}
 
-rt4: rt4_msb0 is hi_pool9_1 = 0b0 & rt4_msb0 {export rt4_msb0;}
-rt4: rt4_msb1 is hi_pool9_1 = 0b1 & rt4_msb1 {export rt4_msb1;}
+rt4: rt4_msb0 is rt4_msb = 0b0 & rt4_msb0 {export rt4_msb0;}
+rt4: rt4_msb1 is rt4_msb = 0b1 & rt4_msb1 {export rt4_msb1;}
 
-rd4_from_rt4: rd4_from_rt4_msb0 is hi_pool9_1 = 0b0 & rd4_from_rt4_msb0 {export rd4_from_rt4_msb0;}
-rd4_from_rt4: rd4_from_rt4_msb1 is hi_pool9_1 = 0b1 & rd4_from_rt4_msb1 {export rd4_from_rt4_msb1;}
+rd4_from_rt4: rd4_from_rt4_msb0 is rt4_msb = 0b0 & rd4_from_rt4_msb0 {export rd4_from_rt4_msb0;}
+rd4_from_rt4: rd4_from_rt4_msb1 is rt4_msb = 0b1 & rd4_from_rt4_msb1 {export rd4_from_rt4_msb1;}
 
-rs4: rs4_msb0 is hi_pool4_1 = 0b0 & rs4_msb0 {export rs4_msb0;}
-rs4: rs4_msb1 is hi_pool4_1 = 0b1 & rs4_msb1 {export rs4_msb1;}
+rs4: rs4_msb0 is rs4_msb = 0b0 & rs4_msb0 {export rs4_msb0;}
+rs4: rs4_msb1 is rs4_msb = 0b1 & rs4_msb1 {export rs4_msb1;}
 
-rtz4: rtz4_msb0 is hi_pool9_1 = 0b0 & rtz4_msb0 {export rtz4_msb0;}
-rtz4: rtz4_msb1 is hi_pool9_1 = 0b1 & rtz4_msb1 {export rtz4_msb1;}
+rtz4: rtz4_msb0 is rtz4_msb = 0b0 & rtz4_msb0 {export rtz4_msb0;}
+rtz4: rtz4_msb1 is rtz4_msb = 0b1 & rtz4_msb1 {export rtz4_msb1;}
 
-rsz4: rsz4_msb0 is hi_pool9_1 = 0b0 & rsz4_msb0 {export rsz4_msb0;}
-rsz4: rsz4_msb1 is hi_pool9_1 = 0b1 & rsz4_msb1 {export rsz4_msb1;}
+rsz4: rsz4_msb0 is rsz4_msb = 0b0 & rsz4_msb0 {export rsz4_msb0;}
+rsz4: rsz4_msb1 is rsz4_msb = 0b1 & rsz4_msb1 {export rsz4_msb1;}
 
 rs_scale2: rs is rs
 	{
