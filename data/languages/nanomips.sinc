@@ -1666,11 +1666,20 @@ hilo_simm32: simm32 is
 
 
 # MOVEP dst1, dst2, src1, src2
+## MOVEP
 :MOVEP rd2_reg1, rd2_reg2, rsz4, rtz4 is
 	hi_pool10_6 = 0b101111 & rtz4 & rd2_reg1 & rd2_reg2 & rsz4
 	{
 		rd2_reg1 = rsz4;
 		rd2_reg2 = rtz4;
+	}
+
+## MOVEP[REV]
+:MOVEP rs4, rt4, rd2_reg1, rd2_reg2 is
+	hi_pool10_6 = 0b111111 & rt4 & rd2_reg1 & rd2_reg2 & rs4
+	{
+		rs4 = rd2_reg1;
+		rt4 = rd2_reg2;
 	}
 
 
