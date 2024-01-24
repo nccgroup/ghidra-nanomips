@@ -1757,16 +1757,23 @@ hilo_simm32: simm32 is
 	rt3 = ~(rs3);
 }
 
-# OR
-## OR rd, rs, rt
-:OR rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b1010010 & lo_pool0_3 = 0b000 {
-	rd = rs | rt;
-}
+
+# OR rd, rs, rt
+## OR[32]
+:OR rd, rs, rt is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	rd & lo_pool3_7 = 0b1010010 & lo_pool0_3 = 0b000
+	{
+		rd = rs | rt;
+	}
 
 ## OR[16]
-:OR rt3, rs3 is hi_pool10_6 = 0b010100 & rt3 & rs3 & hi_pool2_2 = 0b11 & hi_pool1_1 = 0 & hi_pool0_1 = 0 {
-	rt3 = rs3 ^ rt3;
-}
+:OR rt3, rs3 is
+	hi_pool10_6 = 0b010100 & rt3 & rs3 & hi_pool2_2 = 0b11 & hi_pool1_1 = 0 & hi_pool0_1 = 0
+	{
+		rt3 = rs3 | rt3;
+	}
+
 
 # ORI
 ## OR rd, rs, rt
