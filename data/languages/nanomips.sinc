@@ -1564,17 +1564,19 @@ hilo_simm32: simm32 is
 	}
 
 
-# MFC0
-## MFC0 rt, c0s, sel
-:MFC0 rt, c0s, sel is hi_pool10_6 = 0b001000 & rt & c0s; sel & lo_pool3_7 = 0b0000110 & lo_pool0_3 = 0b000 {
-	#TODO: read register and sign extend
-}
+# MFC0 rt, c0s, sel
+:MFC0 rt, c0s, sel is
+	hi_pool10_6 = 0b001000 & rt & c0s;
+	sel & lo_pool3_7 = 0b0000110 & lo_pool0_3 = 0b000
+	unimpl
 
-# MFHC0
-## MFHC0 rt, c0s, sel
-:MFHC0 rt, c0s, sel is hi_pool10_6 = 0b001000 & rt & c0s; sel & lo_pool3_7 = 0b0000111 & lo_pool0_3 = 0b000 {
-	#TODO: read register and sign extend
-}
+
+# MFHC0 rt, c0s, sel
+:MFHC0 rt, c0s, sel is
+	hi_pool10_6 = 0b001000 & rt & c0s;
+	sel & lo_pool3_7 = 0b0000111 & lo_pool0_3 = 0b000
+	unimpl
+
 
 # MOD
 ## MOD rd, rs, rt
