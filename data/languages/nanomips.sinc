@@ -1591,11 +1591,14 @@ hilo_simm32: simm32 is
 	rd = rs % rt;
 }
 
-# MOVE
-## MOVE rt, rs
-:MOVE rt, rs is hi_pool10_6 = 0b000100 & rt & rs {
-	rt = rs;
-}
+
+# MOVE rt, rs
+:MOVE rt, rs is
+	hi_pool10_6 = 0b000100 & rt & rt_raw != 0 & rs
+	{
+		rt = rs;
+	}
+
 
 # MOVE.BALC ()
 ## MOVE.BALC rt, rs
