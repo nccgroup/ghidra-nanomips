@@ -594,7 +594,8 @@ hilo_simm32: simm32 is
 		simm32 = (lo_signbit0_1 << 31) | (lo_simm2_10 << 21) | (hi_simm0_5 << 16) | (lo_simm12_4 << 12);
 	]
 	{
-		export simm32;
+		local tmp:4 = simm32;
+		export tmp;
 	}
 
 
