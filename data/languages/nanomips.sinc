@@ -1342,10 +1342,12 @@ hilo_simm32: simm32 is
 
 # LBU
 ## LBU[16] rt3, offset(rs3)
-:LBU rt3, hi_pool0_2(rs3) is hi_pool10_6 = 0b010111 & rt3 & rs3 & hi_pool2_2 = 0b10 & hi_pool0_2  {
-	# TODO: make the number and also reference original example maybe
-	rt3 = *(rs3 + hi_pool0_2); # TODO: currently updating this to be correct, this is not correct atm
-}
+:LBU rt3, hi_rs3_uoffset2 is
+	(hi_pool10_6 = 0b010111 & rt3 & hi_pool2_2 = 0b10)
+	& hi_rs3_uoffset2
+	{
+		rt3 = (*:1 hi_rs3_uoffset2);
+	}
 
 # LBUE
 ## LBUE rt, offset(rs)
