@@ -36,6 +36,8 @@ define token instrhi(16)
 	# 1 bit register encodings
 	rt1 = (9, 9)
 
+	rd1 = (8, 8)
+
 	# 3 bit register encodings
 	rt3 = (7, 9)
 	rt3_raw = (7, 9)
@@ -180,6 +182,11 @@ attach variables [ rt rs rs_from_rt rd ] [
 	t8 t9
 	k0 k1
 	gp sp fp ra
+];
+
+# gpr1: [4, 5]
+attach variables [ rd1 ] [
+	a0 a1
 ];
 
 # gpr3: [16, 17, 18, 19, 4, 5, 6, 7]
@@ -343,6 +350,16 @@ hilo_saddr26: addr is
 	 hi_simm0_9; lo_simm1_15 & lo_signbit0_1
 	[
 		addr = inst_next + ((lo_signbit0_1 << 25) | (hi_simm0_9 << 16) | (lo_simm1_15 << 1));
+	]
+	{
+		# TODO should be effective_address(addr)
+		export *[ram]:4 addr;
+	}
+
+hilo_saddr22: addr is
+	 hi_simm0_5; lo_simm1_15 & lo_signbit0_1
+	[
+		addr = inst_next + ((lo_signbit0_1 << 21) | (hi_simm0_5 << 16) | (lo_simm1_15 << 1));
 	]
 	{
 		# TODO should be effective_address(addr)
@@ -1600,11 +1617,15 @@ hilo_simm32: simm32 is
 	}
 
 
-# MOVE.BALC ()
-## MOVE.BALC rt, rs
-#:MOVE.BALC rt, rs is hi_pool10_6 = 0b000100 & rt & rs {
-#	rt = rs;
-#}
+# MOVE.BALC rd, rt, address
+:MOVE.BALC rd1, rtz4, hilo_saddr22 is
+	(hi_pool10_6 = 0b000010 & rtz4 & rd1) ... & hilo_saddr22
+	{
+		rd1 = rtz4;
+		ra = inst_next;
+		call hilo_saddr22;
+	}
+
 
 # MOVEP ()
 ## MOVE rt, rs
