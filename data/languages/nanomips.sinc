@@ -38,6 +38,14 @@ define token instrhi(16)
 
 	rd1 = (8, 8)
 
+	# 2 bit register encodings
+	# disjointed msb requires group per possible bit value (see issue #4140)
+	rd2_msb0 = (8, 8)
+	rd2_msb1 = (8, 8)
+	rd2_msb0_reg2 = (8, 8)
+	rd2_msb1_reg2 = (8, 8)
+	rd2_msb = (3, 3)
+
 	# 3 bit register encodings
 	rt3 = (7, 9)
 	rt3_raw = (7, 9)
@@ -60,6 +68,9 @@ define token instrhi(16)
 
 	rs4_msb0 = (0, 2)
 	rs4_msb1 = (0, 2)
+	rsz4_msb0 = (0, 2)
+	rsz4_msb1 = (0, 2)
+	rsz4_msb = (4, 4)
 
 	# data in same token as opcode bits
 	eu_imm7 = (0, 6)
@@ -189,6 +200,24 @@ attach variables [ rd1 ] [
 	a0 a1
 ];
 
+# gpr2.reg1: [4, 5, 6, 7]
+attach variables [ rd2_msb0 ] [
+	a0 a1
+];
+
+attach variables [ rd2_msb1 ] [
+	a2 a3
+];
+
+# gpr2.reg2: [5, 6, 7, 8]
+attach variables [ rd2_msb0_reg2 ] [
+	a1 a2
+];
+
+attach variables [ rd2_msb1_reg2 ] [
+	a3 a4
+];
+
 # gpr3: [16, 17, 18, 19, 4, 5, 6, 7]
 attach variables [ rt3 rs3 rd3 rd3_from_rt3 ] [
 	s0 s1 s2 s3
@@ -217,12 +246,12 @@ attach variables [ rt4_msb1 rs4_msb1 rd4_from_rt4_msb1 ] [
 
 # gpr4.zero: Source GPR used by store and movep instructions. Use $0 instead of a7
 # gpr_list = [8, 9, 10, 0, 4, 5, 6, 7, 16, 17, 18, 19, 20, 21, 22, 23]
-attach variables [ rtz4_msb0 ] [
+attach variables [ rtz4_msb0 rsz4_msb0 ] [
 	a4 a5 a6 zero
 	a0 a1 a2 a3
 ];
 
-attach variables [ rtz4_msb1 ] [
+attach variables [ rtz4_msb1 rsz4_msb1 ] [
 	s0 s1 s2 s3
 	s4 s5 s6 s7
 ];
@@ -307,6 +336,12 @@ attach values [count3] [8 1 2 3 4 5 6 7];
 # ################################################################
 
 # disjointed register encodings
+rd2_reg1: rd2_msb0 is rd2_msb = 0b0 & rd2_msb0 {export rd2_msb0;}
+rd2_reg1: rd2_msb1 is rd2_msb = 0b1 & rd2_msb1 {export rd2_msb1;}
+
+rd2_reg2: rd2_msb0_reg2 is rd2_msb = 0b0 & rd2_msb0_reg2 {export rd2_msb0_reg2;}
+rd2_reg2: rd2_msb1_reg2 is rd2_msb = 0b1 & rd2_msb1_reg2 {export rd2_msb1_reg2;}
+
 rt4: rt4_msb0 is hi_pool9_1 = 0b0 & rt4_msb0 {export rt4_msb0;}
 rt4: rt4_msb1 is hi_pool9_1 = 0b1 & rt4_msb1 {export rt4_msb1;}
 
@@ -318,6 +353,9 @@ rs4: rs4_msb1 is hi_pool4_1 = 0b1 & rs4_msb1 {export rs4_msb1;}
 
 rtz4: rtz4_msb0 is hi_pool9_1 = 0b0 & rtz4_msb0 {export rtz4_msb0;}
 rtz4: rtz4_msb1 is hi_pool9_1 = 0b1 & rtz4_msb1 {export rtz4_msb1;}
+
+rsz4: rsz4_msb0 is hi_pool9_1 = 0b0 & rsz4_msb0 {export rsz4_msb0;}
+rsz4: rsz4_msb1 is hi_pool9_1 = 0b1 & rsz4_msb1 {export rsz4_msb1;}
 
 rs_scale2: rs is rs
 	{
@@ -1627,11 +1665,14 @@ hilo_simm32: simm32 is
 	}
 
 
-# MOVEP ()
-## MOVE rt, rs
-#:MOVE rt, rs is hi_pool10_6 = 0b000100 & rt & rs {
-#	rt = rs;
-#}
+# MOVEP dst1, dst2, src1, src2
+:MOVEP rd2_reg1, rd2_reg2, rsz4, rtz4 is
+	hi_pool10_6 = 0b101111 & rtz4 & rd2_reg1 & rd2_reg2 & rsz4
+	{
+		rd2_reg1 = rsz4;
+		rd2_reg2 = rtz4;
+	}
+
 
 # MOVN
 ## MOVN rd, rs, rt
