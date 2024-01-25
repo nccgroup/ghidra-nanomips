@@ -1952,16 +1952,16 @@ reglist_sv16_02: s0                     is count = 3 - rt1_raw & rt1_raw & s0   
 reglist_sv16_02: s0,reglist_sv16_03     is rt1_raw & s0 & reglist_sv16_03       {*:$(REGSIZE) (sp - $(REGSIZE)*(3-rt1_raw)) = s0;}
 reglist_sv16_01: ra                     is count = 2 - rt1_raw & rt1_raw & ra   {*:$(REGSIZE) (sp - $(REGSIZE)*(2-rt1_raw)) = ra;}
 reglist_sv16_01: ra,reglist_sv16_02     is rt1_raw & ra & reglist_sv16_02       {*:$(REGSIZE) (sp - $(REGSIZE)*(2-rt1_raw)) = ra;}
-reglist_sv16_00:                        is count = 0 {}
-reglist_sv16_00: ,reglist_sv16_01       is rt1_raw = 1 & reglist_sv16_01 {}
-reglist_sv16_00: ,fp                    is rt1_raw = 0 & count = 1 & fp         {*:$(REGSIZE) (sp - $(REGSIZE)) = fp;}
-reglist_sv16_00: ,fp,reglist_sv16_01    is rt1_raw = 0 & fp & reglist_sv16_01   {*:$(REGSIZE) (sp - $(REGSIZE)) = fp;}
+reglist_sv16_00: fp                     is count = 1 - rt1_raw & rt1_raw & fp   {*:$(REGSIZE) (sp - $(REGSIZE)*(1-rt1_raw)) = fp;}
+reglist_sv16_00: fp,reglist_sv16_01     is rt1_raw & fp & reglist_sv16_01       {*:$(REGSIZE) (sp - $(REGSIZE)*(1-rt1_raw)) = fp;}
+reglist_sv16:                           is count = 0 {}
+reglist_sv16:    ,reglist_sv16_01       is rt1_raw = 1 & reglist_sv16_01 {}
+reglist_sv16:    ,reglist_sv16_00       is rt1_raw = 0 & reglist_sv16_00 {}
 
-:SAVE hi_uoffset8_sl4^reglist_sv16_00 is
-	hi_pool10_6 = 0b000111 & hi_pool8_1 = 0 & hi_uoffset8_sl4 & reglist_sv16_00
+:SAVE hi_uoffset8_sl4^reglist_sv16 is
+	hi_pool10_6 = 0b000111 & hi_pool8_1 = 0 & hi_uoffset8_sl4 & reglist_sv16
 	{
-		build reglist_sv16_00;
-		# TODO save registers
+		build reglist_sv16;
 		# TODO effective_address
 		sp = sp - hi_uoffset8_sl4;
 	}
