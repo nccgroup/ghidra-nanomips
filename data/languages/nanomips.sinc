@@ -1949,17 +1949,17 @@ reglist3:       s1      is count = 4 - rt1 & s1 {}
 reglist3:       s1,reglist4     is s1 & reglist4        {}
 reglist2:	s0      		is count = 3 - rt1 & s0 {}
 reglist2:	s0,reglist3     is s0 & reglist3        {}
-reglist1:	,ra 			is count = 2 - rt1 & ra {}
-reglist1:	,ra,reglist2 	is ra & reglist2 {}
+reglist1:	ra 			is count = 2 - rt1 & ra {}
+reglist1:	ra,reglist2 	is ra & reglist2 {}
 reglist: 					is count = 0 {}
-reglist:	reglist1		is rt1 = 1 & reglist1 {}
+reglist:	,reglist1		is rt1 = 1 & reglist1 {}
 reglist:	,fp 			is count = 1 & rt1 = 0 & fp {}
 reglist:	,fp,reglist1 	is rt1 = 0 & fp & reglist1 {}
 
 
 ## SAVE[16]
 :SAVE hi_uoffset8_sl4^reglist is
-	hi_pool10_6 = 0b000111 & rt1 & hi_pool8_1 = 0 & hi_uoffset8_sl4 & reglist
+	hi_pool10_6 = 0b000111 & hi_pool8_1 = 0 & hi_uoffset8_sl4 & reglist
 	{
 		gp = 0;
 		build reglist;
