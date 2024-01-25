@@ -22,6 +22,7 @@ define token instrhi(16)
 	hi_pool0_1 = (0, 0)
 	
 	hint = (5, 9)  # hi_pool5_5
+	count = (0, 3)
 	
 	u4_1 = (0, 4)  # u[4:1] - naming convention conflict
 	
@@ -78,6 +79,7 @@ define token instrhi(16)
 	# data in same token as opcode bits
 	eu_imm7 = (0, 6)
 	hi_uimm8_1 = (8, 8)
+	hi_uimm4_4 = (4, 7)
 	hi_uimm3_1 = (3, 3)
 	hi_uimm1_2 = (1, 2)
 	hi_uimm0_10 = (0, 9)
@@ -196,6 +198,11 @@ attach variables [ rt rs rs_from_rt rd ] [
 	t8 t9
 	k0 k1
 	gp sp fp ra
+];
+
+# SAVE rt1
+attach variables [ rt1 ] [
+	fp ra
 ];
 
 # gpr1: [4, 5]
@@ -451,6 +458,16 @@ lo_saddr15: addr is lo_simm1_13 & lo_signbit0_1
 	{
 		# TODO effective_address
 		export *[ram]:4 addr;
+	}
+
+hi_uoffset8_sl4: offs is
+	hi_uimm4_4
+	[
+		offs = hi_uimm4_4 << 4;
+	]
+	{
+		local tmp:4 = offs;
+		export tmp;
 	}
 
 lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
@@ -1904,10 +1921,52 @@ hilo_simm32: simm32 is
 #}
 
 
-# SAVE
-## SAVE[16] u, [ src1 [, src2 [ ..,]]
-## TODO: figure out how to display registers (seems complicated)
-:SAVE is hi_pool10_6 = 0b000111 & rt1 & hi_pool8_1 = 0 &  u_imm4_4 & u_imm4 unimpl
+# SAVE u[, src1 [, src2 [, ...]]]
+reglist15:      sp      is count = 16 - rt1 & sp        {}
+reglist14:      gp      is count = 15 - rt1 & gp        {}
+reglist14:      gp,reglist15    is gp & reglist15       {}
+reglist13:      k1      is count = 14 - rt1 & k1        {}
+reglist13:      k1,reglist14    is k1 & reglist14       {}
+reglist12:      k0      is count = 13 - rt1 & k0        {}
+reglist12:      k0,reglist13    is k0 & reglist13       {}
+reglist11:      t9      is count = 12 - rt1 & t9        {}
+reglist11:      t9,reglist12    is t9 & reglist12       {}
+reglist10:      t8      is count = 11 - rt1 & t8        {}
+reglist10:      t8,reglist11    is t8 & reglist11       {}
+reglist9:       s7      is count = 10 - rt1 & s7        {}
+reglist9:       s7,reglist10    is s7 & reglist10       {}
+reglist8:       s6      is count = 9 - rt1 & s6 {}
+reglist8:       s6,reglist9     is s6 & reglist9        {}
+reglist7:       s5      is count = 8 - rt1 & s5 {}
+reglist7:       s5,reglist8     is s5 & reglist8        {}
+reglist6:       s4      is count = 7 - rt1 & s4 {}
+reglist6:       s4,reglist7     is s4 & reglist7        {}
+reglist5:       s3      is count = 6 - rt1 & s3 {}
+reglist5:       s3,reglist6     is s3 & reglist6        {}
+reglist4:       s2      is count = 5 - rt1 & s2 {}
+reglist4:       s2,reglist5     is s2 & reglist5        {}
+reglist3:       s1      is count = 4 - rt1 & s1 {}
+reglist3:       s1,reglist4     is s1 & reglist4        {}
+reglist2:	s0      		is count = 3 - rt1 & s0 {}
+reglist2:	s0,reglist3     is s0 & reglist3        {}
+reglist1:	,ra 			is count = 2 - rt1 & ra {}
+reglist1:	,ra,reglist2 	is ra & reglist2 {}
+reglist: 					is count = 0 {}
+reglist:	reglist1		is rt1 = 1 & reglist1 {}
+reglist:	,fp 			is count = 1 & rt1 = 0 & fp {}
+reglist:	,fp,reglist1 	is rt1 = 0 & fp & reglist1 {}
+
+
+## SAVE[16]
+:SAVE hi_uoffset8_sl4^reglist is
+	hi_pool10_6 = 0b000111 & rt1 & hi_pool8_1 = 0 & hi_uoffset8_sl4 & reglist
+	{
+		gp = 0;
+		build reglist;
+		# TODO save registers
+		# TODO effective_address
+		sp = sp - hi_uoffset8_sl4;
+	}
 
 # SAVE
 ## SAVE[32] u, [ src1 [, src2 [ ..,]]
