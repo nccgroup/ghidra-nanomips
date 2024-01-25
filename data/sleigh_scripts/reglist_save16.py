@@ -24,17 +24,22 @@ def main():
         reg = f'{sv16_regs[i]}'
 
         if i == 0:
-            print(f'{name}:\t\t\t\tis count = 0 {{}}')
+            sp_write = f'*:$(REGSIZE) (sp - $(REGSIZE)) = {reg};'
+        else:
+            sp_write = f'*:$(REGSIZE) (sp - $(REGSIZE)*({i+1}-rt1_raw)) = {reg};'
+
+        if i == 0:
+            print(f'{name}: \t\t\tis count = 0 {{}}')
             # skip for rt=1
-            print(f'{name}:\t, {next_name}\tis rt1 = 1 & {next_name} {{}}')
-            print(f'{name}:\t, fp\t\t\tis rt1 = 0 & count = 1 & fp {{}}')
-            print(f'{name}:\t, fp,{next_name}\tis rt1 = 0 & fp & {next_name} {{}}')
+            print(f'{name}: ,{next_name}\tis rt1_raw = 1 & {next_name} {{}}')
+            print(f'{name}: ,fp\t\t\tis rt1_raw = 0 & count = 1 & fp\t\t{{{sp_write}}}')
+            print(f'{name}: ,fp,{next_name}\tis rt1_raw = 0 & fp & {next_name}\t{{{sp_write}}}')
             continue
 
-        print(f'{name}:\t{reg}\t\t\tis count = {i+1} - rt1 & {reg} {{}}')
+        print(f'{name}: {reg}\t\t\tis count = {i+1} - rt1_raw & rt1_raw & {reg}\t{{{sp_write}}}')
 
         if i != 15:
-            print(f'{name}:\t{reg},{next_name}\tis {reg} & {next_name} {{}}')
+            print(f'{name}: {reg},{next_name}\tis rt1_raw & {reg} & {next_name}\t{{{sp_write}}}')
 
 
 if __name__ == '__main__':

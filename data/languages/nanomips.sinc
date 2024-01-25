@@ -35,7 +35,7 @@ define token instrhi(16)
 	c0s = (0, 4) # for MFC0
 
 	# 1 bit register encodings
-	rt1 = (9, 9)
+	rt1_raw = (9, 9)
 
 	rd1 = (8, 8)
 
@@ -201,9 +201,9 @@ attach variables [ rt rs rs_from_rt rd ] [
 ];
 
 # SAVE rt1
-attach variables [ rt1 ] [
-	fp ra
-];
+#attach variables [ rt1 ] [
+#	fp ra
+#];
 
 # gpr1: [4, 5]
 attach variables [ rd1 ] [
@@ -1880,7 +1880,7 @@ hilo_simm32: simm32 is
 # RESTORE.JRC
 ## RESTORE>JRC[16] u, [ src1 [, src2 [ ..,]]
 ## TODO: figure out how to display registers (seems complicated)
-:RESTORE.JRC is hi_pool10_6 = 0b000111 & rt1 & hi_pool8_1 = 1 &  u_imm4_4 & u_imm4 {
+:RESTORE.JRC is hi_pool10_6 = 0b000111 & rt1_raw & hi_pool8_1 = 1 &  u_imm4_4 & u_imm4 {
 
 }
 
@@ -1922,42 +1922,41 @@ hilo_simm32: simm32 is
 
 
 # SAVE u[, src1 [, src2 [, ...]]]
-reglist_sv16_15:        sp                      is count = 16 - rt1 & sp {}
-reglist_sv16_14:        gp                      is count = 15 - rt1 & gp {}
-reglist_sv16_14:        gp,reglist_sv16_15      is gp & reglist_sv16_15 {}
-reglist_sv16_13:        k1                      is count = 14 - rt1 & k1 {}
-reglist_sv16_13:        k1,reglist_sv16_14      is k1 & reglist_sv16_14 {}
-reglist_sv16_12:        k0                      is count = 13 - rt1 & k0 {}
-reglist_sv16_12:        k0,reglist_sv16_13      is k0 & reglist_sv16_13 {}
-reglist_sv16_11:        t9                      is count = 12 - rt1 & t9 {}
-reglist_sv16_11:        t9,reglist_sv16_12      is t9 & reglist_sv16_12 {}
-reglist_sv16_10:        t8                      is count = 11 - rt1 & t8 {}
-reglist_sv16_10:        t8,reglist_sv16_11      is t8 & reglist_sv16_11 {}
-reglist_sv16_09:        s7                      is count = 10 - rt1 & s7 {}
-reglist_sv16_09:        s7,reglist_sv16_10      is s7 & reglist_sv16_10 {}
-reglist_sv16_08:        s6                      is count = 9 - rt1 & s6 {}
-reglist_sv16_08:        s6,reglist_sv16_09      is s6 & reglist_sv16_09 {}
-reglist_sv16_07:        s5                      is count = 8 - rt1 & s5 {}
-reglist_sv16_07:        s5,reglist_sv16_08      is s5 & reglist_sv16_08 {}
-reglist_sv16_06:        s4                      is count = 7 - rt1 & s4 {}
-reglist_sv16_06:        s4,reglist_sv16_07      is s4 & reglist_sv16_07 {}
-reglist_sv16_05:        s3                      is count = 6 - rt1 & s3 {}
-reglist_sv16_05:        s3,reglist_sv16_06      is s3 & reglist_sv16_06 {}
-reglist_sv16_04:        s2                      is count = 5 - rt1 & s2 {}
-reglist_sv16_04:        s2,reglist_sv16_05      is s2 & reglist_sv16_05 {}
-reglist_sv16_03:        s1                      is count = 4 - rt1 & s1 {}
-reglist_sv16_03:        s1,reglist_sv16_04      is s1 & reglist_sv16_04 {}
-reglist_sv16_02:        s0                      is count = 3 - rt1 & s0 {}
-reglist_sv16_02:        s0,reglist_sv16_03      is s0 & reglist_sv16_03 {}
-reglist_sv16_01:        ra                      is count = 2 - rt1 & ra {}
-reglist_sv16_01:        ra,reglist_sv16_02      is ra & reglist_sv16_02 {}
-reglist_sv16_00:                                is count = 0 {}
-reglist_sv16_00:        , reglist_sv16_01       is rt1 = 1 & reglist_sv16_01 {}
-reglist_sv16_00:        , fp                    is rt1 = 0 & count = 1 & fp {}
-reglist_sv16_00:        , fp,reglist_sv16_01    is rt1 = 0 & fp & reglist_sv16_01 {}
-
-
 ## SAVE[16]
+reglist_sv16_15: sp                     is count = 16 - rt1_raw & rt1_raw & sp  {*:$(REGSIZE) (sp - $(REGSIZE)*(16-rt1_raw)) = sp;}
+reglist_sv16_14: gp                     is count = 15 - rt1_raw & rt1_raw & gp  {*:$(REGSIZE) (sp - $(REGSIZE)*(15-rt1_raw)) = gp;}
+reglist_sv16_14: gp,reglist_sv16_15     is rt1_raw & gp & reglist_sv16_15       {*:$(REGSIZE) (sp - $(REGSIZE)*(15-rt1_raw)) = gp;}
+reglist_sv16_13: k1                     is count = 14 - rt1_raw & rt1_raw & k1  {*:$(REGSIZE) (sp - $(REGSIZE)*(14-rt1_raw)) = k1;}
+reglist_sv16_13: k1,reglist_sv16_14     is rt1_raw & k1 & reglist_sv16_14       {*:$(REGSIZE) (sp - $(REGSIZE)*(14-rt1_raw)) = k1;}
+reglist_sv16_12: k0                     is count = 13 - rt1_raw & rt1_raw & k0  {*:$(REGSIZE) (sp - $(REGSIZE)*(13-rt1_raw)) = k0;}
+reglist_sv16_12: k0,reglist_sv16_13     is rt1_raw & k0 & reglist_sv16_13       {*:$(REGSIZE) (sp - $(REGSIZE)*(13-rt1_raw)) = k0;}
+reglist_sv16_11: t9                     is count = 12 - rt1_raw & rt1_raw & t9  {*:$(REGSIZE) (sp - $(REGSIZE)*(12-rt1_raw)) = t9;}
+reglist_sv16_11: t9,reglist_sv16_12     is rt1_raw & t9 & reglist_sv16_12       {*:$(REGSIZE) (sp - $(REGSIZE)*(12-rt1_raw)) = t9;}
+reglist_sv16_10: t8                     is count = 11 - rt1_raw & rt1_raw & t8  {*:$(REGSIZE) (sp - $(REGSIZE)*(11-rt1_raw)) = t8;}
+reglist_sv16_10: t8,reglist_sv16_11     is rt1_raw & t8 & reglist_sv16_11       {*:$(REGSIZE) (sp - $(REGSIZE)*(11-rt1_raw)) = t8;}
+reglist_sv16_09: s7                     is count = 10 - rt1_raw & rt1_raw & s7  {*:$(REGSIZE) (sp - $(REGSIZE)*(10-rt1_raw)) = s7;}
+reglist_sv16_09: s7,reglist_sv16_10     is rt1_raw & s7 & reglist_sv16_10       {*:$(REGSIZE) (sp - $(REGSIZE)*(10-rt1_raw)) = s7;}
+reglist_sv16_08: s6                     is count = 9 - rt1_raw & rt1_raw & s6   {*:$(REGSIZE) (sp - $(REGSIZE)*(9-rt1_raw)) = s6;}
+reglist_sv16_08: s6,reglist_sv16_09     is rt1_raw & s6 & reglist_sv16_09       {*:$(REGSIZE) (sp - $(REGSIZE)*(9-rt1_raw)) = s6;}
+reglist_sv16_07: s5                     is count = 8 - rt1_raw & rt1_raw & s5   {*:$(REGSIZE) (sp - $(REGSIZE)*(8-rt1_raw)) = s5;}
+reglist_sv16_07: s5,reglist_sv16_08     is rt1_raw & s5 & reglist_sv16_08       {*:$(REGSIZE) (sp - $(REGSIZE)*(8-rt1_raw)) = s5;}
+reglist_sv16_06: s4                     is count = 7 - rt1_raw & rt1_raw & s4   {*:$(REGSIZE) (sp - $(REGSIZE)*(7-rt1_raw)) = s4;}
+reglist_sv16_06: s4,reglist_sv16_07     is rt1_raw & s4 & reglist_sv16_07       {*:$(REGSIZE) (sp - $(REGSIZE)*(7-rt1_raw)) = s4;}
+reglist_sv16_05: s3                     is count = 6 - rt1_raw & rt1_raw & s3   {*:$(REGSIZE) (sp - $(REGSIZE)*(6-rt1_raw)) = s3;}
+reglist_sv16_05: s3,reglist_sv16_06     is rt1_raw & s3 & reglist_sv16_06       {*:$(REGSIZE) (sp - $(REGSIZE)*(6-rt1_raw)) = s3;}
+reglist_sv16_04: s2                     is count = 5 - rt1_raw & rt1_raw & s2   {*:$(REGSIZE) (sp - $(REGSIZE)*(5-rt1_raw)) = s2;}
+reglist_sv16_04: s2,reglist_sv16_05     is rt1_raw & s2 & reglist_sv16_05       {*:$(REGSIZE) (sp - $(REGSIZE)*(5-rt1_raw)) = s2;}
+reglist_sv16_03: s1                     is count = 4 - rt1_raw & rt1_raw & s1   {*:$(REGSIZE) (sp - $(REGSIZE)*(4-rt1_raw)) = s1;}
+reglist_sv16_03: s1,reglist_sv16_04     is rt1_raw & s1 & reglist_sv16_04       {*:$(REGSIZE) (sp - $(REGSIZE)*(4-rt1_raw)) = s1;}
+reglist_sv16_02: s0                     is count = 3 - rt1_raw & rt1_raw & s0   {*:$(REGSIZE) (sp - $(REGSIZE)*(3-rt1_raw)) = s0;}
+reglist_sv16_02: s0,reglist_sv16_03     is rt1_raw & s0 & reglist_sv16_03       {*:$(REGSIZE) (sp - $(REGSIZE)*(3-rt1_raw)) = s0;}
+reglist_sv16_01: ra                     is count = 2 - rt1_raw & rt1_raw & ra   {*:$(REGSIZE) (sp - $(REGSIZE)*(2-rt1_raw)) = ra;}
+reglist_sv16_01: ra,reglist_sv16_02     is rt1_raw & ra & reglist_sv16_02       {*:$(REGSIZE) (sp - $(REGSIZE)*(2-rt1_raw)) = ra;}
+reglist_sv16_00:                        is count = 0 {}
+reglist_sv16_00: ,reglist_sv16_01       is rt1_raw = 1 & reglist_sv16_01 {}
+reglist_sv16_00: ,fp                    is rt1_raw = 0 & count = 1 & fp         {*:$(REGSIZE) (sp - $(REGSIZE)) = fp;}
+reglist_sv16_00: ,fp,reglist_sv16_01    is rt1_raw = 0 & fp & reglist_sv16_01   {*:$(REGSIZE) (sp - $(REGSIZE)) = fp;}
+
 :SAVE hi_uoffset8_sl4^reglist_sv16_00 is
 	hi_pool10_6 = 0b000111 & hi_pool8_1 = 0 & hi_uoffset8_sl4 & reglist_sv16_00
 	{
