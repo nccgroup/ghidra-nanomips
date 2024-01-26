@@ -2581,6 +2581,8 @@ define pcodeop syncie;
 
 
 # SYSCALL code
+define pcodeop syscall;
+
 ## SYSCALL[32]
 :SYSCALL code is
 	hi_pool10_6 = 0b000000 & rt = 0 & hi_pool3_2 = 0b01 & hi_pool2_1 = 0b0 & hi_uimm0_2;
@@ -2588,12 +2590,16 @@ define pcodeop syncie;
 	[
 		code = (hi_uimm0_2 << 16) | uimm16;
 	]
-	unimpl
+	{
+		syscall(code:4);
+	}
 
 ## SYSCALL[16]
 :SYSCALL hi_uimm0_2 is
 	hi_pool10_6 = 0b000100 & rt = 0 & hi_pool3_2 = 0b01 & hi_pool2_1 = 0b0 & hi_uimm0_2
-	unimpl
+	{
+		syscall(hi_uimm0_2:4);
+	}
 
 
 # TEQ rs, rt, code
