@@ -2530,36 +2530,54 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 
 
 # SYNC stype
+define pcodeop sync;
+
 ## stype=0 implied
 :SYNC is
 	hi_pool10_6 = 0b100000 & hi_pool5_5 = 0b00000 & hi_uimm0_5 = 0;
 	lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0000 & lo_pool0_5 = 0b00110
-	{}
+	{
+		sync(0:1);
+	}
 
 :SYNC hi_uimm0_5 is
 	hi_pool10_6 = 0b100000 & hi_pool5_5 = 0b00000 & hi_uimm0_5;
 	lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0000 & lo_pool0_5 = 0b00110
-	{}
+	{
+		sync(hi_uimm0_5:1);
+	}
 
 
 # SYNCI(E) offset(rs)
+define pcodeop synci;
+define pcodeop syncie;
+
 ## SYNCI[S9]
-:SYNCI lo_soffset9(rs) is
-	hi_pool10_6 = 0b101001 & hi_pool5_5 = 0b11111 & rs;
-	lo_pool11_4 = 0b0011 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b00 & lo_soffset9
-	{}
+:SYNCI lo_rs_soffset9 is
+	(hi_pool10_6 = 0b101001 & hi_pool5_5 = 0b11111;
+	lo_pool11_4 = 0b0011 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b00)
+	& lo_rs_soffset9
+	{
+		synci(lo_rs_soffset9:4);
+	}
 
 ## SYNCI[U12]
-:SYNCI lo_uimm0_12(rs) is
-	hi_pool10_6 = 0b100001 & hi_pool5_5 = 0b11111 & rs;
-	lo_pool12_4 = 0b0011 & lo_uimm0_12
-	{}
+:SYNCI lo_rs_uoffset12 is
+	(hi_pool10_6 = 0b100001 & hi_pool5_5 = 0b11111;
+	lo_pool12_4 = 0b0011)
+	& lo_rs_uoffset12
+	{
+		synci(lo_rs_uoffset12:4);
+	}
 
 ## SYNCIE, present when Config5.EVA=1, requires CP0 privilege.
-:SYNCIE lo_soffset9(rs) is
-	hi_pool10_6 = 0b101001 & hi_pool5_5 = 0b11111 & rs;
-	lo_pool11_4 = 0b0011 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10 & lo_soffset9
-	{}
+:SYNCIE lo_rs_soffset9 is
+	(hi_pool10_6 = 0b101001 & hi_pool5_5 = 0b11111;
+	lo_pool11_4 = 0b0011 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10)
+	& lo_rs_soffset9
+	{
+		syncie(lo_rs_soffset9:4);
+	}
 
 
 # SYSCALL code
