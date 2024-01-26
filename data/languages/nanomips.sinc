@@ -23,6 +23,7 @@ define token instrhi(16)
 	
 	hint = (5, 9)  # hi_pool5_5
 	count = (0, 3)
+	inv_type = (5, 6)
 	
 	u4_1 = (0, 4)  # u[4:1] - naming convention conflict
 	
@@ -1280,11 +1281,15 @@ define pcodeop ginvi;
 		ginvi(rs);
 	}
 
-# GINVT()
-## GINVT rt
-#:GINV rt is hi_pool10_6 = 0b001000 & rt ; lo_pool14_2 = 0b01  & lo_pool9_5 = 0b01011 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111 {
-#	# NOTE: not sure how to handle coprocessor instructions
-#}
+
+# GINVT rs, type
+define pcodeop ginvt;
+:GINVT rs, inv_type is
+	hi_pool10_6 = 0b001000 & inv_type & rs;
+	lo_pool14_2 = 0b00  & lo_pool9_5 = 0b00111 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
+	{
+		ginvt(inv_type:1, rs);
+	}
 
 
 # INS rt, rs, pos, size
