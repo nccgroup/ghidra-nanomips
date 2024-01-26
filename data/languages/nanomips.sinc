@@ -1888,26 +1888,62 @@ lo_uimm12_sl3: uimm12 is
 ## RDPGPR rd, rs, rt
 :RDPGPR rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool14_2 = 0b11 & lo_pool9_5 = 0b10000 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111 unimpl
 
-# RESTORE.JRC
-## RESTORE>JRC[16] u, [ src1 [, src2 [ ..,]]
-## TODO: figure out how to display registers (seems complicated)
-:RESTORE.JRC is hi_pool10_6 = 0b000111 & rt1_raw & hi_pool8_1 = 1 &  u_imm4_4 & u_imm4 {
 
-}
+# RESTORE     u[, dst1 [, dst2 [, ...]]]  # jr=0 implied
+# RESTORE.JRC u[, dst1 [, dst2 [, ...]]]  # jr=1 implied
 
-# RESTORE
-## RESTORE[32] u, [ src1 [, src2 [ ..,]]
-## TODO: figure out how to display registers (seems complicated)
-:RESTORE is hi_pool10_6 = 0b100000  & rt & hi_pool4_1 = 0 & hi_pool0_4; lo_pool12_4 = 0b0011 & lo_pool3_9 & lo_pool2_1 & lo_pool0_2 = 0b10 {
+## RESTORE.JRC[16]
+reglist_rs16_15: sp			is count = 16 - rt1_raw & rt1_raw & sp & hi_uoffset8_sl4	{sp = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(16-rt1_raw));}
+reglist_rs16_14: gp			is count = 15 - rt1_raw & rt1_raw & gp & hi_uoffset8_sl4	{gp = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(15-rt1_raw));}
+reglist_rs16_14: gp,reglist_rs16_15	is rt1_raw & gp & reglist_rs16_15 & hi_uoffset8_sl4	{gp = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(15-rt1_raw));}
+reglist_rs16_13: k1			is count = 14 - rt1_raw & rt1_raw & k1 & hi_uoffset8_sl4	{k1 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(14-rt1_raw));}
+reglist_rs16_13: k1,reglist_rs16_14	is rt1_raw & k1 & reglist_rs16_14 & hi_uoffset8_sl4	{k1 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(14-rt1_raw));}
+reglist_rs16_12: k0			is count = 13 - rt1_raw & rt1_raw & k0 & hi_uoffset8_sl4	{k0 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(13-rt1_raw));}
+reglist_rs16_12: k0,reglist_rs16_13	is rt1_raw & k0 & reglist_rs16_13 & hi_uoffset8_sl4	{k0 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(13-rt1_raw));}
+reglist_rs16_11: t9			is count = 12 - rt1_raw & rt1_raw & t9 & hi_uoffset8_sl4	{t9 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(12-rt1_raw));}
+reglist_rs16_11: t9,reglist_rs16_12	is rt1_raw & t9 & reglist_rs16_12 & hi_uoffset8_sl4	{t9 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(12-rt1_raw));}
+reglist_rs16_10: t8			is count = 11 - rt1_raw & rt1_raw & t8 & hi_uoffset8_sl4	{t8 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(11-rt1_raw));}
+reglist_rs16_10: t8,reglist_rs16_11	is rt1_raw & t8 & reglist_rs16_11 & hi_uoffset8_sl4	{t8 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(11-rt1_raw));}
+reglist_rs16_09: s7			is count = 10 - rt1_raw & rt1_raw & s7 & hi_uoffset8_sl4	{s7 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(10-rt1_raw));}
+reglist_rs16_09: s7,reglist_rs16_10	is rt1_raw & s7 & reglist_rs16_10 & hi_uoffset8_sl4	{s7 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(10-rt1_raw));}
+reglist_rs16_08: s6			is count = 9 - rt1_raw & rt1_raw & s6 & hi_uoffset8_sl4	{s6 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(9-rt1_raw));}
+reglist_rs16_08: s6,reglist_rs16_09	is rt1_raw & s6 & reglist_rs16_09 & hi_uoffset8_sl4	{s6 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(9-rt1_raw));}
+reglist_rs16_07: s5			is count = 8 - rt1_raw & rt1_raw & s5 & hi_uoffset8_sl4	{s5 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(8-rt1_raw));}
+reglist_rs16_07: s5,reglist_rs16_08	is rt1_raw & s5 & reglist_rs16_08 & hi_uoffset8_sl4	{s5 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(8-rt1_raw));}
+reglist_rs16_06: s4			is count = 7 - rt1_raw & rt1_raw & s4 & hi_uoffset8_sl4	{s4 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(7-rt1_raw));}
+reglist_rs16_06: s4,reglist_rs16_07	is rt1_raw & s4 & reglist_rs16_07 & hi_uoffset8_sl4	{s4 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(7-rt1_raw));}
+reglist_rs16_05: s3			is count = 6 - rt1_raw & rt1_raw & s3 & hi_uoffset8_sl4	{s3 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(6-rt1_raw));}
+reglist_rs16_05: s3,reglist_rs16_06	is rt1_raw & s3 & reglist_rs16_06 & hi_uoffset8_sl4	{s3 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(6-rt1_raw));}
+reglist_rs16_04: s2			is count = 5 - rt1_raw & rt1_raw & s2 & hi_uoffset8_sl4	{s2 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(5-rt1_raw));}
+reglist_rs16_04: s2,reglist_rs16_05	is rt1_raw & s2 & reglist_rs16_05 & hi_uoffset8_sl4	{s2 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(5-rt1_raw));}
+reglist_rs16_03: s1			is count = 4 - rt1_raw & rt1_raw & s1 & hi_uoffset8_sl4	{s1 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(4-rt1_raw));}
+reglist_rs16_03: s1,reglist_rs16_04	is rt1_raw & s1 & reglist_rs16_04 & hi_uoffset8_sl4	{s1 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(4-rt1_raw));}
+reglist_rs16_02: s0			is count = 3 - rt1_raw & rt1_raw & s0 & hi_uoffset8_sl4	{s0 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(3-rt1_raw));}
+reglist_rs16_02: s0,reglist_rs16_03	is rt1_raw & s0 & reglist_rs16_03 & hi_uoffset8_sl4	{s0 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(3-rt1_raw));}
+reglist_rs16_01: ra			is count = 2 - rt1_raw & rt1_raw & ra & hi_uoffset8_sl4	{ra = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(2-rt1_raw));}
+reglist_rs16_01: ra,reglist_rs16_02	is rt1_raw & ra & reglist_rs16_02 & hi_uoffset8_sl4	{ra = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(2-rt1_raw));}
+reglist_rs16_00: fp			is count = 1 - rt1_raw & rt1_raw & fp & hi_uoffset8_sl4	{fp = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(1-rt1_raw));}
+reglist_rs16_00: fp,reglist_rs16_01	is rt1_raw & fp & reglist_rs16_01 & hi_uoffset8_sl4	{fp = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(1-rt1_raw));}
+reglist_rs16: 			is count = 0 {}
+reglist_rs16: ,reglist_rs16_01	is rt1_raw = 1 & reglist_rs16_01 {}
+reglist_rs16: ,reglist_rs16_00	is rt1_raw = 0 & reglist_rs16_00 {}
 
-}
+:RESTORE.JRC hi_uoffset8_sl4^reglist_rs16 is
+	hi_pool10_6 = 0b000111 & hi_pool8_1 = 0b1 & hi_uoffset8_sl4 & reglist_rs16
+	{
+		build reglist_rs16;
+		# TODO effective_address
+		sp = sp + hi_uoffset8_sl4;
+		return [ra];
+	}
 
-# RESTORE
-## RESTORE.JRC[32] u, [ src1 [, src2 [ ..,]]
-## TODO: figure out how to display registers (seems complicated)
-:RESTORE.JRC is hi_pool10_6 = 0b100000  & rt & hi_pool4_1 & hi_pool0_4; lo_pool12_4 = 0b0011 & lo_pool3_9 & lo_pool2_1 & lo_pool0_2 = 0b11 {
+## RESTORE[32]
+:RESTORE is hi_pool10_6 = 0b100000  & rt & hi_pool4_1 = 0 & hi_pool0_4; lo_pool12_4 = 0b0011 & lo_pool3_9 & lo_pool2_1 & lo_pool0_2 = 0b10
+unimpl
 
-}
+## RESTORE.JRC[32]
+:RESTORE.JRC is hi_pool10_6 = 0b100000  & rt & hi_pool4_1 & hi_pool0_4; lo_pool12_4 = 0b0011 & lo_pool3_9 & lo_pool2_1 & lo_pool0_2 = 0b11
+unimpl
 
 # ROTR
 ## ROTR rd, rs, shift

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import argparse
 
 REGS = """zero
 	at
@@ -14,7 +15,15 @@ REGS = """zero
 
 
 def main():
-    base_name = 'reglist_sv16'
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--restore', action='store_true', default=False)
+    args = parser.parse_args()
+
+    if args.restore:
+        base_name = 'reglist_rs16'
+    else:
+        base_name = 'reglist_sv16'
+
     sv16_regs = ['fp', 'ra'] + REGS[16:30]
 
     for i in range(len(sv16_regs) - 1, -1, -1):
@@ -22,12 +31,17 @@ def main():
         next_name = f'{base_name}_{i+1:02}'
         reg = f'{sv16_regs[i]}'
 
-        sp_write = f'*:$(REGSIZE) (sp - $(REGSIZE)*({i+1}-rt1_raw)) = {reg};'
+        if not args.restore:
+            sp_write = f'*:$(REGSIZE) (sp - $(REGSIZE)*({i+1}-rt1_raw)) = {reg};'
+        else:
+            sp_write = f'{reg} = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*({i+1}-rt1_raw));'
 
-        print(f'{name}: {reg}\t\t\tis count = {i+1} - rt1_raw & rt1_raw & {reg}\t{{{sp_write}}}')
+        offs_pattern = ' & hi_uoffset8_sl4' if args.restore else ''
+
+        print(f'{name}: {reg}\t\t\tis count = {i+1} - rt1_raw & rt1_raw & {reg}{offs_pattern}\t{{{sp_write}}}')
 
         if i != len(sv16_regs) - 1:
-            print(f'{name}: {reg},{next_name}\tis rt1_raw & {reg} & {next_name}\t{{{sp_write}}}')
+            print(f'{name}: {reg},{next_name}\tis rt1_raw & {reg} & {next_name}{offs_pattern}\t{{{sp_write}}}')
 
     # empty register list case for count = 0
     print(f'{base_name}: \t\t\tis count = 0 {{}}')
