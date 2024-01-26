@@ -405,6 +405,17 @@ rtz4: rtz4_msb1 is rtz4_msb = 0b1 & rtz4_msb1 {export rtz4_msb1;}
 rsz4: rsz4_msb0 is rsz4_msb = 0b0 & rsz4_msb0 {export rsz4_msb0;}
 rsz4: rsz4_msb1 is rsz4_msb = 0b1 & rsz4_msb1 {export rsz4_msb1;}
 
+c0_reg: c0s,sel is
+	c0s; sel & c0_reg_id
+	[
+		c0_reg_sel = sel;
+		c0_reg_c0s = c0s;
+	]
+	{
+		export c0_reg_id;
+	}
+
+
 rs_scale2: rs is rs
 	{
 		# TODO effective_address
@@ -1748,16 +1759,6 @@ define pcodeop ginvt;
 
 
 # MFC0 rt, c0s, sel
-c0_reg: c0s,sel is
-	c0s; sel & c0_reg_id
-	[
-		c0_reg_sel = sel;
-		c0_reg_c0s = c0s;
-	]
-	{
-		export c0_reg_id;
-	}
-
 :MFC0 rt, c0_reg is
 	(hi_pool10_6 = 0b001000 & rt;
 	lo_pool3_7 = 0b0000110 & lo_pool0_3 = 0b000)
