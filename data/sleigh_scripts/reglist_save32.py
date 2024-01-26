@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import argparse
 
 REGS = """zero
 	at
@@ -14,7 +15,15 @@ REGS = """zero
 
 
 def main():
-    base_name = 'reglist_sv32'
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--restore', action='store_true', default=False)
+    args = parser.parse_args()
+
+    if args.restore:
+        base_name = 'reglist_rs32'
+    else:
+        base_name = 'reglist_sv32'
+
     sv32_regs = REGS + REGS[16:30]
     #print(sv32_regs)
     #print(len(sv32_regs))
@@ -24,17 +33,28 @@ def main():
         next_name = f'{base_name}_{i+1:02}'
         reg = f'{sv32_regs[i]}'
 
-        sp_write = f'*:$(REGSIZE) (sp - $(REGSIZE)*({i+1}-rt_raw)) = {reg};'
-        sp_write_gp = f'*:$(REGSIZE) (sp - $(REGSIZE)*({i+1}-rt_raw)) = gp;'
+        if not args.restore:
+            sp_write = f'*:$(REGSIZE) (sp - $(REGSIZE)*({i+1}-rt_raw)) = {reg};'
+            sp_write_gp = f'*:$(REGSIZE) (sp - $(REGSIZE)*({i+1}-rt_raw)) = gp;'
+        else:
+            sp_write = f'{reg} = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*({i+1}-rt_raw));'
+            sp_write_gp = f'gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*({i+1}-rt_raw));'
+
+        offs_pattern = ' & lo_uimm12_sl3' if args.restore else ''
 
         # this is last register and gp is set (always end with gp)
-        print(f'{name}: gp\t\t\t\t\tis count = {i+1} - rt_raw & rt_raw & gp; gp_end = 1\t{{{sp_write_gp}}}')
+        print(f'{name}: gp\t\t\t\t\tis count = {i+1} - rt_raw & rt_raw & gp; gp_end = 1{offs_pattern}\t{{{sp_write_gp}}}')
 
         # this is last register
-        print(f'{name}: {reg}\t\t\t\t\tis count = {i+1} - rt_raw & rt_raw & {reg}; gp_end = 0\t{{{sp_write}}}')
+        print(f'{name}: {reg}\t\t\t\t\tis count = {i+1} - rt_raw & rt_raw & {reg}; gp_end = 0{offs_pattern}\t{{{sp_write}}}')
 
         if i != len(sv32_regs) - 1:
-            print(f'{name}: {reg},{next_name}\tis rt_raw ... & {next_name} & {reg}\t\t\t\t{{{sp_write}}}')
+            if args.restore:
+                pattern = '(rt_raw; lo_uimm12_sl3)'
+            else:
+                pattern = 'rt_raw ...'
+
+            print(f'{name}: {reg},{next_name}\tis {pattern} & {next_name} & {reg}\t\t\t\t{{{sp_write}}}')
 
     # empty register list case for count = 0
     print(f'{base_name}: \t\t\tis count = 0 {{}}')
