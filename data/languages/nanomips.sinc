@@ -1539,9 +1539,13 @@ define pcodeop ginvt;
 
 # LHU
 ## LHU[u12] rt, offset(rs)
-:LHU rt, lo_uimm0_12(rs) is hi_pool10_6 = 0b100001 & rt & rs; lo_pool12_4 = 0b0110 & lo_uimm0_12 {
-	rt = *(rs + lo_uimm0_12); # TODO: currently updating this to be correct, this is not correct atm
-}
+:LHU rt, lo_rs_uoffset12 is
+	(hi_pool10_6 = 0b100001 & rt;
+	lo_pool12_4 = 0b0110)
+	& lo_rs_uoffset12
+	{
+		rt = (*:2 lo_rs_uoffset12);
+	}
 
 # LHU
 ## LHU[16] rt, offset(rs)
