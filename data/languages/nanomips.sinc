@@ -147,7 +147,8 @@ define token instrlo(16)
 	lo_pool0_3 = (0, 2)
 	lo_pool0_2 = (0, 1)
 	lo_pool0_1 = (0, 0)
-	
+
+	gp_end = (2, 2)
 	shift = (0, 4)
 	
 	rd = (11, 15)
@@ -159,6 +160,7 @@ define token instrlo(16)
 	# data in same token as opcode bits
 	lo_uimm11_5 = (11, 15)
 	lo_uimm6_5 = (6, 10)
+	lo_uimm3_9 = (3, 11)
 	lo_uimm2_14 = (2, 15)
 	lo_uimm1_15 = (1, 15)
 	lo_uimm0_12 = (0, 11)
@@ -612,6 +614,16 @@ hilo_simm32: simm32 is
 	]
 	{
 		local tmp:4 = simm32;
+		export tmp;
+	}
+
+lo_uimm12_sl3: uimm12 is
+	lo_uimm3_9
+	[
+		uimm12 = lo_uimm3_9 << 3;
+	]
+	{
+		local tmp:4 = uimm12;
 		export tmp;
 	}
 
@@ -1966,10 +1978,187 @@ reglist_sv16:    ,reglist_sv16_00       is rt1_raw = 0 & reglist_sv16_00 {}
 		sp = sp - hi_uoffset8_sl4;
 	}
 
-# SAVE
 ## SAVE[32] u, [ src1 [, src2 [ ..,]]
-## TODO: figure out how to display registers (seems complicated)
-:SAVE is hi_pool10_6 = 0b100000  & rt & hi_pool4_1 = 0 & hi_pool0_4; lo_pool12_4 = 0b0011 & lo_pool3_9 = 0 & lo_pool2_1 & lo_pool0_2 = 0b00 unimpl
+reglist_sv32_45: gp					is count = 46 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(46-rt_raw)) = gp;}
+reglist_sv32_45: sp					is count = 46 - rt_raw & rt_raw & sp; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(46-rt_raw)) = sp;}
+reglist_sv32_44: gp					is count = 45 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(45-rt_raw)) = gp;}
+reglist_sv32_44: gp					is count = 45 - rt_raw & rt_raw & gp; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(45-rt_raw)) = gp;}
+reglist_sv32_44: gp,reglist_sv32_45	is rt_raw ... & reglist_sv32_45 & gp				{*:$(REGSIZE) (sp - $(REGSIZE)*(45-rt_raw)) = gp;}
+reglist_sv32_43: gp					is count = 44 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(44-rt_raw)) = gp;}
+reglist_sv32_43: k1					is count = 44 - rt_raw & rt_raw & k1; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(44-rt_raw)) = k1;}
+reglist_sv32_43: k1,reglist_sv32_44	is rt_raw ... & reglist_sv32_44 & k1				{*:$(REGSIZE) (sp - $(REGSIZE)*(44-rt_raw)) = k1;}
+reglist_sv32_42: gp					is count = 43 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(43-rt_raw)) = gp;}
+reglist_sv32_42: k0					is count = 43 - rt_raw & rt_raw & k0; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(43-rt_raw)) = k0;}
+reglist_sv32_42: k0,reglist_sv32_43	is rt_raw ... & reglist_sv32_43 & k0				{*:$(REGSIZE) (sp - $(REGSIZE)*(43-rt_raw)) = k0;}
+reglist_sv32_41: gp					is count = 42 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(42-rt_raw)) = gp;}
+reglist_sv32_41: t9					is count = 42 - rt_raw & rt_raw & t9; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(42-rt_raw)) = t9;}
+reglist_sv32_41: t9,reglist_sv32_42	is rt_raw ... & reglist_sv32_42 & t9				{*:$(REGSIZE) (sp - $(REGSIZE)*(42-rt_raw)) = t9;}
+reglist_sv32_40: gp					is count = 41 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(41-rt_raw)) = gp;}
+reglist_sv32_40: t8					is count = 41 - rt_raw & rt_raw & t8; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(41-rt_raw)) = t8;}
+reglist_sv32_40: t8,reglist_sv32_41	is rt_raw ... & reglist_sv32_41 & t8				{*:$(REGSIZE) (sp - $(REGSIZE)*(41-rt_raw)) = t8;}
+reglist_sv32_39: gp					is count = 40 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(40-rt_raw)) = gp;}
+reglist_sv32_39: s7					is count = 40 - rt_raw & rt_raw & s7; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(40-rt_raw)) = s7;}
+reglist_sv32_39: s7,reglist_sv32_40	is rt_raw ... & reglist_sv32_40 & s7				{*:$(REGSIZE) (sp - $(REGSIZE)*(40-rt_raw)) = s7;}
+reglist_sv32_38: gp					is count = 39 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(39-rt_raw)) = gp;}
+reglist_sv32_38: s6					is count = 39 - rt_raw & rt_raw & s6; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(39-rt_raw)) = s6;}
+reglist_sv32_38: s6,reglist_sv32_39	is rt_raw ... & reglist_sv32_39 & s6				{*:$(REGSIZE) (sp - $(REGSIZE)*(39-rt_raw)) = s6;}
+reglist_sv32_37: gp					is count = 38 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(38-rt_raw)) = gp;}
+reglist_sv32_37: s5					is count = 38 - rt_raw & rt_raw & s5; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(38-rt_raw)) = s5;}
+reglist_sv32_37: s5,reglist_sv32_38	is rt_raw ... & reglist_sv32_38 & s5				{*:$(REGSIZE) (sp - $(REGSIZE)*(38-rt_raw)) = s5;}
+reglist_sv32_36: gp					is count = 37 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(37-rt_raw)) = gp;}
+reglist_sv32_36: s4					is count = 37 - rt_raw & rt_raw & s4; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(37-rt_raw)) = s4;}
+reglist_sv32_36: s4,reglist_sv32_37	is rt_raw ... & reglist_sv32_37 & s4				{*:$(REGSIZE) (sp - $(REGSIZE)*(37-rt_raw)) = s4;}
+reglist_sv32_35: gp					is count = 36 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(36-rt_raw)) = gp;}
+reglist_sv32_35: s3					is count = 36 - rt_raw & rt_raw & s3; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(36-rt_raw)) = s3;}
+reglist_sv32_35: s3,reglist_sv32_36	is rt_raw ... & reglist_sv32_36 & s3				{*:$(REGSIZE) (sp - $(REGSIZE)*(36-rt_raw)) = s3;}
+reglist_sv32_34: gp					is count = 35 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(35-rt_raw)) = gp;}
+reglist_sv32_34: s2					is count = 35 - rt_raw & rt_raw & s2; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(35-rt_raw)) = s2;}
+reglist_sv32_34: s2,reglist_sv32_35	is rt_raw ... & reglist_sv32_35 & s2				{*:$(REGSIZE) (sp - $(REGSIZE)*(35-rt_raw)) = s2;}
+reglist_sv32_33: gp					is count = 34 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(34-rt_raw)) = gp;}
+reglist_sv32_33: s1					is count = 34 - rt_raw & rt_raw & s1; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(34-rt_raw)) = s1;}
+reglist_sv32_33: s1,reglist_sv32_34	is rt_raw ... & reglist_sv32_34 & s1				{*:$(REGSIZE) (sp - $(REGSIZE)*(34-rt_raw)) = s1;}
+reglist_sv32_32: gp					is count = 33 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(33-rt_raw)) = gp;}
+reglist_sv32_32: s0					is count = 33 - rt_raw & rt_raw & s0; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(33-rt_raw)) = s0;}
+reglist_sv32_32: s0,reglist_sv32_33	is rt_raw ... & reglist_sv32_33 & s0				{*:$(REGSIZE) (sp - $(REGSIZE)*(33-rt_raw)) = s0;}
+reglist_sv32_31: gp					is count = 32 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(32-rt_raw)) = gp;}
+reglist_sv32_31: ra					is count = 32 - rt_raw & rt_raw & ra; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(32-rt_raw)) = ra;}
+reglist_sv32_31: ra,reglist_sv32_32	is rt_raw ... & reglist_sv32_32 & ra				{*:$(REGSIZE) (sp - $(REGSIZE)*(32-rt_raw)) = ra;}
+reglist_sv32_30: gp					is count = 31 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(31-rt_raw)) = gp;}
+reglist_sv32_30: fp					is count = 31 - rt_raw & rt_raw & fp; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(31-rt_raw)) = fp;}
+reglist_sv32_30: fp,reglist_sv32_31	is rt_raw ... & reglist_sv32_31 & fp				{*:$(REGSIZE) (sp - $(REGSIZE)*(31-rt_raw)) = fp;}
+reglist_sv32_29: gp					is count = 30 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(30-rt_raw)) = gp;}
+reglist_sv32_29: sp					is count = 30 - rt_raw & rt_raw & sp; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(30-rt_raw)) = sp;}
+reglist_sv32_29: sp,reglist_sv32_30	is rt_raw ... & reglist_sv32_30 & sp				{*:$(REGSIZE) (sp - $(REGSIZE)*(30-rt_raw)) = sp;}
+reglist_sv32_28: gp					is count = 29 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(29-rt_raw)) = gp;}
+reglist_sv32_28: gp					is count = 29 - rt_raw & rt_raw & gp; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(29-rt_raw)) = gp;}
+reglist_sv32_28: gp,reglist_sv32_29	is rt_raw ... & reglist_sv32_29 & gp				{*:$(REGSIZE) (sp - $(REGSIZE)*(29-rt_raw)) = gp;}
+reglist_sv32_27: gp					is count = 28 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(28-rt_raw)) = gp;}
+reglist_sv32_27: k1					is count = 28 - rt_raw & rt_raw & k1; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(28-rt_raw)) = k1;}
+reglist_sv32_27: k1,reglist_sv32_28	is rt_raw ... & reglist_sv32_28 & k1				{*:$(REGSIZE) (sp - $(REGSIZE)*(28-rt_raw)) = k1;}
+reglist_sv32_26: gp					is count = 27 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(27-rt_raw)) = gp;}
+reglist_sv32_26: k0					is count = 27 - rt_raw & rt_raw & k0; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(27-rt_raw)) = k0;}
+reglist_sv32_26: k0,reglist_sv32_27	is rt_raw ... & reglist_sv32_27 & k0				{*:$(REGSIZE) (sp - $(REGSIZE)*(27-rt_raw)) = k0;}
+reglist_sv32_25: gp					is count = 26 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(26-rt_raw)) = gp;}
+reglist_sv32_25: t9					is count = 26 - rt_raw & rt_raw & t9; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(26-rt_raw)) = t9;}
+reglist_sv32_25: t9,reglist_sv32_26	is rt_raw ... & reglist_sv32_26 & t9				{*:$(REGSIZE) (sp - $(REGSIZE)*(26-rt_raw)) = t9;}
+reglist_sv32_24: gp					is count = 25 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(25-rt_raw)) = gp;}
+reglist_sv32_24: t8					is count = 25 - rt_raw & rt_raw & t8; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(25-rt_raw)) = t8;}
+reglist_sv32_24: t8,reglist_sv32_25	is rt_raw ... & reglist_sv32_25 & t8				{*:$(REGSIZE) (sp - $(REGSIZE)*(25-rt_raw)) = t8;}
+reglist_sv32_23: gp					is count = 24 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(24-rt_raw)) = gp;}
+reglist_sv32_23: s7					is count = 24 - rt_raw & rt_raw & s7; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(24-rt_raw)) = s7;}
+reglist_sv32_23: s7,reglist_sv32_24	is rt_raw ... & reglist_sv32_24 & s7				{*:$(REGSIZE) (sp - $(REGSIZE)*(24-rt_raw)) = s7;}
+reglist_sv32_22: gp					is count = 23 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(23-rt_raw)) = gp;}
+reglist_sv32_22: s6					is count = 23 - rt_raw & rt_raw & s6; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(23-rt_raw)) = s6;}
+reglist_sv32_22: s6,reglist_sv32_23	is rt_raw ... & reglist_sv32_23 & s6				{*:$(REGSIZE) (sp - $(REGSIZE)*(23-rt_raw)) = s6;}
+reglist_sv32_21: gp					is count = 22 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(22-rt_raw)) = gp;}
+reglist_sv32_21: s5					is count = 22 - rt_raw & rt_raw & s5; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(22-rt_raw)) = s5;}
+reglist_sv32_21: s5,reglist_sv32_22	is rt_raw ... & reglist_sv32_22 & s5				{*:$(REGSIZE) (sp - $(REGSIZE)*(22-rt_raw)) = s5;}
+reglist_sv32_20: gp					is count = 21 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(21-rt_raw)) = gp;}
+reglist_sv32_20: s4					is count = 21 - rt_raw & rt_raw & s4; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(21-rt_raw)) = s4;}
+reglist_sv32_20: s4,reglist_sv32_21	is rt_raw ... & reglist_sv32_21 & s4				{*:$(REGSIZE) (sp - $(REGSIZE)*(21-rt_raw)) = s4;}
+reglist_sv32_19: gp					is count = 20 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(20-rt_raw)) = gp;}
+reglist_sv32_19: s3					is count = 20 - rt_raw & rt_raw & s3; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(20-rt_raw)) = s3;}
+reglist_sv32_19: s3,reglist_sv32_20	is rt_raw ... & reglist_sv32_20 & s3				{*:$(REGSIZE) (sp - $(REGSIZE)*(20-rt_raw)) = s3;}
+reglist_sv32_18: gp					is count = 19 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(19-rt_raw)) = gp;}
+reglist_sv32_18: s2					is count = 19 - rt_raw & rt_raw & s2; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(19-rt_raw)) = s2;}
+reglist_sv32_18: s2,reglist_sv32_19	is rt_raw ... & reglist_sv32_19 & s2				{*:$(REGSIZE) (sp - $(REGSIZE)*(19-rt_raw)) = s2;}
+reglist_sv32_17: gp					is count = 18 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(18-rt_raw)) = gp;}
+reglist_sv32_17: s1					is count = 18 - rt_raw & rt_raw & s1; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(18-rt_raw)) = s1;}
+reglist_sv32_17: s1,reglist_sv32_18	is rt_raw ... & reglist_sv32_18 & s1				{*:$(REGSIZE) (sp - $(REGSIZE)*(18-rt_raw)) = s1;}
+reglist_sv32_16: gp					is count = 17 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(17-rt_raw)) = gp;}
+reglist_sv32_16: s0					is count = 17 - rt_raw & rt_raw & s0; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(17-rt_raw)) = s0;}
+reglist_sv32_16: s0,reglist_sv32_17	is rt_raw ... & reglist_sv32_17 & s0				{*:$(REGSIZE) (sp - $(REGSIZE)*(17-rt_raw)) = s0;}
+reglist_sv32_15: gp					is count = 16 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(16-rt_raw)) = gp;}
+reglist_sv32_15: t3					is count = 16 - rt_raw & rt_raw & t3; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(16-rt_raw)) = t3;}
+reglist_sv32_15: t3,reglist_sv32_16	is rt_raw ... & reglist_sv32_16 & t3				{*:$(REGSIZE) (sp - $(REGSIZE)*(16-rt_raw)) = t3;}
+reglist_sv32_14: gp					is count = 15 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(15-rt_raw)) = gp;}
+reglist_sv32_14: t2					is count = 15 - rt_raw & rt_raw & t2; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(15-rt_raw)) = t2;}
+reglist_sv32_14: t2,reglist_sv32_15	is rt_raw ... & reglist_sv32_15 & t2				{*:$(REGSIZE) (sp - $(REGSIZE)*(15-rt_raw)) = t2;}
+reglist_sv32_13: gp					is count = 14 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(14-rt_raw)) = gp;}
+reglist_sv32_13: t1					is count = 14 - rt_raw & rt_raw & t1; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(14-rt_raw)) = t1;}
+reglist_sv32_13: t1,reglist_sv32_14	is rt_raw ... & reglist_sv32_14 & t1				{*:$(REGSIZE) (sp - $(REGSIZE)*(14-rt_raw)) = t1;}
+reglist_sv32_12: gp					is count = 13 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(13-rt_raw)) = gp;}
+reglist_sv32_12: t0					is count = 13 - rt_raw & rt_raw & t0; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(13-rt_raw)) = t0;}
+reglist_sv32_12: t0,reglist_sv32_13	is rt_raw ... & reglist_sv32_13 & t0				{*:$(REGSIZE) (sp - $(REGSIZE)*(13-rt_raw)) = t0;}
+reglist_sv32_11: gp					is count = 12 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(12-rt_raw)) = gp;}
+reglist_sv32_11: a7					is count = 12 - rt_raw & rt_raw & a7; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(12-rt_raw)) = a7;}
+reglist_sv32_11: a7,reglist_sv32_12	is rt_raw ... & reglist_sv32_12 & a7				{*:$(REGSIZE) (sp - $(REGSIZE)*(12-rt_raw)) = a7;}
+reglist_sv32_10: gp					is count = 11 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(11-rt_raw)) = gp;}
+reglist_sv32_10: a6					is count = 11 - rt_raw & rt_raw & a6; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(11-rt_raw)) = a6;}
+reglist_sv32_10: a6,reglist_sv32_11	is rt_raw ... & reglist_sv32_11 & a6				{*:$(REGSIZE) (sp - $(REGSIZE)*(11-rt_raw)) = a6;}
+reglist_sv32_09: gp					is count = 10 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(10-rt_raw)) = gp;}
+reglist_sv32_09: a5					is count = 10 - rt_raw & rt_raw & a5; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(10-rt_raw)) = a5;}
+reglist_sv32_09: a5,reglist_sv32_10	is rt_raw ... & reglist_sv32_10 & a5				{*:$(REGSIZE) (sp - $(REGSIZE)*(10-rt_raw)) = a5;}
+reglist_sv32_08: gp					is count = 9 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(9-rt_raw)) = gp;}
+reglist_sv32_08: a4					is count = 9 - rt_raw & rt_raw & a4; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(9-rt_raw)) = a4;}
+reglist_sv32_08: a4,reglist_sv32_09	is rt_raw ... & reglist_sv32_09 & a4				{*:$(REGSIZE) (sp - $(REGSIZE)*(9-rt_raw)) = a4;}
+reglist_sv32_07: gp					is count = 8 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(8-rt_raw)) = gp;}
+reglist_sv32_07: a3					is count = 8 - rt_raw & rt_raw & a3; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(8-rt_raw)) = a3;}
+reglist_sv32_07: a3,reglist_sv32_08	is rt_raw ... & reglist_sv32_08 & a3				{*:$(REGSIZE) (sp - $(REGSIZE)*(8-rt_raw)) = a3;}
+reglist_sv32_06: gp					is count = 7 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(7-rt_raw)) = gp;}
+reglist_sv32_06: a2					is count = 7 - rt_raw & rt_raw & a2; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(7-rt_raw)) = a2;}
+reglist_sv32_06: a2,reglist_sv32_07	is rt_raw ... & reglist_sv32_07 & a2				{*:$(REGSIZE) (sp - $(REGSIZE)*(7-rt_raw)) = a2;}
+reglist_sv32_05: gp					is count = 6 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(6-rt_raw)) = gp;}
+reglist_sv32_05: a1					is count = 6 - rt_raw & rt_raw & a1; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(6-rt_raw)) = a1;}
+reglist_sv32_05: a1,reglist_sv32_06	is rt_raw ... & reglist_sv32_06 & a1				{*:$(REGSIZE) (sp - $(REGSIZE)*(6-rt_raw)) = a1;}
+reglist_sv32_04: gp					is count = 5 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(5-rt_raw)) = gp;}
+reglist_sv32_04: a0					is count = 5 - rt_raw & rt_raw & a0; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(5-rt_raw)) = a0;}
+reglist_sv32_04: a0,reglist_sv32_05	is rt_raw ... & reglist_sv32_05 & a0				{*:$(REGSIZE) (sp - $(REGSIZE)*(5-rt_raw)) = a0;}
+reglist_sv32_03: gp					is count = 4 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(4-rt_raw)) = gp;}
+reglist_sv32_03: t5					is count = 4 - rt_raw & rt_raw & t5; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(4-rt_raw)) = t5;}
+reglist_sv32_03: t5,reglist_sv32_04	is rt_raw ... & reglist_sv32_04 & t5				{*:$(REGSIZE) (sp - $(REGSIZE)*(4-rt_raw)) = t5;}
+reglist_sv32_02: gp					is count = 3 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(3-rt_raw)) = gp;}
+reglist_sv32_02: t4					is count = 3 - rt_raw & rt_raw & t4; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(3-rt_raw)) = t4;}
+reglist_sv32_02: t4,reglist_sv32_03	is rt_raw ... & reglist_sv32_03 & t4				{*:$(REGSIZE) (sp - $(REGSIZE)*(3-rt_raw)) = t4;}
+reglist_sv32_01: gp					is count = 2 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(2-rt_raw)) = gp;}
+reglist_sv32_01: at					is count = 2 - rt_raw & rt_raw & at; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(2-rt_raw)) = at;}
+reglist_sv32_01: at,reglist_sv32_02	is rt_raw ... & reglist_sv32_02 & at				{*:$(REGSIZE) (sp - $(REGSIZE)*(2-rt_raw)) = at;}
+reglist_sv32_00: gp					is count = 1 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(1-rt_raw)) = gp;}
+reglist_sv32_00: zero					is count = 1 - rt_raw & rt_raw & zero; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(1-rt_raw)) = zero;}
+reglist_sv32_00: zero,reglist_sv32_01	is rt_raw ... & reglist_sv32_01 & zero				{*:$(REGSIZE) (sp - $(REGSIZE)*(1-rt_raw)) = zero;}
+reglist_sv32: 			is count = 0 {}
+reglist_sv32: ,reglist_sv32_31	is rt_raw = 31 ... & reglist_sv32_31 {}
+reglist_sv32: ,reglist_sv32_30	is rt_raw = 30 ... & reglist_sv32_30 {}
+reglist_sv32: ,reglist_sv32_29	is rt_raw = 29 ... & reglist_sv32_29 {}
+reglist_sv32: ,reglist_sv32_28	is rt_raw = 28 ... & reglist_sv32_28 {}
+reglist_sv32: ,reglist_sv32_27	is rt_raw = 27 ... & reglist_sv32_27 {}
+reglist_sv32: ,reglist_sv32_26	is rt_raw = 26 ... & reglist_sv32_26 {}
+reglist_sv32: ,reglist_sv32_25	is rt_raw = 25 ... & reglist_sv32_25 {}
+reglist_sv32: ,reglist_sv32_24	is rt_raw = 24 ... & reglist_sv32_24 {}
+reglist_sv32: ,reglist_sv32_23	is rt_raw = 23 ... & reglist_sv32_23 {}
+reglist_sv32: ,reglist_sv32_22	is rt_raw = 22 ... & reglist_sv32_22 {}
+reglist_sv32: ,reglist_sv32_21	is rt_raw = 21 ... & reglist_sv32_21 {}
+reglist_sv32: ,reglist_sv32_20	is rt_raw = 20 ... & reglist_sv32_20 {}
+reglist_sv32: ,reglist_sv32_19	is rt_raw = 19 ... & reglist_sv32_19 {}
+reglist_sv32: ,reglist_sv32_18	is rt_raw = 18 ... & reglist_sv32_18 {}
+reglist_sv32: ,reglist_sv32_17	is rt_raw = 17 ... & reglist_sv32_17 {}
+reglist_sv32: ,reglist_sv32_16	is rt_raw = 16 ... & reglist_sv32_16 {}
+reglist_sv32: ,reglist_sv32_15	is rt_raw = 15 ... & reglist_sv32_15 {}
+reglist_sv32: ,reglist_sv32_14	is rt_raw = 14 ... & reglist_sv32_14 {}
+reglist_sv32: ,reglist_sv32_13	is rt_raw = 13 ... & reglist_sv32_13 {}
+reglist_sv32: ,reglist_sv32_12	is rt_raw = 12 ... & reglist_sv32_12 {}
+reglist_sv32: ,reglist_sv32_11	is rt_raw = 11 ... & reglist_sv32_11 {}
+reglist_sv32: ,reglist_sv32_10	is rt_raw = 10 ... & reglist_sv32_10 {}
+reglist_sv32: ,reglist_sv32_09	is rt_raw = 9 ... & reglist_sv32_09 {}
+reglist_sv32: ,reglist_sv32_08	is rt_raw = 8 ... & reglist_sv32_08 {}
+reglist_sv32: ,reglist_sv32_07	is rt_raw = 7 ... & reglist_sv32_07 {}
+reglist_sv32: ,reglist_sv32_06	is rt_raw = 6 ... & reglist_sv32_06 {}
+reglist_sv32: ,reglist_sv32_05	is rt_raw = 5 ... & reglist_sv32_05 {}
+reglist_sv32: ,reglist_sv32_04	is rt_raw = 4 ... & reglist_sv32_04 {}
+reglist_sv32: ,reglist_sv32_03	is rt_raw = 3 ... & reglist_sv32_03 {}
+reglist_sv32: ,reglist_sv32_02	is rt_raw = 2 ... & reglist_sv32_02 {}
+reglist_sv32: ,reglist_sv32_01	is rt_raw = 1 ... & reglist_sv32_01 {}
+reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
+
+:SAVE lo_uimm12_sl3^reglist_sv32 is
+	(hi_pool10_6 = 0b100000 & hi_pool4_1 = 0;
+	lo_pool12_4 = 0b0011 & lo_uimm12_sl3 & gp_end & lo_pool0_2 = 0b00)
+	& reglist_sv32
+	{
+		build reglist_sv32;
+		# TODO effective_address
+		sp = sp - lo_uimm12_sl3;
+	}
 
 
 # SB
