@@ -177,6 +177,7 @@ define token instrlo(16)
 
 	lo_signbit15_1 = (15, 15) signed
 	lo_signbit0_1 = (0, 0) signed
+	lo_unsignbit15_1 = (15, 15)
 	;
 	
 define token data16(16)
@@ -528,6 +529,15 @@ lo_soffset9: offs is lo_signbit15_1 & lo_simm0_8
 		export tmp;
 	}
 
+lo_uoffset9: offs is lo_unsignbit15_1 & lo_simm0_8
+	[
+		offs = (lo_unsignbit15_1 << 8) | lo_simm0_8;
+	]
+	{
+		local tmp:4 = offs;
+		export tmp;
+	}
+
 hilo_gp_uoffset18_sl1: offs(gp) is
 	gp & hi_uimm0_2; lo_uimm1_15
 	[
@@ -626,6 +636,13 @@ lo_rs_soffset9: lo_soffset9(rs) is
 	rs; lo_soffset9
 	{
 		local addr = rs + lo_soffset9;
+		export *[ram]:4 addr;
+	}
+
+lo_rs_uoffset9: lo_uoffset9(rs) is
+	rs; lo_uoffset9
+	{
+		local addr = rs + lo_uoffset9;
 		export *[ram]:4 addr;
 	}
 
@@ -1594,10 +1611,15 @@ define pcodeop clear_execution_hazards;
 
 # LHUE
 ## LHUE rt, offset(rs)
-:LHUE rt, lo_pool0_8(rs) is hi_pool10_6 = 0b101001 & rt & rs; lo_pool15_1 & lo_pool11_4 = 0b0110 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10 & lo_pool0_8 {
-	#rt = *(rs + lo_uimm0_12); # TODO: currently updating this to be correct, this is not correct atm
-	#TODO: make the number
-}
+:LHUE rt, lo_rs_uoffset9 is
+	(hi_pool10_6 = 0b101001 & rt;
+	lo_pool11_4 = 0b0110 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10)
+	& lo_rs_uoffset9
+	{
+		rt = (*:2 lo_rs_uoffset9);
+	}
+
+
 # LHUX
 ## LHUX rt, offset(rs)
 :LHUX rd, rs(rt) is hi_pool10_6 = 0b001000 & rt & rs; rd  & lo_pool7_4 = 0b0110 & lo_pool6_1 = 0b0 & lo_pool3_3 = 0b000 & lo_pool0_3 = 0b111 {
