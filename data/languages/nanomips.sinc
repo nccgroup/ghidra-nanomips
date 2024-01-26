@@ -1611,12 +1611,12 @@ define pcodeop clear_execution_hazards;
 
 # LHUE
 ## LHUE rt, offset(rs)
-:LHUE rt, lo_rs_uoffset9 is
+:LHUE rt, lo_rs_soffset9 is
 	(hi_pool10_6 = 0b101001 & rt;
 	lo_pool11_4 = 0b0110 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10)
-	& lo_rs_uoffset9
+	& lo_rs_soffset9
 	{
-		rt = (*:2 lo_rs_uoffset9);
+		rt = (*:2 lo_rs_soffset9);
 	}
 
 
