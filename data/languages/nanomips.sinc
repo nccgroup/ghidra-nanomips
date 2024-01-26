@@ -1519,10 +1519,13 @@ define pcodeop ginvt;
 
 # LH
 ## LH rt, offset(s9)
-:LH rt, lo_pool0_8(rs) is hi_pool10_6 = 0b101001 & rt & rs; lo_pool15_1 & lo_pool11_4 = 0b0100 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b00 & lo_pool0_8 {
-	#rt = *(rs + lo_uimm0_12); # TODO: currently updating this to be correct, this is not correct atm
-	#TODO: make the number
-}
+:LH rt, lo_rs_soffset9 is
+	(hi_pool10_6 = 0b101001 & rt;
+	lo_pool11_4 = 0b0100 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b00)
+	& lo_rs_soffset9
+	{
+		rt = sext(*:2 lo_rs_soffset9);
+	}
 
 # LHE
 ## LHE rt, offset(rs)
