@@ -1423,24 +1423,23 @@ lo_uimm12_sl3: uimm12 is
 	}
 
 
-# LH
-## LH rt, offset(rs)
+# LH rt, offset(rs)
+## LH[U12]
 :LH rt, lo_rs_uoffset12 is
 	(hi_pool10_6 = 0b100001 & rt;
 	lo_pool12_4 = 0b0100)
 	& lo_rs_uoffset12
 	{
-		rt = (*:2 lo_rs_uoffset12);
+		rt = sext(*:2 lo_rs_uoffset12);
 	}
 
-# LH
-## LH[16] rt, offset(rs)
+## LH[16]
 :LH rt3, hi_rs3_uoffset2 is
 	(hi_pool10_6 = 0b011111 & rt3 & hi_pool3_1 = 0b0 & hi_pool0_1 = 0b0)
 	& hi_rs3_uoffset2
 	{
 		# TODO: make the number and also reference original example maybe
-		rt3 = (*:2 hi_rs3_uoffset2);
+		rt3 = sext(*:2 hi_rs3_uoffset2);
 	}
 
 # LH
