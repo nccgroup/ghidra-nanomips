@@ -1271,9 +1271,8 @@ lo_uimm12_sl3: uimm12 is
 	}
 
 
-# GINV()
-## GINV rt
-:GINV rs is
+# GINVI rs
+:GINVI rs is
 	hi_pool10_6 = 0b001000 & rs;
 	lo_pool14_2 = 0b00  & lo_pool9_5 = 0b01111 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
 	unimpl  # NOTE: not sure how to handle coprocessor instructions
