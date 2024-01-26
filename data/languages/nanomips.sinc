@@ -2603,10 +2603,13 @@ define pcodeop syscall;
 
 
 # TEQ rs, rt, code
+define pcodeop trap;
 :TEQ rs, rt, lo_uimm11_5 is
 	hi_pool10_6 = 0b001000 & rt & rs;
 	lo_uimm11_5 & lo_pool10_1 = 0b0 & lo_pool3_7 = 0b0000000 & lo_pool0_3 = 0b000
-	unimpl
+	{
+		trap(lo_uimm11_5:1);
+	}
 
 
 # TLBINV
@@ -2655,7 +2658,9 @@ define pcodeop syscall;
 :TNE rs, rt, lo_uimm11_5 is
 	hi_pool10_6 = 0b001000 & rt & rs;
 	lo_uimm11_5 & lo_pool10_1 = 0b1 & lo_pool3_7 = 0b0000000 & lo_pool0_3 = 0b000
-	unimpl
+	{
+		trap(lo_uimm11_5:1);
+	}
 
 
 # UALH rt, offset(rs)
