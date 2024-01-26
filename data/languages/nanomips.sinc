@@ -1372,6 +1372,21 @@ define pcodeop ginvt;
 	}
 
 
+# JALRC.HB rt, rs
+define pcodeop clear_instruction_hazards;
+define pcodeop clear_execution_hazards;
+:JALRC.HB rt, rs is
+	hi_pool10_6 = 0b010010 & rt & rs;
+	lo_pool12_4 = 0b0001
+	{
+		rt = inst_next;
+		# NOTE: in pseudocode these are called after setting next_pc
+		clear_instruction_hazards();
+		clear_execution_hazards();
+		call [rs];
+	}
+
+
 # JRC
 :JRC rt is
 	hi_pool10_6 = 0b110110 & rt & hi_pool4_1 = 0 & hi_pool0_4 = 0b0000
