@@ -60,6 +60,11 @@ define register offset=0x200 size=$(C0REGSIZE) [
 	C0.DESAVE c0_31_1 C0.KScratch1 C0.KScratch2 C0.KScratch3 C0.KScratch4 C0.KScratch5 C0.KScratch6 c0_31_8 c0_31_9 c0_31_10 c0_31_11 c0_31_12 c0_31_13 c0_31_14 c0_31_15 c0_31_16 c0_31_17 c0_31_18 c0_31_19 c0_31_20 c0_31_21 c0_31_22 c0_31_23 c0_31_24 c0_31_25 c0_31_26 c0_31_27 c0_31_28 c0_31_29 c0_31_30 c0_31_31
 ];
 
+# Bit range registers
+## For CP0 bit fields see MIPS® Architecture Base: 32-bit Privileged Resource Architecture Technical Reference Manual — Revision 06.09
+define bitrange
+	C0.Status.IE = C0.Status[0, 1];
+
 # Define context bits (if defined, size must be multiple of 4-bytes)
 define register offset=0x100 size=4   contextreg;
 

@@ -1236,12 +1236,26 @@ lo_uimm12_sl3: uimm12 is
 	lo_pool14_2 = 0b11 & lo_pool9_5 = 0b10001 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
 	unimpl
 
-# DI
-## DI rt
+
+# DI rt
+## rt=0 implied
 :DI is
+	hi_pool10_6 = 0b001000 & rt = 0;
+	lo_pool14_2 = 0b01 & lo_pool9_5 = 0b00011 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
+	{
+		# NOTE: write to $zero is effectively nop
+		zero = C0.Status:$(REGSIZE);
+		C0.Status.IE = 0;
+	}
+
+:DI rt is
 	hi_pool10_6 = 0b001000 & rt;
 	lo_pool14_2 = 0b01 & lo_pool9_5 = 0b00011 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
-	unimpl
+	{
+		rt = C0.Status:$(REGSIZE);
+		C0.Status.IE = 0;
+	}
+
 
 # DIV
 ## DIV rd, rs, rt
@@ -1279,12 +1293,24 @@ lo_uimm12_sl3: uimm12 is
 	unimpl  # NOTE: not sure how to handle coprocessor instructions
 
 
-# EI
-## EI rt
+# EI rt
+## rt = 0 implied
+:EI is
+	hi_pool10_6 = 0b001000 & rt = 0;
+	lo_pool14_2 = 0b01 & lo_pool9_5 = 0b01011 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
+	{
+		# NOTE: write to $zero is effectively a nop
+		zero = C0.Status:$(REGSIZE);
+		C0.Status.IE = 1;
+	}
+
 :EI rt is
 	hi_pool10_6 = 0b001000 & rt;
 	lo_pool14_2 = 0b01 & lo_pool9_5 = 0b01011 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
-	unimpl # NOTE: not sure how to handle coprocessor instructions
+	{
+		rt = C0.Status:$(REGSIZE);
+		C0.Status.IE = 1;
+	}
 
 
 # ERET
