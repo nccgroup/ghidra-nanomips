@@ -11,21 +11,54 @@
     <!-- <range space="io"/> -->
   </global>
   <stackpointer register="sp" space="ram"/>
-  
+  <returnaddress>
+    <register name="ra"/>
+  </returnaddress>
   <default_proto>
-    <prototype name="fake" extrapop="2" stackshift="2" strategy="register">
+    <prototype name="__stdcall" extrapop="0" stackshift="0" strategy="register">
       <input>
-        <pentry minsize="1" maxsize="1">
-          <register name="k0"/>
+        <pentry minsize="4" maxsize="4">
+          <register name="a0"/>
+        </pentry>
+        <pentry minsize="4" maxsize="4">
+          <register name="a1"/>
+        </pentry>
+        <pentry minsize="4" maxsize="4">
+          <register name="a2"/>
+        </pentry>
+        <pentry minsize="4" maxsize="4">
+          <register name="a3"/>
+        </pentry>
+        <pentry minsize="4" maxsize="4">
+          <register name="a4"/>
+        </pentry>
+        <pentry minsize="4" maxsize="4">
+          <register name="a5"/>
+        </pentry>
+        <pentry minsize="4" maxsize="4">
+          <register name="a6"/>
+        </pentry>
+        <pentry minsize="4" maxsize="4">
+          <register name="a7"/>
         </pentry>
       </input>
       <output>
-        <pentry minsize="1" maxsize="1">
-          <register name="k0"/>
+        <pentry minsize="4" maxsize="4">
+          <register name="a0"/>
+        </pentry>
+        <pentry minsize="4" maxsize="4">
+          <register name="a1"/>
         </pentry>
       </output>
       <unaffected>
-        <register name="sp"/>
+        <register name="s0"/>
+        <register name="s1"/>
+        <register name="s2"/>
+        <register name="s3"/>
+        <register name="s4"/>
+        <register name="s5"/>
+        <register name="s6"/>
+        <register name="s7"/>
       </unaffected>
     </prototype>
   </default_proto>
