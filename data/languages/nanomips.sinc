@@ -681,6 +681,16 @@ hilo_simm32: simm32 is
 		export tmp;
 	}
 
+full_simm32: simm32 is
+	lo_imm16; hi_imm16
+	[
+		simm32 = (hi_imm16 << 16) | lo_imm16;
+	]
+	{
+		local tmp:4 = simm32;
+		export tmp;
+	}
+
 lo_uimm12_sl3: uimm12 is
 	lo_uimm3_9
 	[
@@ -713,28 +723,20 @@ lo_uimm12_sl3: uimm12 is
 	}
 
 ## ADDIU[48]
-:ADDIU rt, rs_from_rt, s32 is
+:ADDIU rt, rs_from_rt, full_simm32 is
 	hi_pool10_6 = 0b011000 & rt & rs_from_rt & hi_pool0_5 = 0b00001;
-	lo_imm16; hi_imm16
-	[
-		s32 = (hi_imm16 << 16) | lo_imm16;
-	] {
-		# TODO signedness
-		rt = rs_from_rt + s32;
+	full_simm32
+	{
+		rt = rs_from_rt + full_simm32;
 	}
 
 ## ADDIU[GP48]
 # TODO: not available in P64 mode
-:ADDIU rt, gp, s32 is
+:ADDIU rt, gp, full_simm32 is
 	gp & hi_pool10_6 = 0b011000 & rt & hi_pool0_5 = 0b00010;
-	lo_imm16; hi_imm16
-	[
-		s32 = (hi_imm16 << 16) | lo_imm16;
-	]
+	full_simm32
 	{
-		# TODO signedness
-		# rs = $r28 = gp
-		rt = gp + s32;
+		rt = gp + full_simm32;
 	}
 
 ## ADDIU[GP.B]
@@ -1660,10 +1662,12 @@ define pcodeop clear_execution_hazards;
 } 
 
 ## LI[48]
-:LI rt, s32 is hi_pool10_6 = 0b011000 & rt & hi_pool0_5 = 0b00000; lo_imm16; hi_imm16 [s32 = (hi_imm16 << 16) | lo_imm16;] {
-	rt = s32;
-	# TODO: is signedness maintained correctly?
-}
+:LI rt, full_simm32 is
+	hi_pool10_6 = 0b011000 & rt & hi_pool0_5 = 0b00000;
+	full_simm32
+	{
+		rt = full_simm32;
+	}
 
 # LL
 ## LL rt, offset(rs)
