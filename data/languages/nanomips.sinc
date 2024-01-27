@@ -966,8 +966,7 @@ lo_uimm12_sl3: uimm12 is
 	(hi_pool10_6 = 0b001010 & hi_pool9_1 = 0b0) ... & hilo_saddr26
 	{
 		# TODO should be effective_address(addr)
-		ra = inst_next;
-		call hilo_saddr26;
+		goto hilo_saddr26;
 	}
 
 ## BC[16]
@@ -975,8 +974,7 @@ lo_uimm12_sl3: uimm12 is
 	hi_pool10_6 = 0b000110 & hi_saddr11
 	{
 		# TODO should be effective_address(addr)
-		ra = inst_next;
-		call hi_saddr11;
+		goto hi_saddr11;
 	}
 
 
