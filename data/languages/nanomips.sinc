@@ -2686,9 +2686,16 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 
 
 # SIGRIE code
-# TODO: Signal Reserved Instruction Exception
-:SIGRIE code is hi_pool10_6 = 0b000000 & rt = 0 & hi_pool3_2 = 0b00 & hi_uimm0_3; uimm16
-	[code = (hi_uimm0_3 << 16) | uimm16;] unimpl
+define pcodeop sigrie;
+:SIGRIE code is
+	hi_pool10_6 = 0b000000 & rt = 0 & hi_pool3_2 = 0b00 & hi_uimm0_3;
+	uimm16
+	[
+		code = (hi_uimm0_3 << 16) | uimm16;
+	]
+	{
+		sigrie(code:3);
+	}
 
 
 # SLL
