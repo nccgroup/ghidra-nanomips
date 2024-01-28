@@ -312,6 +312,7 @@ attach values [count3] [8 1 2 3 4 5 6 7];
 # Fake p-code ops
 ################################################################
 
+define pcodeop break;
 define pcodeop clear_execution_hazards;
 define pcodeop clear_instruction_hazards;
 define pcodeop ginvi;
@@ -1155,12 +1156,16 @@ lo_uimm12_sl3: uimm12 is
 	[
 		code = (hi_uimm0_3 << 16) | uimm16;
 	]
-	unimpl # TODO raise breakpoint exception ("BP")
+	{
+		break(code:$(REGSIZE));
+	}
 
 ## BREAK[16]
 :BREAK hi_uimm0_3 is
 	hi_pool10_6 = 0b000100 & rt = 0 & hi_pool3_2 = 0b10 & hi_uimm0_3
-	unimpl # TODO raise breakpoint exception ("BP")
+	{
+		break(hi_uimm0_3:$(REGSIZE));
+	}
 
 
 # BRSC rs
