@@ -309,6 +309,22 @@ attach variables [ c0_reg_id ] [
 attach values [count3] [8 1 2 3 4 5 6 7];
 
 ################################################################
+# Fake p-code ops
+################################################################
+
+define pcodeop clear_execution_hazards;
+define pcodeop clear_instruction_hazards;
+define pcodeop ginvi;
+define pcodeop ginvt;
+define pcodeop sigrie;
+define pcodeop sync;
+define pcodeop synci;
+define pcodeop syncie;
+define pcodeop syscall;
+define pcodeop trap;
+define pcodeop wait;
+
+################################################################
 # Macros
 ################################################################
 
@@ -701,6 +717,10 @@ lo_uimm12_sl3: uimm12 is
 		export tmp;
 	}
 
+
+################################################################
+# Instruction definitions
+################################################################
 
 # ADD rd, rs, rt
 :ADD rd, rs, rt is
@@ -1362,7 +1382,6 @@ lo_uimm12_sl3: uimm12 is
 
 
 # GINVI rs
-define pcodeop ginvi;
 :GINVI rs is
 	hi_pool10_6 = 0b001000 & rs;
 	lo_pool14_2 = 0b00  & lo_pool9_5 = 0b01111 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
@@ -1372,7 +1391,6 @@ define pcodeop ginvi;
 
 
 # GINVT rs, type
-define pcodeop ginvt;
 :GINVT rs, inv_type is
 	hi_pool10_6 = 0b001000 & inv_type & rs;
 	lo_pool14_2 = 0b00  & lo_pool9_5 = 0b00111 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
@@ -1416,8 +1434,6 @@ define pcodeop ginvt;
 
 
 # JALRC.HB rt, rs
-define pcodeop clear_instruction_hazards;
-define pcodeop clear_execution_hazards;
 :JALRC.HB rt, rs is
 	hi_pool10_6 = 0b010010 & rt & rs;
 	lo_pool12_4 = 0b0001
@@ -2716,7 +2732,6 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 
 
 # SIGRIE code
-define pcodeop sigrie;
 :SIGRIE code is
 	hi_pool10_6 = 0b000000 & rt = 0 & hi_pool3_2 = 0b00 & hi_uimm0_3;
 	uimm16
@@ -2947,8 +2962,6 @@ define pcodeop sigrie;
 
 
 # SYNC stype
-define pcodeop sync;
-
 ## stype=0 implied
 :SYNC is
 	hi_pool10_6 = 0b100000 & hi_pool5_5 = 0b00000 & hi_uimm0_5 = 0;
@@ -2966,9 +2979,6 @@ define pcodeop sync;
 
 
 # SYNCI(E) offset(rs)
-define pcodeop synci;
-define pcodeop syncie;
-
 ## SYNCI[S9]
 :SYNCI lo_rs_soffset9 is
 	(hi_pool10_6 = 0b101001 & hi_pool5_5 = 0b11111;
@@ -2998,8 +3008,6 @@ define pcodeop syncie;
 
 
 # SYSCALL code
-define pcodeop syscall;
-
 ## SYSCALL[32]
 :SYSCALL code is
 	hi_pool10_6 = 0b000000 & rt = 0 & hi_pool3_2 = 0b01 & hi_pool2_1 = 0b0 & hi_uimm0_2;
@@ -3020,7 +3028,6 @@ define pcodeop syscall;
 
 
 # TEQ rs, rt, code
-define pcodeop trap;
 :TEQ rs, rt, lo_uimm11_5 is
 	hi_pool10_6 = 0b001000 & rt & rs;
 	lo_uimm11_5 & lo_pool10_1 = 0b0 & lo_pool3_7 = 0b0000000 & lo_pool0_3 = 0b000
@@ -3128,7 +3135,6 @@ define pcodeop trap;
 
 
 # WAIT code
-define pcodeop wait;
 :WAIT is
 	hi_pool10_6 = 0b001000 & hi_uimm0_10 = 0;
 	lo_pool14_2 = 0b11 & lo_pool9_5 = 0b00001 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
