@@ -313,6 +313,7 @@ attach values [count3] [8 1 2 3 4 5 6 7];
 ################################################################
 
 define pcodeop break;
+define pcodeop cacheop;
 define pcodeop clear_execution_hazards;
 define pcodeop clear_instruction_hazards;
 define pcodeop ginvi;
@@ -1178,19 +1179,24 @@ lo_uimm12_sl3: uimm12 is
 
 
 # CACHE/CACHEE op, offset(rs)
-# TODO "Requires CP0 privilege, availability varies by format."
-
 ## CACHE
-:CACHE rt_raw, lo_soffset9(rs) is
-	hi_pool10_6 = 0b101001 & rt_raw & rs;
-	lo_pool11_4 = 0b0111 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b01 & lo_soffset9
-	unimpl
+:CACHE rt_raw, lo_rs_soffset9 is
+	(hi_pool10_6 = 0b101001 & rt_raw;
+	lo_pool11_4 = 0b0111 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b01)
+	& lo_rs_soffset9
+	{
+		cacheop(rt_raw:1, lo_rs_soffset9, 0:1);
+	}
 
 ## CACHEE, present when Config5.EVA=1.
-:CACHEE rt_raw, lo_soffset9(rs) is
-	hi_pool10_6 = 0b101001 & rt_raw & rs;
-	lo_pool11_4 = 0b0111 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10 & lo_soffset9
-	unimpl
+:CACHEE rt_raw, lo_rs_soffset9 is
+	(hi_pool10_6 = 0b101001 & rt_raw;
+	lo_pool11_4 = 0b0111 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10)
+	& lo_rs_soffset9
+	{
+		cacheop(rt_raw:1, lo_rs_soffset9, 1:1);
+	}
+
 
 # CLO rt, rs
 :CLO rt, rs is
