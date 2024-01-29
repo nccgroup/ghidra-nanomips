@@ -2881,38 +2881,31 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 
 # SLT
 ## SLT rd, rs, rt
-:SLT rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b1101010 & lo_pool0_3 = 0b000 {
-	#TODO: finish this out
-}
+:SLT rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b1101010 & lo_pool0_3 = 0b000
+	unimpl
 
 
 
 
 # SLTI
 ## SLTI rd, rs, rt
-:SLTI rt, rs, lo_pool0_12 is hi_pool10_6 = 0b100000  & rt & rs; lo_pool12_4 = 0b0100 & lo_pool0_12 {
-	#TODO: finish this out
-}
+:SLTI rt, rs, lo_pool0_12 is hi_pool10_6 = 0b100000  & rt & rs; lo_pool12_4 = 0b0100 & lo_pool0_12
+	unimpl
 
 # SLTIU
 ## SLTIU rd, rs, rt
-:SLTIU rt, rs, lo_pool0_12 is hi_pool10_6 = 0b100000  & rt & rs; lo_pool12_4 = 0b0101 & lo_pool0_12 {
-	#TODO: finish this out
-}
+:SLTIU rt, rs, lo_pool0_12 is hi_pool10_6 = 0b100000  & rt & rs; lo_pool12_4 = 0b0101 & lo_pool0_12
+	unimpl
 
 # SLTU
 ## SLTU rd, rs, rt
-:SLTU rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b1110010 & lo_pool0_3 = 0b000 {
-	sum = rs + rt;
-	#TODO: finish this out
-}
+:SLTU rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b1110010 & lo_pool0_3 = 0b000
+	unimpl
 
 # SOV
 ## SOV rd, rs, rt
-:SOV rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b1111010 & lo_pool0_3 = 0b000 {
-	sum = rs + rt;
-	#TODO: finish this out
-}
+:SOV rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b1111010 & lo_pool0_3 = 0b000
+	unimpl
 
 # SRA
 ## SRA rd, rs, shift
