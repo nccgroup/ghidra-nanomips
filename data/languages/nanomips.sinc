@@ -1347,11 +1347,12 @@ lo_uimm12_sl3: uimm12 is
 
 
 # EHB
-## EHB
 :EHB is
 	hi_pool10_6 = 0b001000 & hi_pool5_5 = 0b00000;
 	lo_pool12_4 = 0b1100  & lo_pool5_4 = 0b0000 & lo_pool0_5 = 0b00011
-	unimpl  # NOTE: not sure how to handle coprocessor instructions
+	{
+		clear_execution_hazards();
+	}
 
 
 # EI rt
