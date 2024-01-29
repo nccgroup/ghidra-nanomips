@@ -1398,7 +1398,7 @@ lo_uimm12_sl3: uimm12 is
 			effective_epc = C0.EPC:$(REGSIZE);
 			C0.Status.EXL = 0;
 
-			if (C0.SRSCtl.HSS <= 0 || C0.Status.BEV != 0) goto <skip2>;
+			if (C0.SRSCtl.HSS == 0 || C0.Status.BEV != 0) goto <skip2>;
 				C0.SRSCtl.CSS = C0.SRSCtl.PSS;
 			<skip2>
 
@@ -1429,7 +1429,7 @@ lo_uimm12_sl3: uimm12 is
 			effective_epc = C0.EPC:$(REGSIZE);
 			C0.Status.EXL = 0;
 
-			if (C0.SRSCtl.HSS <= 0 || C0.Status.BEV != 0) goto <skip2>;
+			if (C0.SRSCtl.HSS == 0 || C0.Status.BEV != 0) goto <skip2>;
 				C0.SRSCtl.CSS = C0.SRSCtl.PSS;
 			<skip2>
 
