@@ -1606,12 +1606,11 @@ lo_uimm12_sl3: uimm12 is
 	lo_pool11_4 = 0b0000 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b00)
 	& lo_rs_soffset9
 	{
-		rt = (*:1 lo_rs_soffset9);
+		rt = sext(*:1 lo_rs_soffset9);
 	}
 
 
-# LBE
-## LBE rt, offset(rs)
+# LBE rt, offset(rs)
 :LBE rt, lo_rs_soffset9 is
 	(hi_pool10_6 = 0b101001 & rt;
 	lo_pool11_4 = 0b0000 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10)
@@ -1620,30 +1619,29 @@ lo_uimm12_sl3: uimm12 is
 		rt = sext(*:1 lo_rs_soffset9);
 	}
 
-# LBU
-## LBU rt, offset(rs)
+# LBU rt, offset(rs)
+## LBU[U12]
 :LBU rt, lo_rs_uoffset12 is 
 	(hi_pool10_6 = 0b100001 & rt;
 	lo_pool12_4 = 0b0010)
 	& lo_rs_uoffset12
 	{
-		rt = (*:1 lo_rs_uoffset12);
+		rt = zext(*:1 lo_rs_uoffset12);
 	}
 
-# LBU
-## LBU[16] rt3, offset(rs3)
+## LBU[16]
 :LBU rt3, hi_rs3_uoffset2 is
 	(hi_pool10_6 = 0b010111 & rt3 & hi_pool2_2 = 0b10)
 	& hi_rs3_uoffset2
 	{
-		rt3 = (*:1 hi_rs3_uoffset2);
+		rt3 = zext(*:1 hi_rs3_uoffset2);
 	}
 
 ## LBU[GP]
 :LBU rt, hilo_gp_uoffset18 is
 	(hi_pool10_6 = 0b010001 & rt & hi_pool2_3 = 0b010) ... & hilo_gp_uoffset18
 	{
-		rt = (*:1 hilo_gp_uoffset18);
+		rt = zext(*:1 hilo_gp_uoffset18);
 	}
 
 ## LBU[S9]
@@ -1652,35 +1650,35 @@ lo_uimm12_sl3: uimm12 is
 	lo_pool11_4 = 0b0010 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b00)
 	& lo_rs_soffset9
 	{
-		rt = (*:1 lo_rs_soffset9);
+		rt = zext(*:1 lo_rs_soffset9);
 	}
 
-# LBUE
-## LBUE rt, offset(rs)
+
+# LBUE rt, offset(rs)
 :LBUE rt, lo_rs_soffset9 is
 	(hi_pool10_6 = 0b101001 & rt;
 	lo_pool11_4 = 0b0010 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10)
 	& lo_rs_soffset9
 	{
-		rt = (*:1 lo_rs_soffset9);
+		rt = zext(*:1 lo_rs_soffset9);
 	}
 
-# LBUX
-## LBUX rd, rs(rt)
+
+# LBUX rd, rs(rt)
 :LBUX rd, rt_offset_rs is
 	(hi_pool10_6 = 0b001000 & rt_offset_rs;
 	rd  & lo_pool7_4 = 0b0010 & lo_pool6_1 = 0b0 & lo_pool3_3 = 0b000 & lo_pool0_3 = 0b111)
 	{
-		rd = (*:1 rt_offset_rs);
+		rd = zext(*:1 rt_offset_rs);
 	}
 
-# LBX
-## LBX rt, offset(rs)
-:LBUX rd, rt_offset_rs is
+
+# LBX rt, offset(rs)
+:LBX rd, rt_offset_rs is
 	(hi_pool10_6 = 0b001000 & rt_offset_rs;
 	rd  & lo_pool7_4 = 0b0000 & lo_pool6_1 = 0b0 & lo_pool3_3 = 0b000 & lo_pool0_3 = 0b111)
 	{
-		rd = (*:1 rt_offset_rs);
+		rd = sext(*:1 rt_offset_rs);
 	}
 
 
@@ -1703,8 +1701,7 @@ lo_uimm12_sl3: uimm12 is
 		rt3 = sext(*:2 hi_rs3_uoffset2);
 	}
 
-# LH
-## LH[GP] rt, offset(gp)
+## LH[GP]
 :LH rt, hilo_gp_uoffset18_sl1 is
 	(hi_pool10_6 = 0b010001 & rt & hi_pool2_3 = 0b100;
 	lo_pool0_1 = 0b0)
@@ -1713,8 +1710,7 @@ lo_uimm12_sl3: uimm12 is
 		rt = sext(*:2 hilo_gp_uoffset18_sl1);
 	}
 
-# LH
-## LH rt, offset(s9)
+## LH[S9]
 :LH rt, lo_rs_soffset9 is
 	(hi_pool10_6 = 0b101001 & rt;
 	lo_pool11_4 = 0b0100 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b00)
@@ -1723,100 +1719,105 @@ lo_uimm12_sl3: uimm12 is
 		rt = sext(*:2 lo_rs_soffset9);
 	}
 
-# LHE
-## LHE rt, offset(rs)
+
+# LHE rt, offset(rs)
 :LHE rt, lo_rs_soffset9 is
 	(hi_pool10_6 = 0b101001 & rt;
 	lo_pool11_4 = 0b0100 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10)
 	& lo_rs_soffset9
 	{
+		# TODO EVA addressing
 		rt = sext(*:2 lo_rs_soffset9);
 	}
 
-# LHU
-## LHU[u12] rt, offset(rs)
+
+# LHU rt, offset(rs)
+## LHU[U12]
 :LHU rt, lo_rs_uoffset12 is
 	(hi_pool10_6 = 0b100001 & rt;
 	lo_pool12_4 = 0b0110)
 	& lo_rs_uoffset12
 	{
-		rt = (*:2 lo_rs_uoffset12);
+		rt = zext(*:2 lo_rs_uoffset12);
 	}
 
-# LHU
-## LHU[16] rt, offset(rs)
+## LHU[16]
 :LHU rt3, hi_rs3_uoffset2 is
 	(hi_pool10_6 = 0b011111 & rt3 & hi_pool3_1 = 0b1 & hi_pool0_1 = 0b0)
 	& hi_rs3_uoffset2
 	{
-		rt3 = (*:2 hi_rs3_uoffset2);
+		rt3 = zext(*:2 hi_rs3_uoffset2);
 	}
 
-# LHU
-## LHU[GP] rt, offset(rs)
-:LH rt, hilo_gp_uoffset18_sl1 is
+## LHU[GP]
+:LHU rt, hilo_gp_uoffset18_sl1 is
 	(hi_pool10_6 = 0b010001 & rt & hi_pool2_3 = 0b100;
 	lo_pool0_1 = 0b1)
 	& hilo_gp_uoffset18_sl1
 	{
-		rt = (*:2 hilo_gp_uoffset18_sl1);
+		rt = zext(*:2 hilo_gp_uoffset18_sl1);
 	}
 
-# LHU
-## LHU[S9] rt, offset(rs)
+## LHU[S9]
 :LHU rt, lo_rs_soffset9 is
 	(hi_pool10_6 = 0b101001 & rt;
 	lo_pool11_4 = 0b0110 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b00)
 	& lo_rs_soffset9
 	{
-		rt = (*:2 lo_rs_soffset9);
+		rt = zext(*:2 lo_rs_soffset9);
 	}
 
 
-# LHUE
-## LHUE rt, offset(rs)
+# LHUE rt, offset(rs)
 :LHUE rt, lo_rs_soffset9 is
 	(hi_pool10_6 = 0b101001 & rt;
 	lo_pool11_4 = 0b0110 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10)
 	& lo_rs_soffset9
 	{
-		rt = (*:2 lo_rs_soffset9);
+		rt = zext(*:2 lo_rs_soffset9);
 	}
 
 
 # LHUX
 ## LHUX rt, offset(rs)
-:LHUX rd, rs(rt) is hi_pool10_6 = 0b001000 & rt & rs; rd  & lo_pool7_4 = 0b0110 & lo_pool6_1 = 0b0 & lo_pool3_3 = 0b000 & lo_pool0_3 = 0b111 {
-	# NOTE: not sure how to handle coprocessor instructions
-}
+:LHUX rd, rs(rt) is hi_pool10_6 = 0b001000 & rt & rs; rd  & lo_pool7_4 = 0b0110 & lo_pool6_1 = 0b0 & lo_pool3_3 = 0b000 & lo_pool0_3 = 0b111
+	unimpl
+
 
 # LHUXS
 ## LHUXS rt, offset(rs)
-:LHUXS rd, rs(rt) is hi_pool10_6 = 0b001000 & rt & rs; rd  & lo_pool7_4 = 0b0110 & lo_pool6_1 = 0b1 & lo_pool3_3 = 0b000 & lo_pool0_3 = 0b111 {
-	# NOTE: not sure how to handle coprocessor instructions
-}
+:LHUXS rd, rs(rt) is hi_pool10_6 = 0b001000 & rt & rs; rd  & lo_pool7_4 = 0b0110 & lo_pool6_1 = 0b1 & lo_pool3_3 = 0b000 & lo_pool0_3 = 0b111
+	unimpl
+
 
 # LHX
 ## LHX rt, offset(rs)
-:LHX rd, rs(rt) is hi_pool10_6 = 0b001000 & rt & rs; rd  & lo_pool7_4 = 0b0100 & lo_pool6_1 = 0b0 & lo_pool3_3 = 0b000 & lo_pool0_3 = 0b111 {
-	# NOTE: not sure how to handle coprocessor instructions
-}
+:LHX rd, rs(rt) is hi_pool10_6 = 0b001000 & rt & rs; rd  & lo_pool7_4 = 0b0100 & lo_pool6_1 = 0b0 & lo_pool3_3 = 0b000 & lo_pool0_3 = 0b111
+	unimpl
+
 
 # LHXS
 ## LHXS rt, offset(rs)
-:LHXS rd, rs(rt) is hi_pool10_6 = 0b001000 & rt & rs; rd  & lo_pool7_4 = 0b0100 & lo_pool6_1 = 0b1 & lo_pool3_3 = 0b000 & lo_pool0_3 = 0b111 {
-	# NOTE: not sure how to handle coprocessor instructions
-}
+:LHXS rd, rs(rt) is hi_pool10_6 = 0b001000 & rt & rs; rd  & lo_pool7_4 = 0b0100 & lo_pool6_1 = 0b1 & lo_pool3_3 = 0b000 & lo_pool0_3 = 0b111
+	unimpl
+
 
 # LI
 ## LI[16]
-:LI rt3, s is hi_pool10_6 = 0b110100 & rt3 & eu_imm7 = 127 [s = -1;] {
-	rt3 = s;
-}
+:LI rt3, s is
+	hi_pool10_6 = 0b110100 & rt3 & eu_imm7 = 127
+	[
+		s = -1;
+	]
+	{
+		rt3 = s;
+	}
 
-:LI rt3, eu_imm7 is hi_pool10_6 = 0b110100 & rt3 & eu_imm7 {
-	rt3 = eu_imm7;
-} 
+:LI rt3, eu_imm7 is
+	hi_pool10_6 = 0b110100 & rt3 & eu_imm7
+	{
+		rt3 = eu_imm7;
+	} 
 
 ## LI[48]
 :LI rt, full_simm32 is
@@ -1828,37 +1829,36 @@ lo_uimm12_sl3: uimm12 is
 
 # LL
 ## LL rt, offset(rs)
-:LL rt, lo_pool2_6(rs) is hi_pool10_6 = 0b101001  & rt & rs ; lo_pool15_1 & lo_pool11_4 = 0b1010  & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b01 & lo_pool2_6 & lo_pool0_2 = 0b00 {
+:LL rt, lo_pool2_6(rs) is hi_pool10_6 = 0b101001  & rt & rs ; lo_pool15_1 & lo_pool11_4 = 0b1010  & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b01 & lo_pool2_6 & lo_pool0_2 = 0b00
+	unimpl
 	# TODO: chage lo_pool to usim
-	# TODO: complete loading functionality
-}
+
 
 # LLE
 ## LLE rt, offset(rs)
-:LLE rt, lo_pool2_6(rs) is hi_pool10_6 = 0b101001  & rt & rs ; lo_pool15_1 & lo_pool11_4 = 0b1010  & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10 & lo_pool2_6 & lo_pool0_2 = 0b00 {
+:LLE rt, lo_pool2_6(rs) is hi_pool10_6 = 0b101001  & rt & rs ; lo_pool15_1 & lo_pool11_4 = 0b1010  & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10 & lo_pool2_6 & lo_pool0_2 = 0b00
+	unimpl
 	# TODO: chage lo_pool to usim
-	# TODO: complete loading functionality
-}
+
 
 # LLWP
 ## LLWP rt, offset(rs)
-:LLWP rt, lo_pool3_5(rs) is hi_pool10_6 = 0b101001  & rt & rs ; lo_pool11_4 = 0b1010  & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b01 & lo_pool3_5 & lo_pool0_2 = 0b01 {
+:LLWP rt, lo_pool3_5(rs) is hi_pool10_6 = 0b101001  & rt & rs ; lo_pool11_4 = 0b1010  & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b01 & lo_pool3_5 & lo_pool0_2 = 0b01
+	unimpl
 	# TODO: chage lo_pool to usim
-	# TODO: complete loading functionality
-}
+
 
 # LLWPE
 ## LLWPE rt, offset(rs)
-:LLWPE rt, lo_pool3_5(rs) is hi_pool10_6 = 0b101001  & rt & rs ; lo_pool11_4 = 0b1010  & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10 & lo_pool3_5 & lo_pool0_2 = 0b01 {
+:LLWPE rt, lo_pool3_5(rs) is hi_pool10_6 = 0b101001  & rt & rs ; lo_pool11_4 = 0b1010  & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10 & lo_pool3_5 & lo_pool0_2 = 0b01
+	unimpl
 	# TODO: chage lo_pool to usim
-	# TODO: complete loading functionality
-}
+
 
 # LSA
 ## LSA rd, rs, rt, u2
-:LHXS rd, rs, rt, lo_pool9_2 is hi_pool10_6 = 0b001000 & rt & rs; rd  & lo_pool9_2 & lo_pool3_3 = 0b001 & lo_pool0_3 = 0b111 {
-	# NOTE: finsish the operation
-}
+:LHXS rd, rs, rt, lo_pool9_2 is hi_pool10_6 = 0b001000 & rt & rs; rd  & lo_pool9_2 & lo_pool3_3 = 0b001 & lo_pool0_3 = 0b111
+	unimpl
 
 
 # LUI rt, %hi(imm)
