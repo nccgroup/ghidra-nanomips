@@ -3026,8 +3026,7 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 	hi_pool10_6 = 0b100000 & rt & rs;
 	lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0100 & lo_pool0_5
 	{
-		# TODO signed (arithmetic) shift
-		rt = rs >> lo_pool0_5;
+		rt = rs s>> lo_pool0_5;
 	}
 
 
@@ -3036,8 +3035,7 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 	hi_pool10_6 = 0b001000 & rt & rs;
 	rd & lo_pool3_7 = 0b0010010 & lo_pool0_3 = 0b000
 	{
-		# TODO signed (arithmetic) shift
-		rd = rs >> (rt & 0x1f);
+		rd = rs s>> (rt & 0x1f);
 	}
 
 
