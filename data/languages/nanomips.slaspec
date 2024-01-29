@@ -87,6 +87,8 @@ define context contextreg
 	c0_reg_sel = (5, 9)
 	c0_reg_c0s = (0, 4)
 	c0_reg_id = (0, 9)
+
+	count3_mapped = (16, 20)
 	;
 
 # Include contents of skel.sinc file
