@@ -155,6 +155,7 @@ define token instrlo(16)
 	shift = (0, 4)
 	
 	rd = (11, 15)
+	rd_raw = (11, 15)
 	
 	sel = (11, 15) # for MFC0
 
@@ -2989,29 +2990,36 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 :SLT rd, rs, rt is
 	hi_pool10_6 = 0b001000 & rt & rs;
 	rd & lo_pool3_7 = 0b1101010 & lo_pool0_3 = 0b000
-	unimpl
+	{
+		rd = zext(rs s< rt);
+	}
 
 
 # SLTI rt, rs, u
-:SLTI rt, rs, lo_pool0_12 is
+:SLTI rt, rs, lo_uimm0_12 is
 	hi_pool10_6 = 0b100000  & rt & rs;
-	lo_pool12_4 = 0b0100 & lo_pool0_12
-	unimpl
+	lo_pool12_4 = 0b0100 & lo_uimm0_12
+	{
+		rt = zext(rs s< lo_uimm0_12);
+	}
 
 
 # SLTIU rt, rs, u
-:SLTIU rt, rs, lo_pool0_12 is
+:SLTIU rt, rs, lo_uimm0_12 is
 	hi_pool10_6 = 0b100000  & rt & rs;
-	lo_pool12_4 = 0b0101 & lo_pool0_12
-	unimpl
+	lo_pool12_4 = 0b0101 & lo_uimm0_12
+	{
+		rt = zext(rs < lo_uimm0_12);
+	}
 
 
 # SLTU rd, rs, rt
-# TODO rd != 0
 :SLTU rd, rs, rt is
 	hi_pool10_6 = 0b001000 & rt & rs;
-	rd & lo_pool3_7 = 0b1110010 & lo_pool0_3 = 0b000
-	unimpl
+	rd & rd_raw != 0 & lo_pool3_7 = 0b1110010 & lo_pool0_3 = 0b000
+	{
+		rd = zext(rs < rt);
+	}
 
 
 # SOV rd, rs, rt
