@@ -40,17 +40,17 @@ def main():
             sp_write = f'{reg} = *:4 (lo_rs_soffset9 + $(REGSIZE)*({i}-rt_raw));'
 
         # this is last register
-        print(f'{name}: {reg}\t\t\t\t\tis {reg} & (rt_raw ...) & (count3_mapped = {i+1} - rt ...) & lo_rs_soffset9\t{{{sp_write}}}')
+        print(f'{name}: is (rt_raw ...) & (count3_mapped = {i+1} - rt ...) & lo_rs_soffset9\t{{{sp_write}}}')
 
         if i != len(flat_reglist) - 1:
             pattern = '(rt_raw ...) & lo_rs_soffset9'
 
-            print(f'{name}: {reg},{next_name}\tis {reg} & {pattern} & {next_name}\t\t\t\t{{{sp_write}}}')
+            print(f'{name}: is {pattern} & {next_name}\t\t\t\t{{{sp_write}}}')
 
     # entry points to first register (fp or ra)
     for i in range(31, -1, -1):
         next_name = f'{base_name}_{i:02}'
-        print(f'{base_name}: ,{next_name}\tis (rt_raw = {i} ...) & {next_name} {{}}')
+        print(f'{base_name}: is (rt_raw = {i} ...) & {next_name} {{}}')
 
     # pre-constructor to get mapped count3 value in constraints
     # reglist_lwm_pre: reglist_lwm is (rt_raw; count3 = 0) & reglist_lwm [count3_mapped = 8;] {}
