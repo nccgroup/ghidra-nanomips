@@ -1810,13 +1810,13 @@ lo_uimm12_sl3: uimm12 is
 		s = -1;
 	]
 	{
-		rt3 = s;
+		rt3 = sext(s:1);
 	}
 
 :LI rt3, eu_imm7 is
 	hi_pool10_6 = 0b110100 & rt3 & eu_imm7
 	{
-		rt3 = eu_imm7;
+		rt3 = zext(eu_imm7:1);
 	} 
 
 ## LI[48]
