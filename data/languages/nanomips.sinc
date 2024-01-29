@@ -3026,7 +3026,9 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 :SOV rd, rs, rt is
 	hi_pool10_6 = 0b001000 & rt & rs;
 	rd & lo_pool3_7 = 0b1111010 & lo_pool0_3 = 0b000
-	unimpl
+	{
+		rd = zext(scarry(rs, rt));
+	}
 
 
 # SRA rt, rs, shift
