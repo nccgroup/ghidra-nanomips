@@ -65,7 +65,18 @@ define register offset=0x200 size=$(C0REGSIZE) [
 ## Debug bit fields from "MIPS EJTAG Specification" (Revision 6.10)
 define bitrange
 	C0.Debug.DM = C0.Debug[30, 1]
+
+	C0.LLAddr.LLB = C0.LLAddr[0, 1]
+
+	C0.SRSCtl.CSS = C0.SRSCtl[0, 4]
+	C0.SRSCtl.PSS = C0.SRSCtl[6, 4]
+	C0.SRSCtl.HSS = C0.SRSCtl[26, 4]
+
 	C0.Status.IE = C0.Status[0, 1]
+	C0.Status.EXL = C0.Status[1, 1]
+	C0.Status.ERL = C0.Status[2, 1]
+	C0.Status.BEV = C0.Status[22, 1]
+
 	C0.VPControl.DIS = C0.VPControl[0, 1]
 	;
 

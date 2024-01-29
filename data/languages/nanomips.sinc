@@ -1376,19 +1376,64 @@ lo_uimm12_sl3: uimm12 is
 
 
 # ERET
-## ERET
 :ERET is
 	hi_pool10_6 = 0b001000 & hi_pool0_1 = 0b0;
 	lo_pool14_2 = 0b11 & lo_pool9_5 = 0b11001 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
-	unimpl  # NOTE: not sure how to handle coprocessor instructions
+	{
+		local effective_epc:4;
+
+		if (C0.Status.ERL == 1) goto <eq1>;
+			effective_epc = C0.EPC:$(REGSIZE);
+			C0.Status.EXL = 0;
+
+			if (C0.SRSCtl.HSS <= 0 || C0.Status.BEV != 0) goto <skip2>;
+				C0.SRSCtl.CSS = C0.SRSCtl.PSS;
+			<skip2>
+
+			goto <skip1>;
+
+		<eq1>
+			effective_epc = C0.ErrorEPC:$(REGSIZE);
+			C0.Status.ERL = 0;
+
+		<skip1>
+
+		C0.LLAddr.LLB = 0;
+		clear_execution_hazards();
+		clear_execution_hazards();
+
+		goto [effective_epc];
+	}
 
 
 # ERETNC
-## ERETNC
 :ERETNC is
 	hi_pool10_6 = 0b001000 & hi_pool0_1 = 0b1;
 	lo_pool14_2 = 0b11 & lo_pool9_5 = 0b11001  & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
-	unimpl  # NOTE: not sure how to handle coprocessor instructions
+	{
+		local effective_epc:4;
+
+		if (C0.Status.ERL == 1) goto <eq1>;
+			effective_epc = C0.EPC:$(REGSIZE);
+			C0.Status.EXL = 0;
+
+			if (C0.SRSCtl.HSS <= 0 || C0.Status.BEV != 0) goto <skip2>;
+				C0.SRSCtl.CSS = C0.SRSCtl.PSS;
+			<skip2>
+
+			goto <skip1>;
+
+		<eq1>
+			effective_epc = C0.ErrorEPC:$(REGSIZE);
+			C0.Status.ERL = 0;
+
+		<skip1>
+
+		clear_execution_hazards();
+		clear_execution_hazards();
+
+		goto [effective_epc];
+	}
 
 
 # EVP rt
