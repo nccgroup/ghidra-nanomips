@@ -23,6 +23,7 @@ define token instrhi(16)
 	
 	hint = (5, 9)  # hi_pool5_5
 	count = (0, 3)
+	shift3 = (0, 2)
 	inv_type = (5, 6)
 	
 	u4_1 = (0, 4)  # u[4:1] - naming convention conflict
@@ -308,7 +309,7 @@ attach variables [ c0_reg_id ] [
 ];
 
 
-attach values [count3] [8 1 2 3 4 5 6 7];
+attach values [ count3 shift3 ] [ 8 1 2 3 4 5 6 7 ];
 
 ################################################################
 # Fake p-code ops
@@ -2964,15 +2965,14 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 	hi_pool10_6 = 0b100000 & rt & rs;
 	lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0000 & lo_pool0_5
 	{
-		rt = rs << lo_pool0_5;
+		rt = sext(rs << lo_pool0_5);
 	}
 
 ## SLL[16]
-:SLL rt3, rs3, hi_pool0_3 is
-	hi_pool10_6 = 0b001100 & rt3 & rs3 & hi_pool3_1 = 0 & hi_pool0_3
+:SLL rt3, rs3, shift3 is
+	hi_pool10_6 = 0b001100 & rt3 & rs3 & hi_pool3_1 = 0 & shift3
 	{
-		# TODO shift3 interpret 0 as 8
-		rt3 = rs3 << hi_pool0_3;
+		rt3 = sext(rs3 << shift3);
 	}
 
 
@@ -3047,17 +3047,16 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 	hi_pool10_6 = 0b100000 & rt & rs;
 	lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0010 & lo_pool0_5
 	{
-	    # TODO: incorporate signed extend
-		rt = rs >> lo_pool0_5;
+		local tmp:4 = zext(rs >> lo_pool0_5);
+		rt = sext(tmp);
 	}
 
 ## SRL[16]
-:SRL rt3, rs3, hi_pool0_3 is
-	hi_pool10_6 = 0b001100 & rt3 & rs3 & hi_pool3_1 = 1 & hi_pool0_3
+:SRL rt3, rs3, shift3 is
+	hi_pool10_6 = 0b001100 & rt3 & rs3 & hi_pool3_1 = 1 & shift3
 	{
-		# TODO shift3 interpret 0 as 8
-		# TODO: incorporate signe extend
-		rt3 = rs3 >> hi_pool0_3;
+		local tmp:4 = zext(rs3 >> shift3);
+		rt3 = sext(tmp);
 	}
 
 
