@@ -2958,108 +2958,149 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 	}
 
 
-# SLL
-## SLL rd, rs, shift
-:SLL rt, rs, lo_pool0_5 is hi_pool10_6 = 0b100000 & rt & rs; lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0000 & lo_pool0_5 {
-	rt = rs << lo_pool0_5;
-}
+# SLL rt, rs, shift
+## SLL[32]
+:SLL rt, rs, lo_pool0_5 is
+	hi_pool10_6 = 0b100000 & rt & rs;
+	lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0000 & lo_pool0_5
+	{
+		rt = rs << lo_pool0_5;
+	}
 
-# SLL
-## SLL[16] rt3, rs3, shift
-:SLL rt3, rs3, hi_pool0_3 is hi_pool10_6 = 0b001100 & rt3 & rs3 & hi_pool3_1 = 0 & hi_pool0_3 {
-	rt3 = rs3 << hi_pool0_3;
-}
+## SLL[16]
+:SLL rt3, rs3, hi_pool0_3 is
+	hi_pool10_6 = 0b001100 & rt3 & rs3 & hi_pool3_1 = 0 & hi_pool0_3
+	{
+		# TODO shift3 interpret 0 as 8
+		rt3 = rs3 << hi_pool0_3;
+	}
 
 
+# SLLV rd, rs, rt
+:SLLV rd, rs, rt is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	rd & lo_pool3_7 = 0b0000010 & lo_pool0_3 = 0b000
+	{
+		rd = rs << (rt & 0x1f);
+	}
 
 
-# SLLV
-## SLLV rd, rs, shift
-:SLLV rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0000010 & lo_pool0_3 = 0b000 {
-	rd = rs << (rt & 0x1f);
-}
-
-# SLT
-## SLT rd, rs, rt
-:SLT rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b1101010 & lo_pool0_3 = 0b000
+# SLT rd, rs, rt
+:SLT rd, rs, rt is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	rd & lo_pool3_7 = 0b1101010 & lo_pool0_3 = 0b000
 	unimpl
 
 
-
-
-# SLTI
-## SLTI rd, rs, rt
-:SLTI rt, rs, lo_pool0_12 is hi_pool10_6 = 0b100000  & rt & rs; lo_pool12_4 = 0b0100 & lo_pool0_12
+# SLTI rt, rs, u
+:SLTI rt, rs, lo_pool0_12 is
+	hi_pool10_6 = 0b100000  & rt & rs;
+	lo_pool12_4 = 0b0100 & lo_pool0_12
 	unimpl
 
-# SLTIU
-## SLTIU rd, rs, rt
-:SLTIU rt, rs, lo_pool0_12 is hi_pool10_6 = 0b100000  & rt & rs; lo_pool12_4 = 0b0101 & lo_pool0_12
+
+# SLTIU rt, rs, u
+:SLTIU rt, rs, lo_pool0_12 is
+	hi_pool10_6 = 0b100000  & rt & rs;
+	lo_pool12_4 = 0b0101 & lo_pool0_12
 	unimpl
 
-# SLTU
-## SLTU rd, rs, rt
-:SLTU rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b1110010 & lo_pool0_3 = 0b000
+
+# SLTU rd, rs, rt
+# TODO rd != 0
+:SLTU rd, rs, rt is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	rd & lo_pool3_7 = 0b1110010 & lo_pool0_3 = 0b000
 	unimpl
 
-# SOV
-## SOV rd, rs, rt
-:SOV rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b1111010 & lo_pool0_3 = 0b000
+
+# SOV rd, rs, rt
+:SOV rd, rs, rt is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	rd & lo_pool3_7 = 0b1111010 & lo_pool0_3 = 0b000
 	unimpl
 
-# SRA
-## SRA rd, rs, shift
-:SRA rt, rs, lo_pool0_5 is hi_pool10_6 = 0b100000 & rt & rs; lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0100 & lo_pool0_5 {
-	rt = rs >> lo_pool0_5;
-}
 
-# SRAV
-## SRAV rd, rs, rt
-:SRAV rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0010010 & lo_pool0_3 = 0b000 {
-	rd = rs >> (rt & 0x1f);
-}
+# SRA rt, rs, shift
+:SRA rt, rs, lo_pool0_5 is
+	hi_pool10_6 = 0b100000 & rt & rs;
+	lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0100 & lo_pool0_5
+	{
+		# TODO signed (arithmetic) shift
+		rt = rs >> lo_pool0_5;
+	}
 
-# SRL
-## SRL rd, rs, shift
-:SRL rt, rs, lo_pool0_5 is hi_pool10_6 = 0b100000 & rt & rs; lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0010 & lo_pool0_5 {
-    # TODO: incorporate signed extend
-	rt = rs >> lo_pool0_5;
-}
 
-# SRL
-## SRL[16] rt3, rs3, shift
-:SRL rt3, rs3, hi_pool0_3 is hi_pool10_6 = 0b001100 & rt3 & rs3 & hi_pool3_1 = 1 & hi_pool0_3 {
-	# TODO: incorporate signe extend
-	rt3 = rs3 >> hi_pool0_3;
-}
+# SRAV rd, rs, rt
+:SRAV rd, rs, rt is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	rd & lo_pool3_7 = 0b0010010 & lo_pool0_3 = 0b000
+	{
+		# TODO signed (arithmetic) shift
+		rd = rs >> (rt & 0x1f);
+	}
 
-# SRLV
-## SRLV rd, rs, rt
-:SRLV rd, rs, rt is hi_pool10_6 = 0b100000 & rt & rs; rd & lo_pool3_7 = 0b0001010 & lo_pool0_3 = 0b000 {
-    # TODO: incorporate signed extend
-	rd = rs >> (rt & 0x1f);
-}
+
+# SRL rt, rs, shift
+## SRL[32]
+:SRL rt, rs, lo_pool0_5 is
+	hi_pool10_6 = 0b100000 & rt & rs;
+	lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0010 & lo_pool0_5
+	{
+	    # TODO: incorporate signed extend
+		rt = rs >> lo_pool0_5;
+	}
+
+## SRL[16]
+:SRL rt3, rs3, hi_pool0_3 is
+	hi_pool10_6 = 0b001100 & rt3 & rs3 & hi_pool3_1 = 1 & hi_pool0_3
+	{
+		# TODO shift3 interpret 0 as 8
+		# TODO: incorporate signe extend
+		rt3 = rs3 >> hi_pool0_3;
+	}
+
+
+# SRLV rd, rs, rt
+:SRLV rd, rs, rt is
+	hi_pool10_6 = 0b100000 & rt & rs;
+	rd & lo_pool3_7 = 0b0001010 & lo_pool0_3 = 0b000
+	{
+	    # TODO: incorporate signed extend
+		rd = rs >> (rt & 0x1f);
+	}
+
 
 # SUB rd, rs, rt
-:SUB rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0110010 & lo_pool0_3 = 0b000 {
-	rd = rs - rt;
-	# TODO: trap on overflow
-	# TODO: sign extend?
-}
+:SUB rd, rs, rt is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	rd & lo_pool3_7 = 0b0110010 & lo_pool0_3 = 0b000
+	{
+		rd = rs - rt;
+		# TODO: trap on overflow
+		# TODO: sign extend?
+	}
+
 
 # SUBU rd, rs, rt
-:SUBU rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0111010 & lo_pool0_3 = 0b000 {
-	rd = rs - rt;
-	# TODO: trap on overflow
-	# TODO: sign extend?
-}
+## SUBU[32]
+:SUBU rd, rs, rt is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	rd & lo_pool3_7 = 0b0111010 & lo_pool0_3 = 0b000
+	{
+		rd = rs - rt;
+		# TODO: trap on overflow
+		# TODO: sign extend?
+	}
 
-# SUBU rt, rs, imm
 ## SUBU[16]
 # TODO: rt != 0 constraint doesn't work here (covered by SIGRIE?)
-:SUBU rd3, rs3, rt3 is hi_pool10_6 = 0b101100  & rt3 & rs3 & rd3 & hi_pool0_1 = 0b1 {
-	rd3 = rs3 + rt3;
-}
+:SUBU rd3, rs3, rt3 is
+	hi_pool10_6 = 0b101100  & rt3 & rs3 & rd3 & hi_pool0_1 = 0b1
+	{
+		rd3 = rs3 + rt3;
+	}
+
 
 # SW rt, offset(rs)
 ## SW[U12]
@@ -3517,14 +3558,19 @@ reglist_swm_pre: reglist_swm is (rt_raw; count3) & reglist_swm [count3_mapped = 
 
 # XOR rd, rs, rt
 ## XOR[32]
-:XOR rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b1100010 & lo_pool0_3 = 0b000 {
-	rd = rs ^ rt;
-}
+:XOR rd, rs, rt is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	rd & lo_pool3_7 = 0b1100010 & lo_pool0_3 = 0b000
+	{
+		rd = rs ^ rt;
+	}
 
 ## XOR[16]
-:XOR rd3_from_rt3, rs3, rt3 is hi_pool10_6 = 0b010100 & rt3 & rd3_from_rt3 & rs3 & hi_pool2_2 = 0b01 & hi_pool1_1 = 0 & hi_pool0_1 = 0 {
-	rd3_from_rt3 = rs3 ^ rt3;
-}
+:XOR rd3_from_rt3, rs3, rt3 is
+	hi_pool10_6 = 0b010100 & rt3 & rd3_from_rt3 & rs3 & hi_pool2_2 = 0b01 & hi_pool1_1 = 0 & hi_pool0_1 = 0
+	{
+		rd3_from_rt3 = rs3 ^ rt3;
+	}
 
 
 # XORI rt, rs, u
