@@ -66,6 +66,7 @@ define register offset=0x200 size=$(C0REGSIZE) [
 define bitrange
 	C0.Debug.DM = C0.Debug[30, 1]
 	C0.Status.IE = C0.Status[0, 1]
+	C0.VPControl.DIS = C0.VPControl[0, 1]
 	;
 
 # Define context bits (if defined, size must be multiple of 4-bytes)
