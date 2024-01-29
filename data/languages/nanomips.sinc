@@ -1261,11 +1261,23 @@ lo_uimm12_sl3: uimm12 is
 
 
 # DERET
-## DERET rt, rs
 :DERET is
 	hi_pool10_6 = 0b001000;
 	lo_pool14_2 = 0b11 & lo_pool9_5 = 0b10001 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
-	unimpl
+	{
+		# TODO: exception if DM == 0 already
+
+		# pseudocode assigns next_pc here
+		C0.Debug.DM = 0;
+
+		# CPU.debug_sst_progress_allowed = True
+
+		clear_execution_hazards();
+		clear_execution_hazards();
+
+		# NOTE: pseudocode sign-extends register? `sign_extend(Root.C0.DEPC)`
+		goto [C0.DEPC];
+	}
 
 
 # DI rt
