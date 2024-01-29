@@ -164,6 +164,7 @@ define token instrlo(16)
 
 	# data in same token as opcode bits
 	lo_uimm11_5 = (11, 15)
+	lo_uimm9_2 = (9, 10)
 	lo_uimm6_5 = (6, 10)
 	lo_uimm3_9 = (3, 11)
 	lo_uimm2_14 = (2, 15)
@@ -1863,10 +1864,14 @@ lo_uimm12_sl3: uimm12 is
 	# TODO: chage lo_pool to usim
 
 
-# LSA
-## LSA rd, rs, rt, u2
-:LHXS rd, rs, rt, lo_pool9_2 is hi_pool10_6 = 0b001000 & rt & rs; rd  & lo_pool9_2 & lo_pool3_3 = 0b001 & lo_pool0_3 = 0b111
-	unimpl
+# LSA rd, rs, rt, u2
+:LSA rd, rs, rt, lo_uimm9_2 is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	rd & lo_uimm9_2 & lo_pool3_3 = 0b001 & lo_pool0_3 = 0b111
+	{
+		local tmp:4 = (rs << lo_uimm9_2) + rt;
+		rd = sext(tmp);
+	}
 
 
 # LUI rt, %hi(imm)
