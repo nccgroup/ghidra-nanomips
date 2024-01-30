@@ -156,7 +156,9 @@ define token instrlo(16)
 	
 	rd = (11, 15)
 	rd_raw = (11, 15)
-	
+
+	ru = (3, 7)
+
 	sel = (11, 15) # for MFC0
 
 	count3 = (12, 14)
@@ -174,6 +176,7 @@ define token instrlo(16)
 
 	lo_simm12_4 = (12, 15)
 	lo_simm2_10 = (2, 11)
+	lo_simm2_6 = (2, 7)
 	lo_simm1_15 = (1, 15)
 	lo_simm1_13 = (1, 13)
 	lo_simm1_10 = (1, 10)
@@ -195,7 +198,7 @@ define token data16(16)
 	uimm0_2 = (0, 1)
 	;
 
-attach variables [ rt rs rs_from_rt rd ] [
+attach variables [ rt rs rs_from_rt rd ru ] [
 	zero
 	at
 	t4 t5
@@ -646,6 +649,16 @@ lo_rs_uoffset12: lo_uimm0_12(rs) is
 	rs; lo_uimm0_12
 	{
 		local addr = rs + lo_uimm0_12;
+		export *[ram]:4 addr;
+	}
+
+hilo_rs_soffset9_sl2: offs(rs) is
+	rs; lo_signbit15_1 & lo_simm2_6
+	[
+		offs = (lo_signbit15_1 << 8) | (lo_simm2_6 << 2);
+	]
+	{
+		local addr = rs + offs;
 		export *[ram]:4 addr;
 	}
 
@@ -1836,32 +1849,51 @@ lo_uimm12_sl3: uimm12 is
 		rt = full_simm32;
 	}
 
-# LL
-## LL rt, offset(rs)
-:LL rt, lo_pool2_6(rs) is hi_pool10_6 = 0b101001  & rt & rs ; lo_pool15_1 & lo_pool11_4 = 0b1010  & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b01 & lo_pool2_6 & lo_pool0_2 = 0b00
-	unimpl
-	# TODO: chage lo_pool to usim
+
+# LL rt, offset(rs)
+:LL rt, hilo_rs_soffset9_sl2 is
+	(hi_pool10_6 = 0b101001  & rt;
+	lo_pool11_4 = 0b1010 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b01 & lo_pool0_2 = 0b00)
+	& hilo_rs_soffset9_sl2
+	{
+		C0.LLAddr.LLB = 1;
+		rt = sext(*:4 hilo_rs_soffset9_sl2);
+	}
 
 
-# LLE
-## LLE rt, offset(rs)
-:LLE rt, lo_pool2_6(rs) is hi_pool10_6 = 0b101001  & rt & rs ; lo_pool15_1 & lo_pool11_4 = 0b1010  & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10 & lo_pool2_6 & lo_pool0_2 = 0b00
-	unimpl
-	# TODO: chage lo_pool to usim
+# LLE rt, offset(rs)
+:LLE rt, hilo_rs_soffset9_sl2 is
+	(hi_pool10_6 = 0b101001 & rt;
+	lo_pool11_4 = 0b1010 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10 & lo_pool0_2 = 0b00)
+	& hilo_rs_soffset9_sl2
+	{
+		# TODO EVA addressing
+		C0.LLAddr.LLB = 1;
+		rt = sext(*:4 hilo_rs_soffset9_sl2);
+	}
 
 
-# LLWP
-## LLWP rt, offset(rs)
-:LLWP rt, lo_pool3_5(rs) is hi_pool10_6 = 0b101001  & rt & rs ; lo_pool11_4 = 0b1010  & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b01 & lo_pool3_5 & lo_pool0_2 = 0b01
-	unimpl
-	# TODO: chage lo_pool to usim
+# LLWP  rt, ru, (rs)
+:LLWP rt, ru, (rs) is
+	hi_pool10_6 = 0b101001 & rt & rs;
+	lo_pool11_4 = 0b1010 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b01 & ru & lo_pool0_2 = 0b01
+	{
+		C0.LLAddr.LLB = 1;
+		rt = sext(*[ram]:4 rs);
+		ru = sext(*[ram]:4 (rs + 4));
+	}
 
 
-# LLWPE
-## LLWPE rt, offset(rs)
-:LLWPE rt, lo_pool3_5(rs) is hi_pool10_6 = 0b101001  & rt & rs ; lo_pool11_4 = 0b1010  & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10 & lo_pool3_5 & lo_pool0_2 = 0b01
-	unimpl
-	# TODO: chage lo_pool to usim
+# LLWPE rt, ru, (rs)
+:LLWPE rt, ru, (rs) is
+	hi_pool10_6 = 0b101001 & rt & rs;
+	lo_pool11_4 = 0b1010 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10 & ru & lo_pool0_2 = 0b01
+	{
+		C0.LLAddr.LLB = 1;
+		# TODO EVA addressing
+		rt = sext(*[ram]:4 rs);
+		ru = sext(*[ram]:4 (rs + 4));
+	}
 
 
 # LSA rd, rs, rt, u2
