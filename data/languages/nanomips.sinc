@@ -22,6 +22,7 @@ define token instrhi(16)
 	hi_pool0_1 = (0, 0)
 	
 	hint = (5, 9)  # hi_pool5_5
+	hint2 = (5, 9)  # hi_pool5_5
 	count = (0, 3)
 	shift3 = (0, 2)
 	inv_type = (5, 6)
@@ -331,6 +332,7 @@ define pcodeop ginvi;
 define pcodeop ginvt;
 define pcodeop sigrie;
 define pcodeop pause;
+define pcodeop pref;
 define pcodeop sync;
 define pcodeop synci;
 define pcodeop syncie;
@@ -2344,28 +2346,36 @@ reglist_lwm_pre: reglist_lwm is (rt_raw; count3) & reglist_lwm [count3_mapped = 
 	}
 
 
-# PREF
-## PREF hint, offset(rs)
-## TODO: make a custom hint register
-:PREF rt, lo_pool0_8(rs) is hi_pool10_6 = 0b101001 & rt & rs; lo_pool15_1 & lo_pool11_4 = 0b0011 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b00 & lo_pool0_8 {
-	rt = *(rs + lo_pool0_8); # TODO: currently updating this to be correct, this is not correct atm
-	#TODO: make the number
-}
+# PREF hint, offset(rs)
+## PREF[S9]
+:PREF hint, lo_rs_soffset9 is
+	(hi_pool10_6 = 0b101001 & hint & hint2 != 31;
+	lo_pool11_4 = 0b0011 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b00)
+	& lo_rs_soffset9
+	{
+		pref(lo_rs_soffset9, hint:1, 0:1);
+	}
 
-# PREF
-## PREF[U12[ hint, offset(rs)
-## TODO: make a custom hint register
-:PREF rt, lo_uimm0_12(rs) is hi_pool10_6 = 0b100001 & rt & rs; lo_pool12_4 = 0b0011 & lo_uimm0_12 {
-	*(rs + lo_uimm0_12) = rt; # TODO: currently updating this to be correct, this is not correct atm
-}
+## PREF[U12]
+:PREF hint, lo_rs_uoffset12 is
+	(hi_pool10_6 = 0b100001 & hint & hint2 != 31;
+	lo_pool12_4 = 0b0011)
+	& lo_rs_uoffset12
+	{
+		pref(lo_rs_uoffset12, hint:1, 0:1);
+	}
 
-# PREFE
-## PREFE hint, offset(rs)
-## TODO: make a custom hint register
-:PREFE rt, lo_pool0_8(rs) is hi_pool10_6 = 0b101001 & rt & rs; lo_pool15_1 & lo_pool11_4 = 0b0011 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10 & lo_pool0_8 {
-	rt = *(rs + lo_pool0_8); # TODO: currently updating this to be correct, this is not correct atm
-	#TODO: make the number
-}
+
+# PREFE hint, offset(rs)
+:PREFE hint, lo_rs_soffset9 is
+	(hi_pool10_6 = 0b101001 & hint & hint2 != 31;
+	lo_pool11_4 = 0b0011 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10)
+	& lo_rs_soffset9
+	{
+		# TODO EVA addressing
+		pref(lo_rs_soffset9, hint:1, 1:1);
+	}
+
 
 # RDHWR ()
 ## RDHWR rd, rs, rt
