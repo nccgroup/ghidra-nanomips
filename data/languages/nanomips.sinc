@@ -2639,22 +2639,24 @@ reglist_rs32: ,reglist_rs32_00	is rt_raw = 0 ... & reglist_rs32_00 {}
 
 
 # ROTR rt, rs, shift
-:ROTR rt, rs, lo_pool0_5 is
+:ROTR rt, rs, shift is
 	hi_pool10_6 = 0b100000 & rt & rs;
-	lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0110 & lo_pool0_5
+	lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0110 & shift
 	{
-		local tmp:8 = ((zext(rs) << 32) | zext(rs)) >> lo_pool0_5;
+		local tmp:8 = ((zext(rs) << 32) | zext(rs)) >> shift;
 		rt = sext(tmp:4);
 	}
 
 
-# ROTRV
-## ROTRV rd, rs, shift
-:ROTRV rd, rs, rt is hi_pool10_6 = 0b100000 & rt & rs; rd & lo_pool3_7 = 0b0011010 & lo_pool0_3 = 0b000 {
-	# TODO: complete operation
-	# TODO: sign extend
-	rd = rs >> rt;
-}
+# ROTRV rd, rs, rt
+:ROTRV rd, rs, rt is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	rd & lo_pool3_7 = 0b0011010 & lo_pool0_3 = 0b000
+	{
+		local tmp:8 = ((zext(rs) << 32) | zext(rs)) >> (rt & 0x1f);
+		rd = sext(tmp:4);
+	}
+
 
 # ROTX ()
 ## ROTX rd, rs, shift
