@@ -865,7 +865,7 @@ lo_uimm12_sl3: uimm12 is
 	hi_pool10_6 = 0b000001 & rt & hi_simm0_5;
 	lo_simm1_15 & lo_signbit0_1
 	[
-		simm22 = ((lo_signbit0_1 << 21) | (lo_simm1_15 << 1)) + 4;
+		simm22 = (lo_signbit0_1 << 21) | (lo_simm1_15 << 1);
 	]
 	{
 		# TODO effective_address() - exception on overflowing 32 bits
@@ -877,7 +877,7 @@ lo_uimm12_sl3: uimm12 is
 	hi_pool10_6 = 0b011000 & rt & hi_pool0_5 = 0b00011;
 	lo_imm16; hi_imm16
 	[
-		simm32 = ((hi_imm16 << 16) | lo_imm16) + 6;
+		simm32 = (hi_imm16 << 16) | lo_imm16;
 	]
 	{
 		# TODO effective_address()
