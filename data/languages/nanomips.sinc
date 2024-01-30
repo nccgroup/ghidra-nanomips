@@ -153,6 +153,8 @@ define token instrlo(16)
 	lo_pool0_2 = (0, 1)
 	lo_pool0_1 = (0, 0)
 
+	shiftx_raw = (7, 10)
+	stripe = (6, 6)
 	gp_end = (2, 2)
 	shift = (0, 4)
 	
@@ -449,6 +451,15 @@ c0_reg: c0s,sel is
 		export c0_reg_id;
 	}
 
+shiftx: shift is
+	shiftx_raw
+	[
+		shift = shiftx_raw << 1;
+	]
+	{
+		local tmp:4 = shift;
+		export tmp;
+	}
 
 rs_scale2: rs is rs
 	{
@@ -2658,12 +2669,11 @@ reglist_rs32: ,reglist_rs32_00	is rt_raw = 0 ... & reglist_rs32_00 {}
 	}
 
 
-# ROTX ()
-## ROTX rd, rs, shift
-#:ROTX rt, rs, lo_pool0_5 is hi_pool10_6 = 0b100000 & rt & rs; lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0110 & lo_pool0_5 {
-#	# TODO: sign extend
-#	rt = rs >> lo_pool0_5;
-#}
+# ROTX rt, rs, shift, shiftx, stripe
+:ROTX rt, rs, shift, shiftx, stripe is
+	hi_pool10_6 = 0b100000 & rt & rs;
+	lo_pool12_4 = 0b1101 & lo_pool11_1 = 0b0 & shiftx & stripe & lo_pool5_1 = 0b0 & shift
+	unimpl
 
 
 # SAVE u[, src1 [, src2 [, ...]]]
