@@ -3007,14 +3007,19 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 	}
 
 
-# SDBBP
-## SDBBP
-:SDBBP is hi_pool10_6 = 0b000000 & hi_pool5_5 = 0b00000 & hi_pool3_2 = 0b11 & hi_pool0_3; lo_pool0_16
+# SDBBP code
+## SDBBP[32]
+:SDBBP code is
+	hi_pool10_6 = 0b000000 & hi_pool5_5 = 0b00000 & hi_pool3_2 = 0b11 & hi_uimm0_3;
+	uimm16
+	[
+		code = (hi_uimm0_3 << 16) | uimm16;
+	]
 	unimpl
 
-# SDBBP
 ## SDBBP[16]
-:SDBBP is hi_pool10_6 = 0b001000 & hi_pool5_5 = 0b00000 & hi_pool3_2 = 0b11 & hi_pool0_2
+:SDBBP hi_uimm0_3 is
+	hi_pool10_6 = 0b000100 & hi_pool5_5 = 0b00000 & hi_pool3_2 = 0b11 & hi_uimm0_3
 	unimpl
 
 
