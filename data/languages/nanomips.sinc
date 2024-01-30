@@ -2325,11 +2325,14 @@ reglist_lwm_pre: reglist_lwm is (rt_raw; count3) & reglist_lwm [count3_mapped = 
 	}
 
 
-# ORI
-## OR rd, rs, rt
-:ORI rt, rs, lo_uimm0_12 is hi_pool10_6 = 0b100000 & rt & rs; lo_pool12_4 = 0b0000 & lo_uimm0_12 {
-	rt = rs | lo_uimm0_12;
-}
+# ORI rt, rs, u
+:ORI rt, rs, lo_uimm0_12 is
+	hi_pool10_6 = 0b100000 & rt & rs;
+	lo_pool12_4 = 0b0000 & lo_uimm0_12
+	{
+		rt = rs | lo_uimm0_12;
+	}
+
 
 # PAUSE
 ## PAUSE rd, rs, rt
