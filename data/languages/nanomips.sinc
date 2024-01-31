@@ -31,11 +31,13 @@ define token instrhi(16)
 	u4_1 = (0, 4)  # u[4:1] - naming convention conflict
 	
 	# normal register encodings
-	rt = (5, 9)
+	rt_att = (5, 9)
 	rt_raw = (5, 9)  # :'(
 	rt_raw2 = (5, 9)  # :'(
-	rs_from_rt = (5, 9)  # :'(
-	rs = (0, 4)
+	rs_from_rt_att = (5, 9)  # :'(
+	rs_from_rt_raw = (5, 9)
+	rs_att = (0, 4)
+	rs_raw = (0, 4)
 	
 	c0s = (0, 4) # for MFC0
 
@@ -45,7 +47,7 @@ define token instrhi(16)
 	rd1 = (8, 8)
 
 	# 2 bit register encodings
-	# disjointed msb requires group per possible bit value (see issue #4140)
+	# disjointed msb requires group per possible bit value (see issue #4140) or context regs
 	rd2_msb0 = (8, 8)
 	rd2_msb1 = (8, 8)
 	rd2_msb0_reg2 = (8, 8)
@@ -56,7 +58,8 @@ define token instrhi(16)
 	rt3 = (7, 9)
 	rt3_raw = (7, 9)
 	rd3_from_rt3 = (7, 9)
-	rtz3 = (7, 9)
+	rtz3_att = (7, 9)
+	rtz3_raw = (7, 9)
 
 	rs3 = (4, 6)
 	rs3_raw = (4, 6)
@@ -64,10 +67,11 @@ define token instrhi(16)
 	rd3 = (1, 3)
 
 	# 4 bit register encodings
-	# disjointed msb requires group per possible bit value (see issue #4140)
+	# disjointed msb requires group per possible bit value (see issue #4140) or context regs
 	rt4_msb0 = (5, 7)
 	rt4_msb1 = (5, 7)
 	rtz4_msb0 = (5, 7)
+	rtz4_msb0_raw = (5, 7)
 	rtz4_msb1 = (5, 7)
 	rd4_from_rt4_msb0 = (5, 7)
 	rd4_from_rt4_msb1 = (5, 7)
@@ -77,6 +81,7 @@ define token instrhi(16)
 	rs4_msb0 = (0, 2)
 	rs4_msb1 = (0, 2)
 	rsz4_msb0 = (0, 2)
+	rsz4_msb0_raw = (0, 2)
 	rsz4_msb1 = (0, 2)
 	rs4_msb = (4, 4)
 	rsz4_msb = (4, 4)
@@ -158,10 +163,11 @@ define token instrlo(16)
 	gp_end = (2, 2)
 	shift = (0, 4)
 	
-	rd = (11, 15)
+	rd_att = (11, 15)
 	rd_raw = (11, 15)
 
-	ru = (3, 7)
+	ru_att = (3, 7)
+	ru_raw = (3, 7)
 
 	sel = (11, 15) # for MFC0
 
@@ -202,7 +208,7 @@ define token data16(16)
 	uimm0_2 = (0, 1)
 	;
 
-attach variables [ rt rs rs_from_rt rd ru ] [
+attach variables [ rt_att rs_att rs_from_rt_att rd_att ru_att ] [
 	zero
 	at
 	t4 t5
@@ -251,7 +257,7 @@ attach variables [ rt3 rs3 rd3 rd3_from_rt3 ] [
 ];
 
 # gpr3.src.store: [0, 17, 18, 19, 4, 5, 6, 7]
-attach variables [ rtz3 ] [
+attach variables [ rtz3_att ] [
 	zero s1 s2 s3
 	a0 a1 a2 a3
 ];
@@ -419,6 +425,25 @@ define pcodeop wait;
 # cc2: "C"             is bits3_3=0x7                              { c:1 = $(C_flag); export c; }
 # ################################################################
 
+# handle $zero register reads
+rt: rt_att is rt_att & rt_raw = 0 { local tmp:4 = 0; export tmp; }
+rt: rt_att is rt_att { export rt_att; }
+
+rtz3: rtz3_att is rtz3_att & rtz3_raw = 0 { local tmp:4 = 0; export tmp; }
+rtz3: rtz3_att is rtz3_att { export rtz3_att; }
+
+rs_from_rt: rs_from_rt_att is rs_from_rt_att & rs_from_rt_raw = 0 { local tmp:4 = 0; export tmp; }
+rs_from_rt: rs_from_rt_att is rs_from_rt_att { export rs_from_rt_att; }
+
+rs: rs_att is rs_att & rs_raw = 0 { local tmp:4 = 0; export tmp; }
+rs: rs_att is rs_att { export rs_att; }
+
+rd: rd_att is rd_att & rd_raw = 0 { local tmp:4 = 0; export tmp; }
+rd: rd_att is rd_att { export rd_att; }
+
+ru: ru_att is ru_att & ru_raw = 0 { local tmp:4 = 0; export tmp; }
+ru: ru_att is ru_att { export ru_att; }
+
 # disjointed register encodings
 rd2_reg1: rd2_msb0 is rd2_msb = 0b0 & rd2_msb0 {export rd2_msb0;}
 rd2_reg1: rd2_msb1 is rd2_msb = 0b1 & rd2_msb1 {export rd2_msb1;}
@@ -435,9 +460,12 @@ rd4_from_rt4: rd4_from_rt4_msb1 is rt4_msb = 0b1 & rd4_from_rt4_msb1 {export rd4
 rs4: rs4_msb0 is rs4_msb = 0b0 & rs4_msb0 {export rs4_msb0;}
 rs4: rs4_msb1 is rs4_msb = 0b1 & rs4_msb1 {export rs4_msb1;}
 
+# $zero encoded as 3 in rtz4_msb0, rsz4_msb0
+rtz4: rtz4_msb0 is rtz4_msb = 0b0 & rtz4_msb0 & rtz4_msb0_raw = 3 { local tmp:4 = 0; export tmp; }
 rtz4: rtz4_msb0 is rtz4_msb = 0b0 & rtz4_msb0 {export rtz4_msb0;}
 rtz4: rtz4_msb1 is rtz4_msb = 0b1 & rtz4_msb1 {export rtz4_msb1;}
 
+rsz4: rsz4_msb0 is rsz4_msb = 0b0 & rsz4_msb0 & rsz4_msb0_raw = 3 { local tmp:4 = 0; export tmp; }
 rsz4: rsz4_msb0 is rsz4_msb = 0b0 & rsz4_msb0 {export rsz4_msb0;}
 rsz4: rsz4_msb1 is rsz4_msb = 0b1 & rsz4_msb1 {export rsz4_msb1;}
 
@@ -1190,7 +1218,7 @@ addiupc48_offs: display_offs is
 # BREAK code
 ## BREAK[32]
 :BREAK code is
-	hi_pool10_6 = 0b000000 & rt = 0 & hi_pool3_2 = 0b10 & hi_uimm0_3;
+	hi_pool10_6 = 0b000000 & rt_raw = 0 & hi_pool3_2 = 0b10 & hi_uimm0_3;
 	uimm16
 	[
 		code = (hi_uimm0_3 << 16) | uimm16;
@@ -1201,7 +1229,7 @@ addiupc48_offs: display_offs is
 
 ## BREAK[16]
 :BREAK hi_uimm0_3 is
-	hi_pool10_6 = 0b000100 & rt = 0 & hi_pool3_2 = 0b10 & hi_uimm0_3
+	hi_pool10_6 = 0b000100 & rt_raw = 0 & hi_pool3_2 = 0b10 & hi_uimm0_3
 	{
 		break(hi_uimm0_3:$(REGSIZE));
 	}
@@ -1209,7 +1237,7 @@ addiupc48_offs: display_offs is
 
 # BRSC rs
 :BRSC rs_scale2 is
-	hi_pool10_6 = 0b010010 & rt = 0 & rs_scale2;
+	hi_pool10_6 = 0b010010 & rt_raw = 0 & rs_scale2;
 	lo_pool12_4 = 0b1000
 	{
 		goto rs_scale2;
@@ -1332,7 +1360,7 @@ addiupc48_offs: display_offs is
 # DI rt
 ## rt=0 implied
 :DI is
-	hi_pool10_6 = 0b001000 & rt = 0;
+	hi_pool10_6 = 0b001000 & rt_raw = 0;
 	lo_pool14_2 = 0b01 & lo_pool9_5 = 0b00011 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
 	{
 		# NOTE: write to $zero is effectively nop
@@ -1405,7 +1433,7 @@ addiupc48_offs: display_offs is
 # EI rt
 ## rt = 0 implied
 :EI is
-	hi_pool10_6 = 0b001000 & rt = 0;
+	hi_pool10_6 = 0b001000 & rt_raw = 0;
 	lo_pool14_2 = 0b01 & lo_pool9_5 = 0b01011 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
 	{
 		# NOTE: write to $zero is effectively a nop
@@ -1486,7 +1514,7 @@ addiupc48_offs: display_offs is
 # EVP rt
 ## rt = 0 implied
 :EVP is
-	hi_pool10_6 = 0b001000 & rt = 0;
+	hi_pool10_6 = 0b001000 & rt_raw = 0;
 	lo_pool11_5 = 0b00000  & lo_pool10_1 = 0b1 & lo_pool3_7 = 0b1110010 & lo_pool0_3 = 0b000
 	{
 		# TODO: NOP if VP not implemented (C0.Config5.VP == 0)
@@ -2010,82 +2038,82 @@ addiupc48_offs: display_offs is
 
 
 # LWM rt, offset(rs), count
-reglist_lwm_38: is (rt_raw ...) & (count3_mapped = 39 - rt ...) & lo_rs_soffset9	{s6 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(38-rt_raw)));}
-reglist_lwm_37: is (rt_raw ...) & (count3_mapped = 38 - rt ...) & lo_rs_soffset9	{s5 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(37-rt_raw)));}
+reglist_lwm_38: is (rt_raw ...) & (count3_mapped = 39 - rt_raw2 ...) & lo_rs_soffset9	{s6 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(38-rt_raw)));}
+reglist_lwm_37: is (rt_raw ...) & (count3_mapped = 38 - rt_raw2 ...) & lo_rs_soffset9	{s5 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(37-rt_raw)));}
 reglist_lwm_37: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_38				{s5 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(37-rt_raw)));}
-reglist_lwm_36: is (rt_raw ...) & (count3_mapped = 37 - rt ...) & lo_rs_soffset9	{s4 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(36-rt_raw)));}
+reglist_lwm_36: is (rt_raw ...) & (count3_mapped = 37 - rt_raw2 ...) & lo_rs_soffset9	{s4 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(36-rt_raw)));}
 reglist_lwm_36: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_37				{s4 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(36-rt_raw)));}
-reglist_lwm_35: is (rt_raw ...) & (count3_mapped = 36 - rt ...) & lo_rs_soffset9	{s3 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(35-rt_raw)));}
+reglist_lwm_35: is (rt_raw ...) & (count3_mapped = 36 - rt_raw2 ...) & lo_rs_soffset9	{s3 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(35-rt_raw)));}
 reglist_lwm_35: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_36				{s3 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(35-rt_raw)));}
-reglist_lwm_34: is (rt_raw ...) & (count3_mapped = 35 - rt ...) & lo_rs_soffset9	{s2 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(34-rt_raw)));}
+reglist_lwm_34: is (rt_raw ...) & (count3_mapped = 35 - rt_raw2 ...) & lo_rs_soffset9	{s2 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(34-rt_raw)));}
 reglist_lwm_34: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_35				{s2 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(34-rt_raw)));}
-reglist_lwm_33: is (rt_raw ...) & (count3_mapped = 34 - rt ...) & lo_rs_soffset9	{s1 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(33-rt_raw)));}
+reglist_lwm_33: is (rt_raw ...) & (count3_mapped = 34 - rt_raw2 ...) & lo_rs_soffset9	{s1 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(33-rt_raw)));}
 reglist_lwm_33: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_34				{s1 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(33-rt_raw)));}
-reglist_lwm_32: is (rt_raw ...) & (count3_mapped = 33 - rt ...) & lo_rs_soffset9	{s0 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(32-rt_raw)));}
+reglist_lwm_32: is (rt_raw ...) & (count3_mapped = 33 - rt_raw2 ...) & lo_rs_soffset9	{s0 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(32-rt_raw)));}
 reglist_lwm_32: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_33				{s0 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(32-rt_raw)));}
-reglist_lwm_31: is (rt_raw ...) & (count3_mapped = 32 - rt ...) & lo_rs_soffset9	{ra = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(31-rt_raw)));}
+reglist_lwm_31: is (rt_raw ...) & (count3_mapped = 32 - rt_raw2 ...) & lo_rs_soffset9	{ra = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(31-rt_raw)));}
 reglist_lwm_31: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_32				{ra = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(31-rt_raw)));}
-reglist_lwm_30: is (rt_raw ...) & (count3_mapped = 31 - rt ...) & lo_rs_soffset9	{fp = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(30-rt_raw)));}
+reglist_lwm_30: is (rt_raw ...) & (count3_mapped = 31 - rt_raw2 ...) & lo_rs_soffset9	{fp = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(30-rt_raw)));}
 reglist_lwm_30: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_31				{fp = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(30-rt_raw)));}
-reglist_lwm_29: is (rt_raw ...) & (count3_mapped = 30 - rt ...) & lo_rs_soffset9	{sp = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(29-rt_raw)));}
+reglist_lwm_29: is (rt_raw ...) & (count3_mapped = 30 - rt_raw2 ...) & lo_rs_soffset9	{sp = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(29-rt_raw)));}
 reglist_lwm_29: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_30				{sp = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(29-rt_raw)));}
-reglist_lwm_28: is (rt_raw ...) & (count3_mapped = 29 - rt ...) & lo_rs_soffset9	{gp = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(28-rt_raw)));}
+reglist_lwm_28: is (rt_raw ...) & (count3_mapped = 29 - rt_raw2 ...) & lo_rs_soffset9	{gp = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(28-rt_raw)));}
 reglist_lwm_28: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_29				{gp = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(28-rt_raw)));}
-reglist_lwm_27: is (rt_raw ...) & (count3_mapped = 28 - rt ...) & lo_rs_soffset9	{k1 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(27-rt_raw)));}
+reglist_lwm_27: is (rt_raw ...) & (count3_mapped = 28 - rt_raw2 ...) & lo_rs_soffset9	{k1 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(27-rt_raw)));}
 reglist_lwm_27: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_28				{k1 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(27-rt_raw)));}
-reglist_lwm_26: is (rt_raw ...) & (count3_mapped = 27 - rt ...) & lo_rs_soffset9	{k0 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(26-rt_raw)));}
+reglist_lwm_26: is (rt_raw ...) & (count3_mapped = 27 - rt_raw2 ...) & lo_rs_soffset9	{k0 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(26-rt_raw)));}
 reglist_lwm_26: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_27				{k0 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(26-rt_raw)));}
-reglist_lwm_25: is (rt_raw ...) & (count3_mapped = 26 - rt ...) & lo_rs_soffset9	{t9 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(25-rt_raw)));}
+reglist_lwm_25: is (rt_raw ...) & (count3_mapped = 26 - rt_raw2 ...) & lo_rs_soffset9	{t9 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(25-rt_raw)));}
 reglist_lwm_25: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_26				{t9 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(25-rt_raw)));}
-reglist_lwm_24: is (rt_raw ...) & (count3_mapped = 25 - rt ...) & lo_rs_soffset9	{t8 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(24-rt_raw)));}
+reglist_lwm_24: is (rt_raw ...) & (count3_mapped = 25 - rt_raw2 ...) & lo_rs_soffset9	{t8 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(24-rt_raw)));}
 reglist_lwm_24: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_25				{t8 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(24-rt_raw)));}
-reglist_lwm_23: is (rt_raw ...) & (count3_mapped = 24 - rt ...) & lo_rs_soffset9	{s7 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(23-rt_raw)));}
+reglist_lwm_23: is (rt_raw ...) & (count3_mapped = 24 - rt_raw2 ...) & lo_rs_soffset9	{s7 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(23-rt_raw)));}
 reglist_lwm_23: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_24				{s7 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(23-rt_raw)));}
-reglist_lwm_22: is (rt_raw ...) & (count3_mapped = 23 - rt ...) & lo_rs_soffset9	{s6 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(22-rt_raw)));}
+reglist_lwm_22: is (rt_raw ...) & (count3_mapped = 23 - rt_raw2 ...) & lo_rs_soffset9	{s6 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(22-rt_raw)));}
 reglist_lwm_22: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_23				{s6 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(22-rt_raw)));}
-reglist_lwm_21: is (rt_raw ...) & (count3_mapped = 22 - rt ...) & lo_rs_soffset9	{s5 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(21-rt_raw)));}
+reglist_lwm_21: is (rt_raw ...) & (count3_mapped = 22 - rt_raw2 ...) & lo_rs_soffset9	{s5 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(21-rt_raw)));}
 reglist_lwm_21: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_22				{s5 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(21-rt_raw)));}
-reglist_lwm_20: is (rt_raw ...) & (count3_mapped = 21 - rt ...) & lo_rs_soffset9	{s4 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(20-rt_raw)));}
+reglist_lwm_20: is (rt_raw ...) & (count3_mapped = 21 - rt_raw2 ...) & lo_rs_soffset9	{s4 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(20-rt_raw)));}
 reglist_lwm_20: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_21				{s4 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(20-rt_raw)));}
-reglist_lwm_19: is (rt_raw ...) & (count3_mapped = 20 - rt ...) & lo_rs_soffset9	{s3 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(19-rt_raw)));}
+reglist_lwm_19: is (rt_raw ...) & (count3_mapped = 20 - rt_raw2 ...) & lo_rs_soffset9	{s3 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(19-rt_raw)));}
 reglist_lwm_19: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_20				{s3 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(19-rt_raw)));}
-reglist_lwm_18: is (rt_raw ...) & (count3_mapped = 19 - rt ...) & lo_rs_soffset9	{s2 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(18-rt_raw)));}
+reglist_lwm_18: is (rt_raw ...) & (count3_mapped = 19 - rt_raw2 ...) & lo_rs_soffset9	{s2 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(18-rt_raw)));}
 reglist_lwm_18: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_19				{s2 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(18-rt_raw)));}
-reglist_lwm_17: is (rt_raw ...) & (count3_mapped = 18 - rt ...) & lo_rs_soffset9	{s1 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(17-rt_raw)));}
+reglist_lwm_17: is (rt_raw ...) & (count3_mapped = 18 - rt_raw2 ...) & lo_rs_soffset9	{s1 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(17-rt_raw)));}
 reglist_lwm_17: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_18				{s1 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(17-rt_raw)));}
-reglist_lwm_16: is (rt_raw ...) & (count3_mapped = 17 - rt ...) & lo_rs_soffset9	{s0 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(16-rt_raw)));}
+reglist_lwm_16: is (rt_raw ...) & (count3_mapped = 17 - rt_raw2 ...) & lo_rs_soffset9	{s0 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(16-rt_raw)));}
 reglist_lwm_16: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_17				{s0 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(16-rt_raw)));}
-reglist_lwm_15: is (rt_raw ...) & (count3_mapped = 16 - rt ...) & lo_rs_soffset9	{t3 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(15-rt_raw)));}
+reglist_lwm_15: is (rt_raw ...) & (count3_mapped = 16 - rt_raw2 ...) & lo_rs_soffset9	{t3 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(15-rt_raw)));}
 reglist_lwm_15: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_16				{t3 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(15-rt_raw)));}
-reglist_lwm_14: is (rt_raw ...) & (count3_mapped = 15 - rt ...) & lo_rs_soffset9	{t2 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(14-rt_raw)));}
+reglist_lwm_14: is (rt_raw ...) & (count3_mapped = 15 - rt_raw2 ...) & lo_rs_soffset9	{t2 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(14-rt_raw)));}
 reglist_lwm_14: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_15				{t2 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(14-rt_raw)));}
-reglist_lwm_13: is (rt_raw ...) & (count3_mapped = 14 - rt ...) & lo_rs_soffset9	{t1 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(13-rt_raw)));}
+reglist_lwm_13: is (rt_raw ...) & (count3_mapped = 14 - rt_raw2 ...) & lo_rs_soffset9	{t1 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(13-rt_raw)));}
 reglist_lwm_13: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_14				{t1 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(13-rt_raw)));}
-reglist_lwm_12: is (rt_raw ...) & (count3_mapped = 13 - rt ...) & lo_rs_soffset9	{t0 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(12-rt_raw)));}
+reglist_lwm_12: is (rt_raw ...) & (count3_mapped = 13 - rt_raw2 ...) & lo_rs_soffset9	{t0 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(12-rt_raw)));}
 reglist_lwm_12: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_13				{t0 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(12-rt_raw)));}
-reglist_lwm_11: is (rt_raw ...) & (count3_mapped = 12 - rt ...) & lo_rs_soffset9	{a7 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(11-rt_raw)));}
+reglist_lwm_11: is (rt_raw ...) & (count3_mapped = 12 - rt_raw2 ...) & lo_rs_soffset9	{a7 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(11-rt_raw)));}
 reglist_lwm_11: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_12				{a7 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(11-rt_raw)));}
-reglist_lwm_10: is (rt_raw ...) & (count3_mapped = 11 - rt ...) & lo_rs_soffset9	{a6 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(10-rt_raw)));}
+reglist_lwm_10: is (rt_raw ...) & (count3_mapped = 11 - rt_raw2 ...) & lo_rs_soffset9	{a6 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(10-rt_raw)));}
 reglist_lwm_10: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_11				{a6 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(10-rt_raw)));}
-reglist_lwm_09: is (rt_raw ...) & (count3_mapped = 10 - rt ...) & lo_rs_soffset9	{a5 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(9-rt_raw)));}
+reglist_lwm_09: is (rt_raw ...) & (count3_mapped = 10 - rt_raw2 ...) & lo_rs_soffset9	{a5 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(9-rt_raw)));}
 reglist_lwm_09: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_10				{a5 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(9-rt_raw)));}
-reglist_lwm_08: is (rt_raw ...) & (count3_mapped = 9 - rt ...) & lo_rs_soffset9	{a4 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(8-rt_raw)));}
+reglist_lwm_08: is (rt_raw ...) & (count3_mapped = 9 - rt_raw2 ...) & lo_rs_soffset9	{a4 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(8-rt_raw)));}
 reglist_lwm_08: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_09				{a4 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(8-rt_raw)));}
-reglist_lwm_07: is (rt_raw ...) & (count3_mapped = 8 - rt ...) & lo_rs_soffset9	{a3 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(7-rt_raw)));}
+reglist_lwm_07: is (rt_raw ...) & (count3_mapped = 8 - rt_raw2 ...) & lo_rs_soffset9	{a3 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(7-rt_raw)));}
 reglist_lwm_07: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_08				{a3 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(7-rt_raw)));}
-reglist_lwm_06: is (rt_raw ...) & (count3_mapped = 7 - rt ...) & lo_rs_soffset9	{a2 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(6-rt_raw)));}
+reglist_lwm_06: is (rt_raw ...) & (count3_mapped = 7 - rt_raw2 ...) & lo_rs_soffset9	{a2 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(6-rt_raw)));}
 reglist_lwm_06: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_07				{a2 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(6-rt_raw)));}
-reglist_lwm_05: is (rt_raw ...) & (count3_mapped = 6 - rt ...) & lo_rs_soffset9	{a1 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(5-rt_raw)));}
+reglist_lwm_05: is (rt_raw ...) & (count3_mapped = 6 - rt_raw2 ...) & lo_rs_soffset9	{a1 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(5-rt_raw)));}
 reglist_lwm_05: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_06				{a1 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(5-rt_raw)));}
-reglist_lwm_04: is (rt_raw ...) & (count3_mapped = 5 - rt ...) & lo_rs_soffset9	{a0 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(4-rt_raw)));}
+reglist_lwm_04: is (rt_raw ...) & (count3_mapped = 5 - rt_raw2 ...) & lo_rs_soffset9	{a0 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(4-rt_raw)));}
 reglist_lwm_04: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_05				{a0 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(4-rt_raw)));}
-reglist_lwm_03: is (rt_raw ...) & (count3_mapped = 4 - rt ...) & lo_rs_soffset9	{t5 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(3-rt_raw)));}
+reglist_lwm_03: is (rt_raw ...) & (count3_mapped = 4 - rt_raw2 ...) & lo_rs_soffset9	{t5 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(3-rt_raw)));}
 reglist_lwm_03: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_04				{t5 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(3-rt_raw)));}
-reglist_lwm_02: is (rt_raw ...) & (count3_mapped = 3 - rt ...) & lo_rs_soffset9	{t4 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(2-rt_raw)));}
+reglist_lwm_02: is (rt_raw ...) & (count3_mapped = 3 - rt_raw2 ...) & lo_rs_soffset9	{t4 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(2-rt_raw)));}
 reglist_lwm_02: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_03				{t4 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(2-rt_raw)));}
-reglist_lwm_01: is (rt_raw ...) & (count3_mapped = 2 - rt ...) & lo_rs_soffset9	{at = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(1-rt_raw)));}
+reglist_lwm_01: is (rt_raw ...) & (count3_mapped = 2 - rt_raw2 ...) & lo_rs_soffset9	{at = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(1-rt_raw)));}
 reglist_lwm_01: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_02				{at = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(1-rt_raw)));}
-reglist_lwm_00: is (rt_raw ...) & (count3_mapped = 1 - rt ...) & lo_rs_soffset9	{}
+reglist_lwm_00: is (rt_raw ...) & (count3_mapped = 1 - rt_raw2 ...) & lo_rs_soffset9	{}
 reglist_lwm_00: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_01				{}
 reglist_lwm: is (rt_raw = 31 ...) & reglist_lwm_31 {}
 reglist_lwm: is (rt_raw = 30 ...) & reglist_lwm_30 {}
@@ -2317,14 +2345,14 @@ reglist_lwm_pre: reglist_lwm is (rt_raw; count3) & reglist_lwm [count3_mapped = 
 ## NOTE: equivalent to SLL[32] with dest $zero and shift 0
 ## compilers should only generate shift=0, but any write to $zero is NOP
 :NOP is
-	hi_pool10_6 = 0b100000 & rt = 0;
+	hi_pool10_6 = 0b100000 & rt_raw = 0;
 	lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0000 & shift
 	{}
 
 ## NOP[16]
 ## NOTE: equivalent to ADDIU[RS5] with dest $zero
 :NOP is
-	hi_pool10_6 = 0b100100 & rt = 0 & hi_pool3_1 = 0b1
+	hi_pool10_6 = 0b100100 & rt_raw = 0 & hi_pool3_1 = 0b1
 	{}
 
 
@@ -3107,7 +3135,7 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 
 # SIGRIE code
 :SIGRIE code is
-	hi_pool10_6 = 0b000000 & rt = 0 & hi_pool3_2 = 0b00 & hi_uimm0_3;
+	hi_pool10_6 = 0b000000 & rt_raw = 0 & hi_pool3_2 = 0b00 & hi_uimm0_3;
 	uimm16
 	[
 		code = (hi_uimm0_3 << 16) | uimm16;
@@ -3336,97 +3364,97 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 
 
 # SWM rt, offset(rs), count
-reglist_swm_38: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 39 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(38-rt_raw)) = s6:4;}
-reglist_swm_37: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 38 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(37-rt_raw)) = s5:4;}
+reglist_swm_38: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 39 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(38-rt_raw)) = s6:4;}
+reglist_swm_37: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 38 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(37-rt_raw)) = s5:4;}
 reglist_swm_37: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_38				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(37-rt_raw)) = s5:4;}
-reglist_swm_36: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 37 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(36-rt_raw)) = s4:4;}
+reglist_swm_36: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 37 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(36-rt_raw)) = s4:4;}
 reglist_swm_36: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_37				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(36-rt_raw)) = s4:4;}
-reglist_swm_35: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 36 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(35-rt_raw)) = s3:4;}
+reglist_swm_35: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 36 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(35-rt_raw)) = s3:4;}
 reglist_swm_35: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_36				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(35-rt_raw)) = s3:4;}
-reglist_swm_34: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 35 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(34-rt_raw)) = s2:4;}
+reglist_swm_34: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 35 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(34-rt_raw)) = s2:4;}
 reglist_swm_34: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_35				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(34-rt_raw)) = s2:4;}
-reglist_swm_33: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 34 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(33-rt_raw)) = s1:4;}
+reglist_swm_33: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 34 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(33-rt_raw)) = s1:4;}
 reglist_swm_33: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_34				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(33-rt_raw)) = s1:4;}
-reglist_swm_32: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 33 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(32-rt_raw)) = s0:4;}
+reglist_swm_32: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 33 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(32-rt_raw)) = s0:4;}
 reglist_swm_32: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_33				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(32-rt_raw)) = s0:4;}
-reglist_swm_31: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 32 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(31-rt_raw)) = ra:4;}
+reglist_swm_31: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 32 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(31-rt_raw)) = ra:4;}
 reglist_swm_31: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_32				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(31-rt_raw)) = ra:4;}
-reglist_swm_30: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 31 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(30-rt_raw)) = fp:4;}
+reglist_swm_30: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 31 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(30-rt_raw)) = fp:4;}
 reglist_swm_30: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_31				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(30-rt_raw)) = fp:4;}
-reglist_swm_29: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 30 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(29-rt_raw)) = sp:4;}
+reglist_swm_29: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 30 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(29-rt_raw)) = sp:4;}
 reglist_swm_29: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_30				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(29-rt_raw)) = sp:4;}
-reglist_swm_28: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 29 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(28-rt_raw)) = gp:4;}
+reglist_swm_28: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 29 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(28-rt_raw)) = gp:4;}
 reglist_swm_28: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_29				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(28-rt_raw)) = gp:4;}
-reglist_swm_27: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 28 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(27-rt_raw)) = k1:4;}
+reglist_swm_27: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 28 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(27-rt_raw)) = k1:4;}
 reglist_swm_27: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_28				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(27-rt_raw)) = k1:4;}
-reglist_swm_26: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 27 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(26-rt_raw)) = k0:4;}
+reglist_swm_26: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 27 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(26-rt_raw)) = k0:4;}
 reglist_swm_26: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_27				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(26-rt_raw)) = k0:4;}
-reglist_swm_25: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 26 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(25-rt_raw)) = t9:4;}
+reglist_swm_25: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 26 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(25-rt_raw)) = t9:4;}
 reglist_swm_25: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_26				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(25-rt_raw)) = t9:4;}
-reglist_swm_24: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 25 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(24-rt_raw)) = t8:4;}
+reglist_swm_24: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 25 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(24-rt_raw)) = t8:4;}
 reglist_swm_24: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_25				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(24-rt_raw)) = t8:4;}
-reglist_swm_23: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 24 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(23-rt_raw)) = s7:4;}
+reglist_swm_23: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 24 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(23-rt_raw)) = s7:4;}
 reglist_swm_23: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_24				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(23-rt_raw)) = s7:4;}
-reglist_swm_22: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 23 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(22-rt_raw)) = s6:4;}
+reglist_swm_22: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 23 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(22-rt_raw)) = s6:4;}
 reglist_swm_22: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_23				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(22-rt_raw)) = s6:4;}
-reglist_swm_21: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 22 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(21-rt_raw)) = s5:4;}
+reglist_swm_21: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 22 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(21-rt_raw)) = s5:4;}
 reglist_swm_21: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_22				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(21-rt_raw)) = s5:4;}
-reglist_swm_20: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 21 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(20-rt_raw)) = s4:4;}
+reglist_swm_20: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 21 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(20-rt_raw)) = s4:4;}
 reglist_swm_20: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_21				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(20-rt_raw)) = s4:4;}
-reglist_swm_19: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 20 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(19-rt_raw)) = s3:4;}
+reglist_swm_19: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 20 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(19-rt_raw)) = s3:4;}
 reglist_swm_19: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_20				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(19-rt_raw)) = s3:4;}
-reglist_swm_18: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 19 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(18-rt_raw)) = s2:4;}
+reglist_swm_18: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 19 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(18-rt_raw)) = s2:4;}
 reglist_swm_18: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_19				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(18-rt_raw)) = s2:4;}
-reglist_swm_17: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 18 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(17-rt_raw)) = s1:4;}
+reglist_swm_17: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 18 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(17-rt_raw)) = s1:4;}
 reglist_swm_17: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_18				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(17-rt_raw)) = s1:4;}
-reglist_swm_16: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 17 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(16-rt_raw)) = s0:4;}
+reglist_swm_16: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 17 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(16-rt_raw)) = s0:4;}
 reglist_swm_16: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_17				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(16-rt_raw)) = s0:4;}
-reglist_swm_15: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 16 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(15-rt_raw)) = t3:4;}
+reglist_swm_15: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 16 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(15-rt_raw)) = t3:4;}
 reglist_swm_15: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_16				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(15-rt_raw)) = t3:4;}
-reglist_swm_14: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 15 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(14-rt_raw)) = t2:4;}
+reglist_swm_14: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 15 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(14-rt_raw)) = t2:4;}
 reglist_swm_14: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_15				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(14-rt_raw)) = t2:4;}
-reglist_swm_13: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 14 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(13-rt_raw)) = t1:4;}
+reglist_swm_13: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 14 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(13-rt_raw)) = t1:4;}
 reglist_swm_13: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_14				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(13-rt_raw)) = t1:4;}
-reglist_swm_12: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 13 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(12-rt_raw)) = t0:4;}
+reglist_swm_12: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 13 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(12-rt_raw)) = t0:4;}
 reglist_swm_12: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_13				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(12-rt_raw)) = t0:4;}
-reglist_swm_11: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 12 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(11-rt_raw)) = a7:4;}
+reglist_swm_11: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 12 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(11-rt_raw)) = a7:4;}
 reglist_swm_11: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_12				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(11-rt_raw)) = a7:4;}
-reglist_swm_10: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 11 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(10-rt_raw)) = a6:4;}
+reglist_swm_10: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 11 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(10-rt_raw)) = a6:4;}
 reglist_swm_10: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_11				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(10-rt_raw)) = a6:4;}
-reglist_swm_09: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 10 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(9-rt_raw)) = a5:4;}
+reglist_swm_09: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 10 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(9-rt_raw)) = a5:4;}
 reglist_swm_09: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_10				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(9-rt_raw)) = a5:4;}
-reglist_swm_08: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 9 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(8-rt_raw)) = a4:4;}
+reglist_swm_08: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 9 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(8-rt_raw)) = a4:4;}
 reglist_swm_08: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_09				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(8-rt_raw)) = a4:4;}
-reglist_swm_07: is (rt_raw ...) & (rt_raw2 = 0 ...) & (count3_mapped = 8 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(7-rt_raw)) = 0:4;}
-reglist_swm_07: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 8 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(7-rt_raw)) = a3:4;}
+reglist_swm_07: is (rt_raw ...) & (rt_raw2 = 0 ...) & (count3_mapped = 8 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(7-rt_raw)) = 0:4;}
+reglist_swm_07: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 8 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(7-rt_raw)) = a3:4;}
 reglist_swm_07: is (rt_raw2 = 0 ...) & (rt_raw ...) & lo_rs_soffset9 & reglist_swm_08				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(7-rt_raw)) = 0:4;}
 reglist_swm_07: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_08				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(7-rt_raw)) = a3:4;}
-reglist_swm_06: is (rt_raw ...) & (rt_raw2 = 0 ...) & (count3_mapped = 7 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(6-rt_raw)) = 0:4;}
-reglist_swm_06: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 7 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(6-rt_raw)) = a2:4;}
+reglist_swm_06: is (rt_raw ...) & (rt_raw2 = 0 ...) & (count3_mapped = 7 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(6-rt_raw)) = 0:4;}
+reglist_swm_06: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 7 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(6-rt_raw)) = a2:4;}
 reglist_swm_06: is (rt_raw2 = 0 ...) & (rt_raw ...) & lo_rs_soffset9 & reglist_swm_07				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(6-rt_raw)) = 0:4;}
 reglist_swm_06: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_07				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(6-rt_raw)) = a2:4;}
-reglist_swm_05: is (rt_raw ...) & (rt_raw2 = 0 ...) & (count3_mapped = 6 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(5-rt_raw)) = 0:4;}
-reglist_swm_05: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 6 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(5-rt_raw)) = a1:4;}
+reglist_swm_05: is (rt_raw ...) & (rt_raw2 = 0 ...) & (count3_mapped = 6 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(5-rt_raw)) = 0:4;}
+reglist_swm_05: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 6 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(5-rt_raw)) = a1:4;}
 reglist_swm_05: is (rt_raw2 = 0 ...) & (rt_raw ...) & lo_rs_soffset9 & reglist_swm_06				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(5-rt_raw)) = 0:4;}
 reglist_swm_05: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_06				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(5-rt_raw)) = a1:4;}
-reglist_swm_04: is (rt_raw ...) & (rt_raw2 = 0 ...) & (count3_mapped = 5 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(4-rt_raw)) = 0:4;}
-reglist_swm_04: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 5 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(4-rt_raw)) = a0:4;}
+reglist_swm_04: is (rt_raw ...) & (rt_raw2 = 0 ...) & (count3_mapped = 5 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(4-rt_raw)) = 0:4;}
+reglist_swm_04: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 5 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(4-rt_raw)) = a0:4;}
 reglist_swm_04: is (rt_raw2 = 0 ...) & (rt_raw ...) & lo_rs_soffset9 & reglist_swm_05				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(4-rt_raw)) = 0:4;}
 reglist_swm_04: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_05				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(4-rt_raw)) = a0:4;}
-reglist_swm_03: is (rt_raw ...) & (rt_raw2 = 0 ...) & (count3_mapped = 4 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(3-rt_raw)) = 0:4;}
-reglist_swm_03: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 4 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(3-rt_raw)) = t5:4;}
+reglist_swm_03: is (rt_raw ...) & (rt_raw2 = 0 ...) & (count3_mapped = 4 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(3-rt_raw)) = 0:4;}
+reglist_swm_03: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 4 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(3-rt_raw)) = t5:4;}
 reglist_swm_03: is (rt_raw2 = 0 ...) & (rt_raw ...) & lo_rs_soffset9 & reglist_swm_04				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(3-rt_raw)) = 0:4;}
 reglist_swm_03: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_04				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(3-rt_raw)) = t5:4;}
-reglist_swm_02: is (rt_raw ...) & (rt_raw2 = 0 ...) & (count3_mapped = 3 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(2-rt_raw)) = 0:4;}
-reglist_swm_02: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 3 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(2-rt_raw)) = t4:4;}
+reglist_swm_02: is (rt_raw ...) & (rt_raw2 = 0 ...) & (count3_mapped = 3 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(2-rt_raw)) = 0:4;}
+reglist_swm_02: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 3 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(2-rt_raw)) = t4:4;}
 reglist_swm_02: is (rt_raw2 = 0 ...) & (rt_raw ...) & lo_rs_soffset9 & reglist_swm_03				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(2-rt_raw)) = 0:4;}
 reglist_swm_02: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_03				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(2-rt_raw)) = t4:4;}
-reglist_swm_01: is (rt_raw ...) & (rt_raw2 = 0 ...) & (count3_mapped = 2 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(1-rt_raw)) = 0:4;}
-reglist_swm_01: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 2 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(1-rt_raw)) = at:4;}
+reglist_swm_01: is (rt_raw ...) & (rt_raw2 = 0 ...) & (count3_mapped = 2 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(1-rt_raw)) = 0:4;}
+reglist_swm_01: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 2 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(1-rt_raw)) = at:4;}
 reglist_swm_01: is (rt_raw2 = 0 ...) & (rt_raw ...) & lo_rs_soffset9 & reglist_swm_02				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(1-rt_raw)) = 0:4;}
 reglist_swm_01: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_02				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(1-rt_raw)) = at:4;}
-reglist_swm_00: is (rt_raw ...) & (rt_raw2 = 0 ...) & (count3_mapped = 1 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(0-rt_raw)) = 0:4;}
-reglist_swm_00: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 1 - rt ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(0-rt_raw)) = 0:4;}
+reglist_swm_00: is (rt_raw ...) & (rt_raw2 = 0 ...) & (count3_mapped = 1 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(0-rt_raw)) = 0:4;}
+reglist_swm_00: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 1 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(0-rt_raw)) = 0:4;}
 reglist_swm_00: is (rt_raw2 = 0 ...) & (rt_raw ...) & lo_rs_soffset9 & reglist_swm_01				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(0-rt_raw)) = 0:4;}
 reglist_swm_00: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_01				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(0-rt_raw)) = 0:4;}
 reglist_swm: is (rt_raw = 31 ...) & reglist_swm_31 {}
@@ -3554,7 +3582,7 @@ reglist_swm_pre: reglist_swm is (rt_raw; count3) & reglist_swm [count3_mapped = 
 # SYSCALL code
 ## SYSCALL[32]
 :SYSCALL code is
-	hi_pool10_6 = 0b000000 & rt = 0 & hi_pool3_2 = 0b01 & hi_pool2_1 = 0b0 & hi_uimm0_2;
+	hi_pool10_6 = 0b000000 & rt_raw = 0 & hi_pool3_2 = 0b01 & hi_pool2_1 = 0b0 & hi_uimm0_2;
 	uimm16
 	[
 		code = (hi_uimm0_2 << 16) | uimm16;
@@ -3565,7 +3593,7 @@ reglist_swm_pre: reglist_swm is (rt_raw; count3) & reglist_swm [count3_mapped = 
 
 ## SYSCALL[16]
 :SYSCALL hi_uimm0_2 is
-	hi_pool10_6 = 0b000100 & rt = 0 & hi_pool3_2 = 0b01 & hi_pool2_1 = 0b0 & hi_uimm0_2
+	hi_pool10_6 = 0b000100 & rt_raw = 0 & hi_pool3_2 = 0b01 & hi_pool2_1 = 0b0 & hi_uimm0_2
 	{
 		syscall(hi_uimm0_2:4);
 	}

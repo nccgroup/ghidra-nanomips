@@ -48,13 +48,13 @@ def main():
 
         # For SWM, if rt=0 then all writes are zero
         if not args.load and i <= 7:
-            print(f'{name}: is (rt_raw ...) & (rt_raw2 = 0 ...) & (count3_mapped = {i+1} - rt ...) & lo_rs_soffset9\t{{{pcode_zero}}}')
+            print(f'{name}: is (rt_raw ...) & (rt_raw2 = 0 ...) & (count3_mapped = {i+1} - rt_raw2 ...) & lo_rs_soffset9\t{{{pcode_zero}}}')
 
         # rule when this is last register
         if not args.load:
-            print(f'{name}: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = {i+1} - rt ...) & lo_rs_soffset9\t{{{pcode}}}')
+            print(f'{name}: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = {i+1} - rt_raw2 ...) & lo_rs_soffset9\t{{{pcode}}}')
         else:
-            print(f'{name}: is (rt_raw ...) & (count3_mapped = {i+1} - rt ...) & lo_rs_soffset9\t{{{pcode}}}')
+            print(f'{name}: is (rt_raw ...) & (count3_mapped = {i+1} - rt_raw2 ...) & lo_rs_soffset9\t{{{pcode}}}')
 
         # rule when there are more registers
         if i != len(flat_reglist) - 1:
