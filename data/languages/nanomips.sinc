@@ -835,11 +835,7 @@ lo_uimm12_sl3: uimm12 is
 	}
 
 ## ADDIU[RS5]
-### ADDIU[RS5] with rt=0 is used to provide a 16 bit NOP instruction.
-:NOP is
-	hi_pool10_6 = 0b100100 & rt = 0 & hi_pool3_1 = 0b1
-	{}
-
+### ADDIU[RS5] with rt=0 is used to provide a 16 bit NOP instruction (NOP[16]).
 :ADDIU rt, rs_from_rt, s4 is
 	hi_pool10_6 = 0b100100 & rt & rs_from_rt & hi_simm4_1 & hi_pool3_1 = 0b1 & hi_simm0_3
 	[
@@ -2317,12 +2313,20 @@ reglist_lwm_pre: reglist_lwm is (rt_raw; count3) & reglist_lwm [count3_mapped = 
 }
 
 # NOP
-## NOP
-:NOP is hi_pool10_6 = 0b100000 & hi_pool5_5 = 0b00000; lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0000 & lo_pool0_5 = 0b00000 { }
+## NOP[32]
+## NOTE: equivalent to SLL[32] with dest $zero and shift 0
+## compilers should only generate shift=0, but any write to $zero is NOP
+:NOP is
+	hi_pool10_6 = 0b100000 & rt = 0;
+	lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0000 & shift
+	{}
 
-# NOP
-## NOP
-:NOP is hi_pool10_6 = 0b100100 & hi_pool5_5 = 0b00000 & hi_pool3_1 = 0b0 { }
+## NOP[16]
+## NOTE: equivalent to ADDIU[RS5] with dest $zero
+:NOP is
+	hi_pool10_6 = 0b100100 & rt = 0 & hi_pool3_1 = 0b1
+	{}
+
 
 # NOR
 ## NOR rd, rs, rt
@@ -3115,7 +3119,7 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 
 # SLL rt, rs, shift
 ## SLL[32]
-# TODO handle overlap with NOP[32]
+## NOTE: SLL[32] with rt=$zero is used for 32-bit NOP
 :SLL rt, rs, lo_pool0_5 is
 	hi_pool10_6 = 0b100000 & rt & rs;
 	lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0000 & lo_pool0_5
