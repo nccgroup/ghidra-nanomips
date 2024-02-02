@@ -8,7 +8,8 @@
   </data_organization>
   <global>
     <range space="ram"/>
-    <!-- <range space="io"/> -->
+    <!-- CP0 registers -->
+    <range space="register" first="0x200" last="0x2200"/>
   </global>
   <stackpointer register="sp" space="ram"/>
   <returnaddress>
