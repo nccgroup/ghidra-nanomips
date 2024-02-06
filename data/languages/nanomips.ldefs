@@ -3,9 +3,8 @@
 <!-- See Relax specification: Ghidra/Framework/SoftwareModeling/data/languages/language_definitions.rxg -->
 
 <language_definitions>
-<!-- Uncomment the following to make the language available in Ghidra -->
 
-   <language processor="Nanomips"
+   <language processor="nanoMIPS"
             endian="little"
             size="32"
             variant="default"
@@ -13,7 +12,7 @@
             slafile="nanomips.sla"
             processorspec="nanomips.pspec"
             id="nanomips:LE:32:default">
-    <description>Nanomips Language Module</description>
+    <description>nanoMIPS Language Module</description>
     <compiler name="default" spec="nanomips.cspec" id="default"/>
   </language> 
 
