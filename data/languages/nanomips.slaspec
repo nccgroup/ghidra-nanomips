@@ -1,4 +1,4 @@
-# sleigh specification file for nanomips Processor
+# sleigh specification file for nanoMIPS Processor
 #   >> see docs/languages/sleigh.htm or sleigh.pdf for Sleigh syntax
 @define REGSIZE "4"
 @define C0REGSIZE "8"
@@ -8,7 +8,6 @@ define alignment=2;
 
 define space ram     type=ram_space      size=4  default;
 define space register type=register_space size=4;
-#define space cp0regs type=ram_space size=4;
 
 define register offset=0x00 size=$(REGSIZE) [
 	zero
@@ -91,5 +90,4 @@ define context contextreg
 	count3_mapped = (16, 20)
 	;
 
-# Include contents of skel.sinc file
 @include "nanomips.sinc"
