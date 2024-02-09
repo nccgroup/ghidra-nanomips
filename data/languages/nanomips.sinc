@@ -2319,9 +2319,11 @@ reglist_lwm_pre: reglist_lwm is (rt_raw; count3) & reglist_lwm [count3_mapped = 
 
 # NOT
 ## NOT[16] rt, rs
-:NOT rt3, rs3 is hi_pool10_6 = 0b001000 & rt3 & rs3 {
-	rt3 = ~(rs3);
-}
+:NOT rt3, rs3 is
+	hi_pool10_6 = 0b010100 & rt3 & rs3 & hi_pool2_2 = 0b00 & hi_pool1_1 = 0b0 & hi_pool0_1 = 0b0
+	{
+		rt3 = ~(rs3);
+	}
 
 
 # OR rd, rs, rt
