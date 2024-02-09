@@ -77,6 +77,8 @@ define bitrange
 	C0.Status.BEV = C0.Status[22, 1]
 
 	C0.VPControl.DIS = C0.VPControl[0, 1]
+
+	C0.VPEControl.TE = C0.VPEControl[15, 1]
 	;
 
 # Define context bits (if defined, size must be multiple of 4-bytes)
@@ -91,3 +93,4 @@ define context contextreg
 	;
 
 @include "nanomips.sinc"
+@include "nanomips_mt.sinc"

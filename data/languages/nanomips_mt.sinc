@@ -1,0 +1,10 @@
+# See "MIPS Architecture Extension: nanoMIPS32 Multithreading Technical Reference Manual — Revision 1.17"
+
+# DMT
+:DMT rt is
+	hi_pool10_6 = 0b001000 & rt & hi_pool0_5 = 0b00001;
+	lo_pool14_2 = 0b00 & lo_pool11_3 = 0b001 & sc = 0b0 & lo_pool3_7 = 0b1010110 & lo_pool0_3 = 0b000
+	{
+		rt = C0.VPEControl:$(REGSIZE);
+		C0.VPEControl.TE = 0;
+	}
