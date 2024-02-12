@@ -1,10 +1,71 @@
 # See "MIPS Architecture Extension: nanoMIPS32 Multithreading Technical Reference Manual — Revision 1.17"
 
-# DMT
-:DMT rt is
-	hi_pool10_6 = 0b001000 & rt & hi_pool0_5 = 0b00001;
+# DMT rt
+:DMT rt_implicit_zero is
+	hi_pool10_6 = 0b001000 & rt_implicit_zero & rt & hi_pool0_5 = 0b00001;
 	lo_pool14_2 = 0b00 & lo_pool11_3 = 0b001 & sc = 0b0 & lo_pool3_7 = 0b1010110 & lo_pool0_3 = 0b000
 	{
 		rt = C0.VPEControl:$(REGSIZE);
 		C0.VPEControl.TE = 0;
 	}
+
+
+# DVPE rt
+:DVPE rt_implicit_zero is
+	hi_pool10_6 = 0b001000 & rt_implicit_zero & rt & hi_pool0_5 = 0b00000;
+	lo_pool14_2 = 0b00 & lo_pool11_3 = 0b001 & sc = 0b0 & lo_pool3_7 = 0b1010110 & lo_pool0_3 = 0b000
+	{
+		rt = C0.MVPControl:$(REGSIZE);
+		C0.MVPControl.EVP = 0;
+	}
+
+
+# EMT rt
+:EMT rt_implicit_zero is
+	hi_pool10_6 = 0b001000 & rt_implicit_zero & rt & hi_pool0_5 = 0b00001;
+	lo_pool14_2 = 0b00 & lo_pool11_3 = 0b001 & sc = 0b1 & lo_pool3_7 = 0b1010110 & lo_pool0_3 = 0b000
+	{
+		rt = C0.VPEControl:$(REGSIZE);
+		C0.VPEControl.TE = 1;
+	}
+
+
+# EVPE rt
+:EVPE rt_implicit_zero is
+	hi_pool10_6 = 0b001000 & rt_implicit_zero & rt & hi_pool0_5 = 0b00000;
+	lo_pool14_2 = 0b00 & lo_pool11_3 = 0b001 & sc = 0b1 & lo_pool3_7 = 0b1010110 & lo_pool0_3 = 0b000
+	{
+		rt = C0.MVPControl:$(REGSIZE);
+		C0.MVPControl.EVP = 1;
+	}
+
+
+# FORK rd, rs, rt
+:FORK rd, rs, rt is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	rd & lo_pool3_7 = 0b1000101 & lo_pool0_3 = 0b000
+	unimpl  # TODO: implement thread context (TC) space
+
+
+# MFTR rt, rs, u, sel, h
+:MFTR rt, rs, u, sel, h is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	sel & u & lo_pool4_6 = 0b100011 & h & lo_pool0_3 = 0b000
+	unimpl  # TODO: implement thread context (TC) space
+
+
+# MTTR rt, rs, u, sel, h
+:MTTR rt, rs, u, sel, h is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	sel & u & lo_pool4_6 = 0b100111 & h & lo_pool0_3 = 0b000
+	unimpl  # TODO: implement thread context (TC) space
+
+
+# YIELD rt, rs
+yieldregs: rs is rt_raw = 0 & rs {}
+yieldregs: rt, rs is rt & rs {}
+
+:YIELD yieldregs is
+	hi_pool10_6 = 0b001000 & rt & rs & yieldregs;
+	lo_pool3_7 = 0b1001101 & lo_pool0_3 = 0b000
+	unimpl  # TODO: implement thread context (TC) space

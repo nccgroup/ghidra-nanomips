@@ -67,6 +67,8 @@ define bitrange
 
 	C0.LLAddr.LLB = C0.LLAddr[0, 1]
 
+	C0.MVPControl.EVP = C0.MVPControl[0,1]
+
 	C0.SRSCtl.CSS = C0.SRSCtl[0, 4]
 	C0.SRSCtl.PSS = C0.SRSCtl[6, 4]
 	C0.SRSCtl.HSS = C0.SRSCtl[26, 4]

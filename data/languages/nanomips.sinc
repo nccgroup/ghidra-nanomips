@@ -139,6 +139,7 @@ define token instrlo(16)
 	lo_pool6_1 = (6, 6)
 	lo_pool5_4 = (5, 8)
 	lo_pool5_1 = (5, 5)
+	lo_pool4_6 = (4, 9)
 	lo_pool3_9 = (3, 11)
 	lo_pool3_7 = (3, 9)
 	lo_pool3_5 = (3, 7)
@@ -172,6 +173,8 @@ define token instrlo(16)
 	ru_raw = (3, 7)
 
 	sel = (11, 15) # for MFC0
+	u = (10, 10)
+	h = (3, 3)
 
 	count3 = (12, 14)
 	count3_raw = (12, 14)
@@ -425,6 +428,10 @@ rtz4: rtz4_msb1 is rtz4_msb = 0b1 & rtz4_msb1 {export rtz4_msb1;}
 rsz4: rsz4_msb0 is rsz4_msb = 0b0 & rsz4_msb0 & rsz4_msb0_raw = 3 { local tmp:4 = 0; export tmp; }
 rsz4: rsz4_msb0 is rsz4_msb = 0b0 & rsz4_msb0 {export rsz4_msb0;}
 rsz4: rsz4_msb1 is rsz4_msb = 0b1 & rsz4_msb1 {export rsz4_msb1;}
+
+# for assembly where no operand implies the $zero register
+rt_implicit_zero: is rt_raw = 0 {}
+rt_implicit_zero: rt is rt {}
 
 c0_reg: c0s,sel is
 	c0s; sel & c0_reg_id
