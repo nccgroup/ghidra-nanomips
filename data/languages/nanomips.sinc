@@ -1322,18 +1322,8 @@ addiupc48_offs: display_offs is
 
 
 # DI rt
-## rt=0 implied
-:DI is
-	hi_pool10_6 = 0b001000 & rt_raw = 0;
-	lo_pool14_2 = 0b01 & lo_pool9_5 = 0b00011 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
-	{
-		# NOTE: write to $zero is effectively nop
-		#zero = C0.Status:$(REGSIZE);
-		C0.Status.IE = 0;
-	}
-
-:DI rt is
-	hi_pool10_6 = 0b001000 & rt;
+:DI rt_implicit_zero is
+	hi_pool10_6 = 0b001000 & rt_implicit_zero & rt;
 	lo_pool14_2 = 0b01 & lo_pool9_5 = 0b00011 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
 	{
 		rt = C0.Status:$(REGSIZE);
@@ -1362,20 +1352,8 @@ addiupc48_offs: display_offs is
 	}
 
 # DVP rt
-# rt=0 implied
-:DVP is
-	hi_pool10_6 = 0b001000 & rt_raw = 0;
-	lo_pool11_5 = 0b00000 & lo_pool10_1 = 0b0 & lo_pool3_7 = 0b1110010 & lo_pool0_3 = 0b000
-	{
-		# TODO: NOP if VP not implemented (C0.Config5.VP == 0)
-		# NOTE: write to $zero effectively nop
-		#zero = C0.VPControl:$(REGSIZE);
-		C0.VPControl.DIS = 1;
-		disable_virtual_processors();
-	}
-
-:DVP rt is
-	hi_pool10_6 = 0b001000 & rt;
+:DVP rt_implicit_zero is
+	hi_pool10_6 = 0b001000 & rt_implicit_zero & rt;
 	lo_pool11_5 = 0b00000 & lo_pool10_1 = 0b0 & lo_pool3_7 = 0b1110010 & lo_pool0_3 = 0b000
 	{
 		# TODO: NOP if VP not implemented (C0.Config5.VP == 0)
@@ -1395,18 +1373,8 @@ addiupc48_offs: display_offs is
 
 
 # EI rt
-## rt = 0 implied
-:EI is
-	hi_pool10_6 = 0b001000 & rt_raw = 0;
-	lo_pool14_2 = 0b01 & lo_pool9_5 = 0b01011 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
-	{
-		# NOTE: write to $zero is effectively a nop
-		#zero = C0.Status:$(REGSIZE);
-		C0.Status.IE = 1;
-	}
-
-:EI rt is
-	hi_pool10_6 = 0b001000 & rt;
+:EI rt_implicit_zero is
+	hi_pool10_6 = 0b001000 & rt_implicit_zero & rt;
 	lo_pool14_2 = 0b01 & lo_pool9_5 = 0b01011 & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
 	{
 		rt = C0.Status:$(REGSIZE);
@@ -1476,20 +1444,8 @@ addiupc48_offs: display_offs is
 
 
 # EVP rt
-## rt = 0 implied
-:EVP is
-	hi_pool10_6 = 0b001000 & rt_raw = 0;
-	lo_pool11_5 = 0b00000  & lo_pool10_1 = 0b1 & lo_pool3_7 = 0b1110010 & lo_pool0_3 = 0b000
-	{
-		# TODO: NOP if VP not implemented (C0.Config5.VP == 0)
-		# NOTE: write to zero is nop
-		#zero = C0.VPControl:$(REGSIZE);
-		C0.VPControl.DIS = 0;
-		enable_virtual_processors();
-	}
-
-:EVP rt is
-	hi_pool10_6 = 0b001000 & rt;
+:EVP rt_implicit_zero is
+	hi_pool10_6 = 0b001000 & rt_implicit_zero & rt;
 	lo_pool11_5 = 0b00000  & lo_pool10_1 = 0b1 & lo_pool3_7 = 0b1110010 & lo_pool0_3 = 0b000
 	{
 		# TODO: NOP if VP not implemented (C0.Config5.VP == 0)
