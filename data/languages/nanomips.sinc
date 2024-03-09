@@ -984,7 +984,7 @@ addiupc48_offs: display_offs is
 	lo_pool12_4 = 0b1000
 	{
 		rt = inst_next;
-		call rs_scale2;
+		call [rs_scale2];
 	}
 
 
@@ -1204,7 +1204,7 @@ addiupc48_offs: display_offs is
 	hi_pool10_6 = 0b010010 & rt_raw = 0 & rs_scale2;
 	lo_pool12_4 = 0b1000
 	{
-		goto rs_scale2;
+		goto [rs_scale2];
 	}
 
 
