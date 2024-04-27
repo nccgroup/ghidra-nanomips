@@ -854,7 +854,7 @@ addiupc32_offs: display_offs is
 		display_offs = ((lo_signbit0_1 << 21) | (hi_simm0_5 << 16) | (lo_simm1_15 << 1)) + 4;
 	]
 	{
-		local tmp:4 = display_offs - 4;
+		local tmp:4 = display_offs;
 		export tmp;
 	}
 
@@ -863,7 +863,7 @@ addiupc32_offs: display_offs is
 	& addiupc32_offs
 	{
 		# TODO effective_address() - exception on overflowing 32 bits
-		rt = inst_next + addiupc32_offs;
+		rt = inst_start + addiupc32_offs;
 	}
 
 ## ADDIUPC[48], not available in NMS, TODO not available in P64 mode
@@ -873,7 +873,7 @@ addiupc48_offs: display_offs is
 		display_offs = ((hi_simm16 << 16) | lo_imm16) + 6;
 	]
 	{
-		local tmp:4 = display_offs - 6;
+		local tmp:4 = display_offs;
 		export tmp;
 	}
 
@@ -882,7 +882,7 @@ addiupc48_offs: display_offs is
 	addiupc48_offs
 	{
 		# TODO effective_address()
-		rt = inst_next + addiupc48_offs;
+		rt = inst_start + addiupc48_offs;
 	}
 
 
