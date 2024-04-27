@@ -101,13 +101,14 @@ define token instrhi(16)
 	hi_uimm0_3 = (0, 2)
 	hi_uimm0_1 = (0, 0)
 
-	hi_simm4_1 = (4, 4)
 	hi_simm1_6 = (1, 6)
 	hi_simm1_9 = (1, 9)
 	hi_simm0_9 = (0, 8)
 	hi_simm0_5 = (0, 4)
 	hi_simm0_3 = (0, 2)
 	hi_simm0_1 = (0, 0)
+
+	hi_signbit4_1 = (4, 4) signed
 	hi_signbit0_1 = (0, 0) signed
 
 	u_imm5 = (0, 4)
@@ -828,9 +829,9 @@ lo_uimm12_sl3: uimm12 is
 ## ADDIU[RS5]
 ### ADDIU[RS5] with rt=0 is used to provide a 16 bit NOP instruction (NOP[16]).
 :ADDIU rt, rs_from_rt, s4 is
-	hi_pool10_6 = 0b100100 & rt & rs_from_rt & hi_simm4_1 & hi_pool3_1 = 0b1 & hi_uimm0_3
+	hi_pool10_6 = 0b100100 & rt & rs_from_rt & hi_signbit4_1 & hi_pool3_1 = 0b1 & hi_uimm0_3
 	[
-		s4 = (hi_simm4_1 << 3) | hi_uimm0_3;
+		s4 = (hi_signbit4_1 << 3) | hi_uimm0_3;
 	]
 	{
 		rt = rs_from_rt + s4;
