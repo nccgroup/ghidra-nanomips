@@ -892,7 +892,6 @@ addiupc48_offs: display_offs is
 	hi_pool10_6 = 0b001000 & rt & rs;
 	rd & lo_pool3_7 = 0b0101010 & lo_pool0_3 = 0b000
 	{
-		# TODO sign extend sum?
 		rd = rs + rt;
 	}
 
@@ -900,7 +899,6 @@ addiupc48_offs: display_offs is
 :ADDU rd3, rs3, rt3 is
 	hi_pool10_6 = 0b101100 & rt3 & rs3 & rd3 & hi_pool0_1 = 0b0
 	{
-		# TODO sign extend sum?
 		rd3 = rs3 + rt3;
 	}
 
@@ -908,7 +906,6 @@ addiupc48_offs: display_offs is
 :ADDU rd4_from_rt4, rt4, rs4 is
 	hi_pool10_6 = 0b001111 & hi_pool8_1 = 0b0 & rt4 & rd4_from_rt4 & hi_pool3_1 = 0b0 & rs4
 	{
-		# TODO sign extend sum?
 		rd4_from_rt4 = rt4 + rs4;
 	}
 
