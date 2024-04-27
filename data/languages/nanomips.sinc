@@ -910,6 +910,18 @@ addiupc48_offs: display_offs is
 	}
 
 
+# ALUIPC rt, %pcrel_hi(address)
+:ALUIPC rt, "%pcrel_hi"(addr) is
+	hi_pool10_6 = 0b111000 & rt & hi_simm0_5;
+	lo_simm12_4 & lo_simm2_10 & lo_simm1_1 = 0b1 & lo_signbit0_1
+	[
+		addr = (((lo_signbit0_1 << 31) | (lo_simm2_10 << 21) | (hi_simm0_5 << 16) | (lo_simm12_4 << 12)) + inst_next) & ~0xfff;
+	]
+	{
+		rt = addr;
+	}
+
+
 # AND
 ## AND rd, rs, rt
 :AND rd, rs, rt is
@@ -941,18 +953,6 @@ addiupc48_offs: display_offs is
 	hi_pool10_6 = 0b111100 & rt3 & rs3 & eu_imm4
 	{
 		rt3 = rs3 & eu_imm4;
-	}
-
-
-# ALUIPC rt, %pcrel_hi(address)
-:ALUIPC rt, "%pcrel_hi"(addr) is
-	hi_pool10_6 = 0b111000 & rt & hi_simm0_5;
-	lo_simm12_4 & lo_simm2_10 & lo_simm1_1 = 0b1 & lo_signbit0_1
-	[
-		addr = (((lo_signbit0_1 << 31) | (lo_simm2_10 << 21) | (hi_simm0_5 << 16) | (lo_simm12_4 << 12)) + inst_next) & ~0xfff;
-	]
-	{
-		rt = addr;
 	}
 
 
