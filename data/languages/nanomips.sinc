@@ -204,7 +204,7 @@ define token instrlo(16)
 	;
 	
 define token data16(16)
-	hi_imm16 = (0, 15) signed
+	hi_simm16 = (0, 15) signed
 	lo_imm16 = (0, 15)
 	
 	# TODO move/rename any immediate fields that can be mixed with opcode bits
@@ -471,9 +471,9 @@ buimm7: uimm7 is
 	}
 
 pc_rel_saddr32: addr is
-	lo_imm16; hi_imm16
+	lo_imm16; hi_simm16
 	[
-		addr = inst_next + ((hi_imm16 << 16) | lo_imm16);
+		addr = inst_next + ((hi_simm16 << 16) | lo_imm16);
 	]
 	{
 		# TODO effective_address
@@ -720,9 +720,9 @@ hilo_simm32: simm32 is
 	}
 
 full_simm32: simm32 is
-	lo_imm16; hi_imm16
+	lo_imm16; hi_simm16
 	[
-		simm32 = (hi_imm16 << 16) | lo_imm16;
+		simm32 = (hi_simm16 << 16) | lo_imm16;
 	]
 	{
 		local tmp:4 = simm32;
@@ -867,9 +867,9 @@ addiupc32_offs: display_offs is
 
 ## ADDIUPC[48], not available in NMS, TODO not available in P64 mode
 addiupc48_offs: display_offs is
-	lo_imm16; hi_imm16
+	lo_imm16; hi_simm16
 	[
-		display_offs = ((hi_imm16 << 16) | lo_imm16) + 6;
+		display_offs = ((hi_simm16 << 16) | lo_imm16) + 6;
 	]
 	{
 		local tmp:4 = display_offs - 6;
