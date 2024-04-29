@@ -2262,6 +2262,7 @@ reglist_lwm_pre: reglist_lwm is (rt_raw; count3) & reglist_lwm [count3_mapped = 
 		c0_reg = (c0_reg & ~0xFFFFFFFF) | zext(rt:4);
 	}
 
+
 # MTHC0 rt, c0s, sel
 :MTHC0 rt, c0_reg is
 	(hi_pool10_6 = 0b001000 & rt;
@@ -2272,17 +2273,24 @@ reglist_lwm_pre: reglist_lwm is (rt_raw; count3) & reglist_lwm [count3_mapped = 
 	}
 
 
-# MUH
-## MUH rd, rs, rt
-:MUH rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0001011 & lo_pool0_3 = 0b000 {
-	rd = rs * rt;
-}
+# MUH rd, rs, rt
+:MUH rd, rs, rt is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	rd & lo_pool3_7 = 0b0001011 & lo_pool0_3 = 0b000
+	{
+		local result:8 = sext(rs) * sext(rt);
+		rd = result(4);
+	}
 
-# MUHU
-## MUHU  rd, rs, rt
-:MUHU rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0011011 & lo_pool0_3 = 0b000 {
-	rd = rs * rt;
-}
+
+# MUHU rd, rs, rt
+:MUHU rd, rs, rt is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	rd & lo_pool3_7 = 0b0011011 & lo_pool0_3 = 0b000
+	{
+		local result:8 = zext(rs) * zext(rt);
+		rd = result(4);
+	}
 
 # MUL
 ## MUL rd, rs, rt
