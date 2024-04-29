@@ -1338,10 +1338,9 @@ addiupc48_offs: display_offs is
 	hi_pool10_6 = 0b001000 & rt & rs;
 	rd & lo_pool3_7 = 0b0100011 & lo_pool0_3 = 0b000
 	{
-		# TODO: Verify correct to sign extend for 32 bit value
-		# TODO: implement signedness
-		rd = sext(rs / rt);
+		rd = sext(rs s/ rt);
 	}
+
 
 # DIVU
 ## DIVU rd, rs, rt
@@ -1349,8 +1348,9 @@ addiupc48_offs: display_offs is
 	hi_pool10_6 = 0b001000 & rt & rs;
 	rd & lo_pool3_7 = 0b0110011 & lo_pool0_3 = 0b000
 	{
-		rd = sext(rs / rt);
+		rd = rs / rt;
 	}
+
 
 # DVP rt
 :DVP rt_implicit_zero is
