@@ -1687,12 +1687,11 @@ addiupc48_offs: display_offs is
 	}
 
 ## LH[16]
-:LH rt3, hi_rs3_uoffset2 is
+:LH rt3, hi_rs3_uoffset3 is
 	(hi_pool10_6 = 0b011111 & rt3 & hi_pool3_1 = 0b0 & hi_pool0_1 = 0b0)
-	& hi_rs3_uoffset2
+	& hi_rs3_uoffset3
 	{
-		# TODO: make the number and also reference original example maybe
-		rt3 = sext(*:2 hi_rs3_uoffset2);
+		rt3 = sext(*:2 hi_rs3_uoffset3);
 	}
 
 ## LH[GP]
@@ -1736,11 +1735,11 @@ addiupc48_offs: display_offs is
 	}
 
 ## LHU[16]
-:LHU rt3, hi_rs3_uoffset2 is
+:LHU rt3, hi_rs3_uoffset3 is
 	(hi_pool10_6 = 0b011111 & rt3 & hi_pool3_1 = 0b1 & hi_pool0_1 = 0b0)
-	& hi_rs3_uoffset2
+	& hi_rs3_uoffset3
 	{
-		rt3 = zext(*:2 hi_rs3_uoffset2);
+		rt3 = zext(*:2 hi_rs3_uoffset3);
 	}
 
 ## LHU[GP]
