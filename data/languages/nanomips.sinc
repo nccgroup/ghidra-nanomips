@@ -2334,11 +2334,15 @@ reglist_lwm_pre: reglist_lwm is (rt_raw; count3) & reglist_lwm [count3_mapped = 
 	{}
 
 
-# NOR
-## NOR rd, rs, rt
-:NOR rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b1011010 & lo_pool0_3 = 0b000 {
-	rt = ~(rs | rt);
-}
+# NOR rd, rs, rt
+:NOR rd, rs, rt is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	rd & lo_pool3_7 = 0b1011010 & lo_pool0_3 = 0b000
+	{
+		# NOTE: "Purpose" in docs appears to have a typo stating rt is the destination
+		rd = ~(rs | rt);
+	}
+
 
 # NOT
 ## NOT[16] rt, rs
