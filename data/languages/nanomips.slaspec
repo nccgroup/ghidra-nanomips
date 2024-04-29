@@ -63,6 +63,8 @@ define register offset=0x200 size=$(C0REGSIZE) [
 ## For CP0 bit fields see "MIPS Architecture Base: 32-bit Privileged Resource Architecture Technical Reference Manual" (Revision 06.09)
 ## Debug bit fields from "MIPS EJTAG Specification" (Revision 6.10)
 define bitrange
+	C0.Config.BE = C0.Config[15, 1]
+
 	C0.Debug.DM = C0.Debug[30, 1]
 
 	C0.LLAddr.LLB = C0.LLAddr[0, 1]

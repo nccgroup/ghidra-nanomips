@@ -1863,9 +1863,23 @@ addiupc48_offs: display_offs is
 	lo_pool11_4 = 0b1010 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b01 & ru & lo_pool0_2 = 0b01
 	{
 		C0.LLAddr.LLB = 1;
-		# TODO C0.Config.BE determines word order
-		ru = sext(*[ram]:4 rs);
-		rt = sext(*[ram]:4 (rs + 4));
+
+		# C0.Config.BE determines word order
+		local word0:4;
+		local word1:4;
+
+		if (C0.Config.BE) goto <bigendian>;
+		word0 = sext(*[ram]:4 (rs + 4));
+		word1 = sext(*[ram]:4 rs);
+		goto <assign>;
+
+		<bigendian>
+		word0 = sext(*[ram]:4 rs);
+		word1 = sext(*[ram]:4 (rs + 4));
+
+		<assign>
+		rt = word0;
+		ru = word1;
 	}
 
 
@@ -1874,11 +1888,25 @@ addiupc48_offs: display_offs is
 	hi_pool10_6 = 0b101001 & rt & rs;
 	lo_pool11_4 = 0b1010 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10 & ru & lo_pool0_2 = 0b01
 	{
-		C0.LLAddr.LLB = 1;
 		# TODO EVA addressing
-		# TODO C0.Config.BE determines word order
-		ru = sext(*[ram]:4 rs);
-		rt = sext(*[ram]:4 (rs + 4));
+		C0.LLAddr.LLB = 1;
+
+		# C0.Config.BE determines word order
+		local word0:4;
+		local word1:4;
+
+		if (C0.Config.BE) goto <bigendian>;
+		word0 = sext(*[ram]:4 (rs + 4));
+		word1 = sext(*[ram]:4 rs);
+		goto <assign>;
+
+		<bigendian>
+		word0 = sext(*[ram]:4 rs);
+		word1 = sext(*[ram]:4 (rs + 4));
+
+		<assign>
+		rt = word0;
+		ru = word1;
 	}
 
 
