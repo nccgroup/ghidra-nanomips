@@ -1963,7 +1963,9 @@ addiupc48_offs: display_offs is
 
 ## LW[GP]
 :LW rt, hilo_gp_uoffset21 is
-	(hi_pool10_6 = 0b010000 & rt) ... & hilo_gp_uoffset21
+	(hi_pool10_6 = 0b010000 & rt;
+	lo_pool0_2 = 0b10)
+	& hilo_gp_uoffset21
 	{
 		rt = *:4 hilo_gp_uoffset21;
 	}
