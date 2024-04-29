@@ -1390,6 +1390,8 @@ addiupc48_offs: display_offs is
 	{
 		local effective_epc:4;
 
+		# nc = False
+
 		if (C0.Status.ERL == 1) goto <eq1>;
 			effective_epc = C0.EPC:$(REGSIZE);
 			C0.Status.EXL = 0;
@@ -1406,7 +1408,9 @@ addiupc48_offs: display_offs is
 
 		<skip1>
 
+		# if not nc
 		C0.LLAddr.LLB = 0;
+
 		clear_execution_hazards();
 		clear_instruction_hazards();
 
@@ -1420,6 +1424,10 @@ addiupc48_offs: display_offs is
 	lo_pool14_2 = 0b11 & lo_pool9_5 = 0b11001  & lo_pool6_3 = 0b101 & lo_pool3_3 = 0b111 & lo_pool0_3 = 0b111
 	{
 		local effective_epc:4;
+
+		# nc = True
+
+		# TODO: exception if nc and C0.Config5.LLB == 0
 
 		if (C0.Status.ERL == 1) goto <eq1>;
 			effective_epc = C0.EPC:$(REGSIZE);
