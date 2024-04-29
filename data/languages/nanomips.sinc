@@ -1473,7 +1473,7 @@ addiupc48_offs: display_offs is
 	]
 	{
 		local pos = lo_uimm0_5;
-		local result:4 = zext(rs >> pos);
+		local result:4 = zext((rs >> pos) & ((1 << sz) - 1));
 		rt = sext(result);
 	}
 
