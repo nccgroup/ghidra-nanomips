@@ -2310,11 +2310,13 @@ reglist_lwm_pre: reglist_lwm is (rt_raw; count3) & reglist_lwm [count3_mapped = 
 	}
 
 
-# MULU
-## MUL rd, rs, rt
-:MULU rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0010011 & lo_pool0_3 = 0b000 {
-	rd = rs * rt;
-}
+# MULU rd, rs, rt
+:MULU rd, rs, rt is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	rd & lo_pool3_7 = 0b0010011 & lo_pool0_3 = 0b000
+	{
+		rd = rs * rt;
+	}
 
 # NOP
 ## NOP[32]
