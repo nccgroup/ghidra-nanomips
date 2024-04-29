@@ -2383,7 +2383,9 @@ reglist_lwm_pre: reglist_lwm is (rt_raw; count3) & reglist_lwm [count3_mapped = 
 	hi_pool10_6 = 0b100000 & hi_pool5_5 = 0b00000;
 	lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0000 & lo_pool0_5 = 0b00101
 	{
+		if (C0.LLAddr.LLB == 0) goto <skip>;
 		pause();
+		<skip>
 	}
 
 
