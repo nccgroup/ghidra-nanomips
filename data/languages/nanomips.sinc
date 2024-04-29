@@ -1315,7 +1315,7 @@ addiupc48_offs: display_offs is
 		# CPU.debug_sst_progress_allowed = True
 
 		clear_execution_hazards();
-		clear_execution_hazards();
+		clear_instruction_hazards();
 
 		# NOTE: pseudocode sign-extends register? `sign_extend(Root.C0.DEPC)`
 		goto [C0.DEPC];
@@ -1408,7 +1408,7 @@ addiupc48_offs: display_offs is
 
 		C0.LLAddr.LLB = 0;
 		clear_execution_hazards();
-		clear_execution_hazards();
+		clear_instruction_hazards();
 
 		goto [effective_epc];
 	}
@@ -1438,7 +1438,7 @@ addiupc48_offs: display_offs is
 		<skip1>
 
 		clear_execution_hazards();
-		clear_execution_hazards();
+		clear_instruction_hazards();
 
 		goto [effective_epc];
 	}
