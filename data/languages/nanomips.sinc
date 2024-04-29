@@ -2177,18 +2177,22 @@ reglist_lwm_pre: reglist_lwm is (rt_raw; count3) & reglist_lwm [count3_mapped = 
 	}
 
 
-# MOD
-## MOD rd, rs, rt
-:MOD rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0101011 & lo_pool0_3 = 0b000 {
-	rd = rs % rt;
-}
+# MOD rd, rs, rt
+:MOD rd, rs, rt is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	rd & lo_pool3_7 = 0b0101011 & lo_pool0_3 = 0b000
+	{
+		rd = rs s% rt;
+	}
 
-# MODU
-## MOD rd, rs, rt
-:MODU rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0111011 & lo_pool0_3 = 0b000 {
-	# TODO :zero extend
-	rd = rs % rt;
-}
+
+# MODU rd, rs, rt
+:MODU rd, rs, rt is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	rd & lo_pool3_7 = 0b0111011 & lo_pool0_3 = 0b000
+	{
+		rd = rs % rt;
+	}
 
 
 # MOVE rt, rs
