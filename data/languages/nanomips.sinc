@@ -2292,20 +2292,23 @@ reglist_lwm_pre: reglist_lwm is (rt_raw; count3) & reglist_lwm [count3_mapped = 
 		rd = result(4);
 	}
 
-# MUL
-## MUL rd, rs, rt
-:MUL rd, rs, rt is hi_pool10_6 = 0b001000 & rt & rs; rd & lo_pool3_7 = 0b0000011 & lo_pool0_3 = 0b000 {
-	rd = rs * rt;
-}
 
-# MUL
-## MUL[4X4] rt4, rs4, rt4
+# MUL dst, src1, src2
+## MUL[32]
+:MUL rd, rs, rt is
+	hi_pool10_6 = 0b001000 & rt & rs;
+	rd & lo_pool3_7 = 0b0000011 & lo_pool0_3 = 0b000
+	{
+		rd = rs * rt;
+	}
+
+## MUL[4X4]
 :MUL rd4_from_rt4, rt4, rs4 is
 	hi_pool10_6 = 0b001111 & hi_pool8_1 = 0b0 & rt4 & rd4_from_rt4 & hi_pool3_1 = 0b1 & rs4
 	{
-		# TODO sign extend rt4 and rs4??
-		rd4_from_rt4 = *:4 rt4 * rs4;
+		rd4_from_rt4 = rt4 * rs4;
 	}
+
 
 # MULU
 ## MUL rd, rs, rt
