@@ -3028,9 +3028,22 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 	hi_pool10_6 = 0b101001 & rt & rs;
 	lo_pool11_4 = 0b1011 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b01 & ru & lo_pool0_2 = 0b01
 	{
-		# TODO C0.Config.BE determines word order
-		*:4 rs = ru;
-		*:4 (rs+4) = rt;
+		# C0.Config.BE determines word order
+		local word0:4;
+		local word1:4;
+
+		if (C0.Config.BE) goto <bigendian>;
+		word0 = ru;
+		word1 = rt;
+		goto <assign>;
+
+		<bigendian>
+		word0 = rt;
+		word1 = ru;
+
+		<assign>
+		*:4 rs = word0;
+		*:4 (rs+4) = word1;
 
 		# sets rt to 0 or 1 to indicate success
 		# TODO: multiequal?
@@ -3046,9 +3059,22 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 	lo_pool11_4 = 0b1011 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10 & ru & lo_pool0_2 = 0b01
 	{
 		# TODO EVA addressing
-		# TODO C0.Config.BE determines word order
-		*:4 rs = ru;
-		*:4 (rs+4) = rt;
+		# C0.Config.BE determines word order
+		local word0:4;
+		local word1:4;
+
+		if (C0.Config.BE) goto <bigendian>;
+		word0 = ru;
+		word1 = rt;
+		goto <assign>;
+
+		<bigendian>
+		word0 = rt;
+		word1 = ru;
+
+		<assign>
+		*:4 rs = word0;
+		*:4 (rs+4) = word1;
 
 		# sets rt to 0 or 1 to indicate success
 		# TODO: multiequal?
