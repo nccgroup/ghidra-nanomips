@@ -24,6 +24,7 @@ define token instrhi(16)
 	hint = (5, 9)  # hi_pool5_5
 	hint2 = (5, 9)  # hi_pool5_5
 	hs = (0, 4)
+	hs2 = (0, 4)
 	count = (0, 3)
 	shift3 = (0, 2)
 	inv_type = (5, 6)
@@ -2421,6 +2422,15 @@ reglist_lwm_pre: reglist_lwm is (rt_raw; count3) & reglist_lwm [count3_mapped = 
 
 
 # RDHWR rt, hs, sel
+## hs = 0, sel = 0
+:RDHWR rt, hs is
+	hi_pool10_6 = 0b001000 & rt & hs & hs2 = 0;
+	sel = 0 & lo_pool3_7 = 0b0111000 & lo_pool0_3 = 0b000
+	{
+		rt = zext(C0.EBase.CPUNum);
+	}
+
+## unhandled cases
 :RDHWR rt, hs, sel is
 	hi_pool10_6 = 0b001000 & rt & hs;
 	sel & lo_pool3_7 = 0b0111000 & lo_pool0_3 = 0b000

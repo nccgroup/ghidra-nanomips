@@ -67,6 +67,8 @@ define bitrange
 
 	C0.Debug.DM = C0.Debug[30, 1]
 
+	C0.EBase.CPUNum = C0.EBase[0, 10]
+
 	C0.LLAddr.LLB = C0.LLAddr[0, 1]
 
 	C0.MVPControl.EVP = C0.MVPControl[0,1]
