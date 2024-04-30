@@ -3128,35 +3128,6 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 	}
 
 
-# SHE rt, offset(rs)
-:SHE rt, lo_rs_soffset9 is
-	(hi_pool10_6 = 0b101001 & rt;
-	lo_pool11_4 = 0b0101 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10)
-	& lo_rs_soffset9
-	{
-		# TODO EVA mode
-		*:2 lo_rs_soffset9 = rt:2;
-	}
-
-
-# SHX rd, rs(rt)
-:SHX rd, rt_offset_rs is
-	hi_pool10_6 = 0b001000 & rt_offset_rs;
-	rd & lo_pool7_4 = 0b0101 & lo_pool6_1 = 0b0 & lo_pool3_3 = 0b000 & lo_pool0_3 = 0b111
-	{
-		*:2 rt_offset_rs = rd:2;
-	}
-
-
-# SHXS rd, rs(rt)
-:SHXS rd, rt_offset_2rs is
-	hi_pool10_6 = 0b001000 & rt_offset_2rs;
-	rd & lo_pool7_4 = 0b0101 & lo_pool6_1 = 0b1 & lo_pool3_3 = 0b000 & lo_pool0_3 = 0b111
-	{
-		*:2 rt_offset_2rs = rd:2;
-	}
-
-
 # SH rt, offset(rs)
 ## SH[U12]
 :SH rt, lo_rs_uoffset12 is
@@ -3190,6 +3161,35 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 	& lo_rs_soffset9
 	{
 		*:2 lo_rs_soffset9 = rt:2;
+	}
+
+
+# SHE rt, offset(rs)
+:SHE rt, lo_rs_soffset9 is
+	(hi_pool10_6 = 0b101001 & rt;
+	lo_pool11_4 = 0b0101 & lo_pool10_1 = 0b0 & lo_pool8_2 = 0b10)
+	& lo_rs_soffset9
+	{
+		# TODO EVA mode
+		*:2 lo_rs_soffset9 = rt:2;
+	}
+
+
+# SHX rd, rs(rt)
+:SHX rd, rt_offset_rs is
+	hi_pool10_6 = 0b001000 & rt_offset_rs;
+	rd & lo_pool7_4 = 0b0101 & lo_pool6_1 = 0b0 & lo_pool3_3 = 0b000 & lo_pool0_3 = 0b111
+	{
+		*:2 rt_offset_rs = rd:2;
+	}
+
+
+# SHXS rd, rs(rt)
+:SHXS rd, rt_offset_2rs is
+	hi_pool10_6 = 0b001000 & rt_offset_2rs;
+	rd & lo_pool7_4 = 0b0101 & lo_pool6_1 = 0b1 & lo_pool3_3 = 0b000 & lo_pool0_3 = 0b111
+	{
+		*:2 rt_offset_2rs = rd:2;
 	}
 
 
