@@ -2997,6 +2997,11 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 	& hilo_rs_soffset9_sl2
 	{
 		*:4 hilo_rs_soffset9_sl2 = zext(rt);
+
+		# sets rt to 0 or 1 to indicate success
+		# TODO: multiequal?
+		rt = 1;
+
 		C0.LLAddr.LLB = 0;
 	}
 
@@ -3009,6 +3014,11 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 	{
 		# TODO EVA addressing
 		*:4 hilo_rs_soffset9_sl2 = zext(rt);
+
+		# sets rt to 0 or 1 to indicate success
+		# TODO: multiequal?
+		rt = 1;
+
 		C0.LLAddr.LLB = 0;
 	}
 
@@ -3021,6 +3031,11 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 		# TODO C0.Config.BE determines word order
 		*:4 rs = ru;
 		*:4 (rs+4) = rt;
+
+		# sets rt to 0 or 1 to indicate success
+		# TODO: multiequal?
+		rt = 1;
+
 		C0.LLAddr.LLB = 0;
 	}
 
@@ -3034,6 +3049,11 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 		# TODO C0.Config.BE determines word order
 		*:4 rs = ru;
 		*:4 (rs+4) = rt;
+
+		# sets rt to 0 or 1 to indicate success
+		# TODO: multiequal?
+		rt = 1;
+
 		C0.LLAddr.LLB = 0;
 	}
 
