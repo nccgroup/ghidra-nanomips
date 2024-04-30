@@ -3208,11 +3208,11 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 # SLL rt, rs, shift
 ## SLL[32]
 ## NOTE: SLL[32] with rt=$zero is used for 32-bit NOP
-:SLL rt, rs, lo_pool0_5 is
+:SLL rt, rs, shift is
 	hi_pool10_6 = 0b100000 & rt & rs;
-	lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0000 & lo_pool0_5
+	lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0000 & shift
 	{
-		rt = sext(rs << lo_pool0_5);
+		rt = sext(rs << shift);
 	}
 
 ## SLL[16]
