@@ -3297,11 +3297,11 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 
 # SRL rt, rs, shift
 ## SRL[32]
-:SRL rt, rs, lo_pool0_5 is
+:SRL rt, rs, shift is
 	hi_pool10_6 = 0b100000 & rt & rs;
-	lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0010 & lo_pool0_5
+	lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0010 & shift
 	{
-		local tmp:4 = zext(rs >> lo_pool0_5);
+		local tmp:4 = zext(rs >> shift);
 		rt = sext(tmp);
 	}
 
