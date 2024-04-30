@@ -3590,16 +3590,11 @@ reglist_swm_pre: reglist_swm is (rt_raw; count3) & reglist_swm [count3_mapped = 
 
 
 # SYNC stype
-## stype=0 implied
-:SYNC is
-	hi_pool10_6 = 0b100000 & hi_pool5_5 = 0b00000 & hi_uimm0_5 = 0;
-	lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0000 & lo_pool0_5 = 0b00110
-	{
-		sync(0:1);
-	}
+stype_implicit_zero: is hi_uimm0_5 = 0 {}
+stype_implicit_zero: hi_uimm0_5 is hi_uimm0_5 {}
 
-:SYNC hi_uimm0_5 is
-	hi_pool10_6 = 0b100000 & hi_pool5_5 = 0b00000 & hi_uimm0_5;
+:SYNC stype_implicit_zero is
+	hi_pool10_6 = 0b100000 & hi_pool5_5 = 0b00000 & hi_uimm0_5 & stype_implicit_zero;
 	lo_pool12_4 = 0b1100 & lo_pool5_4 = 0b0000 & lo_pool0_5 = 0b00110
 	{
 		sync(hi_uimm0_5:1);
