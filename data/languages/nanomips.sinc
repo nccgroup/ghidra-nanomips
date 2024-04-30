@@ -2947,7 +2947,7 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 
 ## SB[16]
 :SB rtz3, hi_rs3_uoffset2 is
-	hi_pool10_6 = 0b100111 & rtz3 & hi_pool2_2 = 0b01 & hi_rs3_uoffset2
+	hi_pool10_6 = 0b010111 & rtz3 & hi_pool2_2 = 0b01 & hi_rs3_uoffset2
 	{
 		*:1 hi_rs3_uoffset2 = rtz3:1;
 	}
