@@ -3319,7 +3319,6 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 	hi_pool10_6 = 0b001000 & rt & rs;
 	rd & lo_pool3_7 = 0b0001010 & lo_pool0_3 = 0b000
 	{
-	    # TODO: incorporate signed extend
 		rd = rs >> (rt & 0x1f);
 	}
 
@@ -3331,7 +3330,6 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 	{
 		rd = rs - rt;
 		# TODO: trap on overflow
-		# TODO: sign extend?
 	}
 
 
@@ -3343,11 +3341,9 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 	{
 		rd = rs - rt;
 		# TODO: trap on overflow
-		# TODO: sign extend?
 	}
 
 ## SUBU[16]
-# TODO: rt != 0 constraint doesn't work here (covered by SIGRIE?)
 :SUBU rd3, rs3, rt3 is
 	hi_pool10_6 = 0b101100  & rt3 & rs3 & rd3 & hi_pool0_1 = 0b1
 	{
