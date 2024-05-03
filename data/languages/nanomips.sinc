@@ -2000,6 +2000,7 @@ addiupc48_offs: display_offs is
 
 
 # LWM rt, offset(rs), count
+## generated with data/sleigh_scripts/reglist_lwm.py --load
 reglist_lwm_38: is (rt_raw ...) & (count3_mapped = 39 - rt_raw2 ...) & lo_rs_soffset9	{s6 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(38-rt_raw)));}
 reglist_lwm_37: is (rt_raw ...) & (count3_mapped = 38 - rt_raw2 ...) & lo_rs_soffset9	{s5 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(37-rt_raw)));}
 reglist_lwm_37: is (rt_raw ...) & lo_rs_soffset9 & reglist_lwm_38				{s5 = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*(37-rt_raw)));}
@@ -2451,6 +2452,7 @@ reglist_lwm_pre: reglist_lwm is (rt_raw; count3) & reglist_lwm [count3_mapped = 
 # RESTORE.JRC u[, dst1 [, dst2 [, ...]]]  # jr=1 implied
 
 ## RESTORE.JRC[16]
+### generated with data/sleigh_scripts/reglist_save16.py --restore
 reglist_rs16_15: sp			is count = 16 - rt1_raw & rt1_raw & sp & hi_uoffset8_sl4	{sp = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(16-rt1_raw));}
 reglist_rs16_14: gp			is count = 15 - rt1_raw & rt1_raw & gp & hi_uoffset8_sl4	{gp = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(15-rt1_raw));}
 reglist_rs16_14: gp,reglist_rs16_15	is rt1_raw & gp & reglist_rs16_15 & hi_uoffset8_sl4	{gp = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(15-rt1_raw));}
@@ -2496,6 +2498,7 @@ reglist_rs16: ,reglist_rs16_00	is rt1_raw = 0 & reglist_rs16_00 {}
 	}
 
 ## RESTORE[32]
+### generated with data/sleigh_scripts/reglist_save32.py --restore
 reglist_rs32_45: gp					is count = 46 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(46-rt_raw));}
 reglist_rs32_45: sp					is count = 46 - rt_raw & rt_raw & sp; gp_end = 0 & lo_uimm12_sl3	{sp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(46-rt_raw));}
 reglist_rs32_44: gp					is count = 45 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(45-rt_raw));}
@@ -2719,6 +2722,7 @@ reglist_rs32: ,reglist_rs32_00	is rt_raw = 0 ... & reglist_rs32_00 {}
 
 # SAVE u[, src1 [, src2 [, ...]]]
 ## SAVE[16]
+### generated with data/sleigh_scripts/reglist_save16.py
 reglist_sv16_15: sp                     is count = 16 - rt1_raw & rt1_raw & sp  {*:$(REGSIZE) (sp - $(REGSIZE)*(16-rt1_raw)) = sp;}
 reglist_sv16_14: gp                     is count = 15 - rt1_raw & rt1_raw & gp  {*:$(REGSIZE) (sp - $(REGSIZE)*(15-rt1_raw)) = gp;}
 reglist_sv16_14: gp,reglist_sv16_15     is rt1_raw & gp & reglist_sv16_15       {*:$(REGSIZE) (sp - $(REGSIZE)*(15-rt1_raw)) = gp;}
@@ -2763,6 +2767,7 @@ reglist_sv16:    ,reglist_sv16_00       is rt1_raw = 0 & reglist_sv16_00 {}
 	}
 
 ## SAVE[32]
+### generated with data/sleigh_scripts/reglist_save32.py
 reglist_sv32_45: gp					is count = 46 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(46-rt_raw)) = gp;}
 reglist_sv32_45: sp					is count = 46 - rt_raw & rt_raw & sp; gp_end = 0	{*:$(REGSIZE) (sp - $(REGSIZE)*(46-rt_raw)) = sp;}
 reglist_sv32_44: gp					is count = 45 - rt_raw & rt_raw & gp; gp_end = 1	{*:$(REGSIZE) (sp - $(REGSIZE)*(45-rt_raw)) = gp;}
@@ -3430,6 +3435,7 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 
 
 # SWM rt, offset(rs), count
+## generated with data/sleigh_scripts/reglist_lwm.py
 reglist_swm_38: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 39 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(38-rt_raw)) = s6:4;}
 reglist_swm_37: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = 38 - rt_raw2 ...) & lo_rs_soffset9	{*:4 (lo_rs_soffset9 + $(REGSIZE)*(37-rt_raw)) = s5:4;}
 reglist_swm_37: is (rt_raw ...) & lo_rs_soffset9 & reglist_swm_38				{*:4 (lo_rs_soffset9 + $(REGSIZE)*(37-rt_raw)) = s5:4;}
