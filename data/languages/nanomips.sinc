@@ -1207,6 +1207,26 @@ addiupc48_offs: display_offs is
 	}
 
 
+# BYTEREVH rt, rs (alias for ROTX rt, rs, 8, 24)
+:BYTEREVH rt, rs is
+	hi_pool10_6 = 0b100000 & rt & rs;
+	lo_pool12_4 = 0b1101 & lo_pool11_1 = 0b0 & shiftx_raw = (24 >> 1) & stripe = 0 & lo_pool5_1 = 0b0 & shift = 8
+	{
+		# Reverse bytes in halfwords
+		rt = (zext(rs[16,8]) << 24) | (zext(rs[24,8]) << 16)| (zext(rs[0,8]) << 8) | (zext(rs[8,8]));
+	}
+
+
+# BYTEREVW rt, rs (alias for ROTX rt, rs, 24, 8)
+:BYTEREVW rt, rs is
+	hi_pool10_6 = 0b100000 & rt & rs;
+	lo_pool12_4 = 0b1101 & lo_pool11_1 = 0b0 & shiftx_raw = (8 >> 1) & stripe = 0 & lo_pool5_1 = 0b0 & shift = 24
+	{
+		# Reverse all bytes
+		rt = (zext(rs[0,8]) << 24) | (zext(rs[8,8]) << 16) | (zext(rs[16,8]) << 8) | (zext(rs[24,8]));
+	}
+
+
 # CACHE/CACHEE op, offset(rs)
 ## CACHE
 :CACHE rt_raw, lo_rs_soffset9 is
