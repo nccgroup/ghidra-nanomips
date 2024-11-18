@@ -1,5 +1,5 @@
 <!-- This file is generated on each "Link Ghidra" command.  Do not modify. -->
 
 <project>
-  <property name="ghidra.install.dir" value="/opt/ghidra_11.0.3" />
+  <property name="ghidra.install.dir" value="/opt/ghidra_11.2.1" />
 </project>
