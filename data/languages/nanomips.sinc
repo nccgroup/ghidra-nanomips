@@ -1255,6 +1255,8 @@ addiupc48_offs: display_offs is
 	]
 	{
 		break(code:$(REGSIZE));
+		# Simulate halting with infinite loop (See NationalSecurityAgency/ghidra#237)
+		goto inst_start;
 	}
 
 ## BREAK[16]
@@ -1262,6 +1264,8 @@ addiupc48_offs: display_offs is
 	hi_pool10_6 = 0b000100 & rt_raw = 0 & hi_pool3_2 = 0b10 & hi_uimm0_3
 	{
 		break(hi_uimm0_3:$(REGSIZE));
+		# Simulate halting with infinite loop (See NationalSecurityAgency/ghidra#237)
+		goto inst_start;
 	}
 
 
