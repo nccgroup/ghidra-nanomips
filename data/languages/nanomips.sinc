@@ -481,7 +481,8 @@ pc_rel_saddr32: addr is
 	]
 	{
 		# TODO effective_address
-		export *[ram]:4 addr;
+		local tmp:4 = addr;
+		export tmp;
 	}
 
 hilo_saddr26: addr is
@@ -491,7 +492,8 @@ hilo_saddr26: addr is
 	]
 	{
 		# TODO should be effective_address(addr)
-		export *[ram]:4 addr;
+		local tmp:4 = addr;
+		export tmp;
 	}
 
 hilo_saddr22: addr is
@@ -501,7 +503,8 @@ hilo_saddr22: addr is
 	]
 	{
 		# TODO should be effective_address(addr)
-		export *[ram]:4 addr;
+		local tmp:4 = addr;
+		export tmp;
 	}
 
 hi_uaddr5: addr is hi_uimm0_4
@@ -510,6 +513,7 @@ hi_uaddr5: addr is hi_uimm0_4
 	]
 	{
 		# TODO effective_address
+		# only used for CBRANCH, which doesn't take square bracket syntax for goto
 		export *[ram]:4 addr;
 	}
 
@@ -520,6 +524,7 @@ hi_saddr8: addr is
 	]
 	{
 		# TODO effective_address
+		# only used for CBRANCH, which doesn't take square bracket syntax for goto
 		export *[ram]:4 addr;
 	}
 
@@ -529,7 +534,8 @@ hi_saddr11: addr is hi_simm1_9 & hi_signbit0_1
 	]
 	{
 		# TODO effective_address
-		export *[ram]:4 addr;
+		local tmp:4 = addr;
+		export tmp;
 	}
 
 lo_saddr12: addr is lo_simm1_10 & lo_signbit0_1
@@ -538,6 +544,7 @@ lo_saddr12: addr is lo_simm1_10 & lo_signbit0_1
 	]
 	{
 		# TODO effective_address
+		# only used for CBRANCH, which doesn't take square bracket syntax for goto
 		export *[ram]:4 addr;
 	}
 
@@ -547,6 +554,7 @@ lo_saddr15: addr is lo_simm1_13 & lo_signbit0_1
 	]
 	{
 		# TODO effective_address
+		# only used for CBRANCH, which doesn't take square bracket syntax for goto
 		export *[ram]:4 addr;
 	}
 
@@ -575,8 +583,8 @@ hilo_gp_uoffset18_sl1: offs(gp) is
 		offs = (hi_uimm0_2 << 16) | (lo_uimm1_15 << 1);
 	]
 	{
-		local addr = gp + offs;
-		export *[ram]:4 addr;
+		local addr:4 = gp + offs;
+		export addr;
 	}
 
 hilo_gp_uoffset18: offs(gp) is
@@ -585,8 +593,8 @@ hilo_gp_uoffset18: offs(gp) is
 		offs = (hi_uimm0_2 << 16) | uimm16;
 	]
 	{
-		local addr = gp + offs;
-		export *[ram]:4 addr;
+		local addr:4 = gp + offs;
+		export addr;
 	}
 
 hilo_gp_uoffset21: offs(gp) is
@@ -595,8 +603,8 @@ hilo_gp_uoffset21: offs(gp) is
 		offs = (hi_uimm0_5 << 16) | (lo_uimm2_14 << 2);
 	]
 	{
-		local addr = gp + offs;
-		export *[ram]:4 addr;
+		local addr:4 = gp + offs;
+		export addr;
 	}
 
 hi_gp_uoffset9: offs(gp) is
@@ -605,8 +613,8 @@ hi_gp_uoffset9: offs(gp) is
 		offs = hi_uimm0_7 << 2;
 	]
 	{
-		local addr = gp + offs;
-		export *[ram]:4 addr;
+		local addr:4 = gp + offs;
+		export addr;
 	}
 
 hi_sp_uoffset7: offs(sp) is
@@ -615,8 +623,8 @@ hi_sp_uoffset7: offs(sp) is
 		offs = hi_uimm0_5 << 2;
 	]
 	{
-		local addr = sp + offs;
-		export *[ram]:4 addr;
+		local addr:4 = sp + offs;
+		export addr;
 	}
 
 hi_rs3_uoffset6: offs(rs3) is
@@ -625,8 +633,8 @@ hi_rs3_uoffset6: offs(rs3) is
 		offs = hi_uimm0_4 << 2;
 	]
 	{
-		local addr = rs3 + offs;
-		export *[ram]:4 addr;
+		local addr:4 = rs3 + offs;
+		export addr;
 	}
 
 hi_rs3_uoffset3: offs(rs3) is
@@ -652,15 +660,15 @@ hi_rs4_uoffset4: offs(rs4) is
 		offs = (hi_uimm3_1 << 3) | (hi_uimm8_1 << 2);
 	]
 	{
-		local addr = rs4 + offs;
-		export *[ram]:4 addr;
+		local addr:4 = rs4 + offs;
+		export addr;
 	}
 
 lo_rs_uoffset12: lo_uimm0_12(rs) is
 	rs; lo_uimm0_12
 	{
-		local addr = rs + lo_uimm0_12;
-		export *[ram]:4 addr;
+		local addr:4 = rs + lo_uimm0_12;
+		export addr;
 	}
 
 hilo_rs_soffset9_sl2: offs(rs) is
@@ -669,47 +677,47 @@ hilo_rs_soffset9_sl2: offs(rs) is
 		offs = (lo_signbit15_1 << 8) | (lo_simm2_6 << 2);
 	]
 	{
-		local addr = rs + offs;
-		export *[ram]:4 addr;
+		local addr:4 = rs + offs;
+		export addr;
 	}
 
 lo_rs_soffset9: lo_soffset9(rs) is
 	rs; lo_soffset9
 	{
-		local addr = rs + lo_soffset9;
-		export *[ram]:4 addr;
+		local addr:4 = rs + lo_soffset9;
+		export addr;
 	}
 
 rt_offset_rs: rs(rt) is
 	rt & rs
 	{
 		# TODO effective_address
-		local addr = rt + rs;
-		export *[ram]:4 addr;
+		local addr:4 = rt + rs;
+		export addr;
 	}
 
 rt_offset_2rs: rs(rt) is
 	rt & rs
 	{
 		# TODO effective_address
-		local addr = rt + 2 * rs;
-		export *[ram]:4 addr;
+		local addr:4 = rt + 2 * rs;
+		export addr;
 	}
 
 rt_offset_4rs: rs(rt) is
 	rt & rs
 	{
 		# TODO effective_address
-		local addr = rt + 4 * rs;
-		export *[ram]:4 addr;
+		local addr:4 = rt + 4 * rs;
+		export addr;
 	}
 
 rt3_offset_4rs3: rs3(rt3) is
 	rt3 & rs3
 	{
 		# TODO effective_address
-		local addr = rt3 + 4 * rs3;
-		export *[ram]:4 addr;
+		local addr:4 = rt3 + 4 * rs3;
+		export addr;
 	}
 
 hilo_simm32: simm32 is
@@ -965,7 +973,7 @@ addiupc48_offs: display_offs is
 	(hi_pool10_6 = 0b001010 & hi_pool9_1 = 0b1) ... & hilo_saddr26
 	{
 		ra = inst_next;
-		call hilo_saddr26;
+		call [hilo_saddr26];
 	}
 
 ## BALC[16]
@@ -973,7 +981,7 @@ addiupc48_offs: display_offs is
 	hi_pool10_6 = 0b001110 & hi_saddr11
 	{
 		ra = inst_next;
-		call hi_saddr11;
+		call [hi_saddr11];
 	}
 
 
@@ -1019,7 +1027,7 @@ addiupc48_offs: display_offs is
 	(hi_pool10_6 = 0b001010 & hi_pool9_1 = 0b0) ... & hilo_saddr26
 	{
 		# TODO should be effective_address(addr)
-		goto hilo_saddr26;
+		goto [hilo_saddr26];
 	}
 
 ## BC[16]
@@ -1027,7 +1035,7 @@ addiupc48_offs: display_offs is
 	hi_pool10_6 = 0b000110 & hi_saddr11
 	{
 		# TODO should be effective_address(addr)
-		goto hi_saddr11;
+		goto [hi_saddr11];
 	}
 
 
@@ -2302,7 +2310,7 @@ reglist_lwm_pre: reglist_lwm is (rt_raw; count3) & reglist_lwm [count3_mapped = 
 	{
 		rd1 = rtz4;
 		ra = inst_next;
-		call hilo_saddr22;
+		call [hilo_saddr22];
 	}
 
 
