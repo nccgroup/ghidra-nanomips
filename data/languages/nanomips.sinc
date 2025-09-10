@@ -636,14 +636,14 @@ hi_rs3_uoffset3: offs(rs3) is
 	]
 	{
 		local addr = rs3 + offs;
-		export *[ram]:4 addr;
+		export addr;
 	}
 
 hi_rs3_uoffset2: hi_uimm0_2(rs3) is
 	rs3 & hi_uimm0_2
 	{
 		local addr = rs3 + hi_uimm0_2;
-		export *[ram]:4 addr;
+		export addr;
 	}
 
 hi_rs4_uoffset4: offs(rs4) is
