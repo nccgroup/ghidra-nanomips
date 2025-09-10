@@ -461,7 +461,7 @@ rs_scale2: rs is rs
 	{
 		# TODO effective_address
 		local addr:4 = rs * 2 + inst_next;
-		export *[ram]:4 addr;
+		export addr;
 	}
 
 buimm7: uimm7 is
