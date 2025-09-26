@@ -1159,7 +1159,7 @@ addiupc48_offs: display_offs is
         ((lower >> 6 & 1) << 9) | ((lower >> 5 & 1) << 10) | ((lower >> 4 & 1) << 11) | ((lower >> 3 & 1) << 12) |
         ((lower >> 2 & 1) << 13) | ((lower >> 1 & 1) << 14) | ((lower >> 0 & 1) << 15);
 
-		rt = (upper << 16) | lower;
+		rt = (upper_rev << 16) | lower_rev;
 	}
 
 
