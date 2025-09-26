@@ -98,5 +98,10 @@ define context contextreg
 	count3_mapped = (16, 20)
 	;
 
+define register offset=0x120 size=4 [
+	load_multiple_base
+	]
+	;
+
 @include "nanomips.sinc"
 @include "nanomips_mt.sinc"

@@ -34,6 +34,7 @@ def main():
         reg = f'{flat_reglist[i]}'
 
         if not args.load:
+            # SWM
             pcode =      f'*:4 (lo_rs_soffset9 + $(REGSIZE)*({i}-rt_raw)) = {reg}:4;'
             pcode_zero = f'*:4 (lo_rs_soffset9 + $(REGSIZE)*({i}-rt_raw)) = 0:4;'
 
@@ -41,10 +42,11 @@ def main():
                 # read from $zero is 0
                 pcode = pcode_zero
         else:
+            # LWM
             if reg == 'zero':
                 pcode = ''  # write to $zero is NOP
             else:
-                pcode = f'{reg} = sext(*:4 (lo_rs_soffset9 + $(REGSIZE)*({i}-rt_raw)));'
+                pcode = f'{reg} = sext(*:4 (load_multiple_base + $(REGSIZE)*({i}-rt_raw)));'
 
         # For SWM, if rt=0 then all writes are zero
         if not args.load and i <= 7:
@@ -52,13 +54,20 @@ def main():
 
         # rule when this is last register
         if not args.load:
+            # SWM
             print(f'{name}: is (rt_raw ...) & (rt_raw2 != 0 ...) & (count3_mapped = {i+1} - rt_raw2 ...) & lo_rs_soffset9\t{{{pcode}}}')
         else:
-            print(f'{name}: is (rt_raw ...) & (count3_mapped = {i+1} - rt_raw2 ...) & lo_rs_soffset9\t{{{pcode}}}')
+            # LWM
+            print(f'{name}: is (rt_raw ...) & (count3_mapped = {i+1} - rt_raw2 ...)\t{{{pcode}}}')
 
         # rule when there are more registers
         if i != len(flat_reglist) - 1:
-            pattern = '(rt_raw ...) & lo_rs_soffset9'
+            if not args.load:
+                # SWM
+                pattern = '(rt_raw ...) & lo_rs_soffset9'
+            else:
+                # LWM
+                pattern = '(rt_raw ...)'
 
             if (not args.load) and i<= 7:
                 print(f'{name}: is (rt_raw2 = 0 ...) & {pattern} & {next_name}\t\t\t\t{{{pcode_zero}}}')
