@@ -2554,44 +2554,45 @@ reglist_lwm_pre: reglist_lwm is (rt_raw; count3) & reglist_lwm [count3_mapped = 
 
 ## RESTORE.JRC[16]
 ### generated with data/sleigh_scripts/reglist_save16.py --restore
-reglist_rs16_15: sp			is count = 16 - rt1_raw & rt1_raw & sp & hi_uoffset8_sl4	{sp = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(16-rt1_raw));}
-reglist_rs16_14: gp			is count = 15 - rt1_raw & rt1_raw & gp & hi_uoffset8_sl4	{gp = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(15-rt1_raw));}
-reglist_rs16_14: gp,reglist_rs16_15	is rt1_raw & gp & reglist_rs16_15 & hi_uoffset8_sl4	{gp = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(15-rt1_raw));}
-reglist_rs16_13: k1			is count = 14 - rt1_raw & rt1_raw & k1 & hi_uoffset8_sl4	{k1 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(14-rt1_raw));}
-reglist_rs16_13: k1,reglist_rs16_14	is rt1_raw & k1 & reglist_rs16_14 & hi_uoffset8_sl4	{k1 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(14-rt1_raw));}
-reglist_rs16_12: k0			is count = 13 - rt1_raw & rt1_raw & k0 & hi_uoffset8_sl4	{k0 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(13-rt1_raw));}
-reglist_rs16_12: k0,reglist_rs16_13	is rt1_raw & k0 & reglist_rs16_13 & hi_uoffset8_sl4	{k0 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(13-rt1_raw));}
-reglist_rs16_11: t9			is count = 12 - rt1_raw & rt1_raw & t9 & hi_uoffset8_sl4	{t9 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(12-rt1_raw));}
-reglist_rs16_11: t9,reglist_rs16_12	is rt1_raw & t9 & reglist_rs16_12 & hi_uoffset8_sl4	{t9 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(12-rt1_raw));}
-reglist_rs16_10: t8			is count = 11 - rt1_raw & rt1_raw & t8 & hi_uoffset8_sl4	{t8 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(11-rt1_raw));}
-reglist_rs16_10: t8,reglist_rs16_11	is rt1_raw & t8 & reglist_rs16_11 & hi_uoffset8_sl4	{t8 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(11-rt1_raw));}
-reglist_rs16_09: s7			is count = 10 - rt1_raw & rt1_raw & s7 & hi_uoffset8_sl4	{s7 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(10-rt1_raw));}
-reglist_rs16_09: s7,reglist_rs16_10	is rt1_raw & s7 & reglist_rs16_10 & hi_uoffset8_sl4	{s7 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(10-rt1_raw));}
-reglist_rs16_08: s6			is count = 9 - rt1_raw & rt1_raw & s6 & hi_uoffset8_sl4	{s6 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(9-rt1_raw));}
-reglist_rs16_08: s6,reglist_rs16_09	is rt1_raw & s6 & reglist_rs16_09 & hi_uoffset8_sl4	{s6 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(9-rt1_raw));}
-reglist_rs16_07: s5			is count = 8 - rt1_raw & rt1_raw & s5 & hi_uoffset8_sl4	{s5 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(8-rt1_raw));}
-reglist_rs16_07: s5,reglist_rs16_08	is rt1_raw & s5 & reglist_rs16_08 & hi_uoffset8_sl4	{s5 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(8-rt1_raw));}
-reglist_rs16_06: s4			is count = 7 - rt1_raw & rt1_raw & s4 & hi_uoffset8_sl4	{s4 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(7-rt1_raw));}
-reglist_rs16_06: s4,reglist_rs16_07	is rt1_raw & s4 & reglist_rs16_07 & hi_uoffset8_sl4	{s4 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(7-rt1_raw));}
-reglist_rs16_05: s3			is count = 6 - rt1_raw & rt1_raw & s3 & hi_uoffset8_sl4	{s3 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(6-rt1_raw));}
-reglist_rs16_05: s3,reglist_rs16_06	is rt1_raw & s3 & reglist_rs16_06 & hi_uoffset8_sl4	{s3 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(6-rt1_raw));}
-reglist_rs16_04: s2			is count = 5 - rt1_raw & rt1_raw & s2 & hi_uoffset8_sl4	{s2 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(5-rt1_raw));}
-reglist_rs16_04: s2,reglist_rs16_05	is rt1_raw & s2 & reglist_rs16_05 & hi_uoffset8_sl4	{s2 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(5-rt1_raw));}
-reglist_rs16_03: s1			is count = 4 - rt1_raw & rt1_raw & s1 & hi_uoffset8_sl4	{s1 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(4-rt1_raw));}
-reglist_rs16_03: s1,reglist_rs16_04	is rt1_raw & s1 & reglist_rs16_04 & hi_uoffset8_sl4	{s1 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(4-rt1_raw));}
-reglist_rs16_02: s0			is count = 3 - rt1_raw & rt1_raw & s0 & hi_uoffset8_sl4	{s0 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(3-rt1_raw));}
-reglist_rs16_02: s0,reglist_rs16_03	is rt1_raw & s0 & reglist_rs16_03 & hi_uoffset8_sl4	{s0 = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(3-rt1_raw));}
-reglist_rs16_01: ra			is count = 2 - rt1_raw & rt1_raw & ra & hi_uoffset8_sl4	{ra = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(2-rt1_raw));}
-reglist_rs16_01: ra,reglist_rs16_02	is rt1_raw & ra & reglist_rs16_02 & hi_uoffset8_sl4	{ra = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(2-rt1_raw));}
-reglist_rs16_00: fp			is count = 1 - rt1_raw & rt1_raw & fp & hi_uoffset8_sl4	{fp = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(1-rt1_raw));}
-reglist_rs16_00: fp,reglist_rs16_01	is rt1_raw & fp & reglist_rs16_01 & hi_uoffset8_sl4	{fp = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*(1-rt1_raw));}
-reglist_rs16: 			is count = 0 {}
-reglist_rs16: ,reglist_rs16_01	is rt1_raw = 1 & reglist_rs16_01 {}
-reglist_rs16: ,reglist_rs16_00	is rt1_raw = 0 & reglist_rs16_00 {}
+reglist_rs16_15: sp                     is count = 16 - rt1_raw & rt1_raw & sp & hi_uoffset8_sl4        {sp = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(16-rt1_raw));}
+reglist_rs16_14: gp                     is count = 15 - rt1_raw & rt1_raw & gp & hi_uoffset8_sl4        {gp = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(15-rt1_raw));}
+reglist_rs16_14: gp,reglist_rs16_15     is rt1_raw & gp & reglist_rs16_15 & hi_uoffset8_sl4     {gp = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(15-rt1_raw));}
+reglist_rs16_13: k1                     is count = 14 - rt1_raw & rt1_raw & k1 & hi_uoffset8_sl4        {k1 = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(14-rt1_raw));}
+reglist_rs16_13: k1,reglist_rs16_14     is rt1_raw & k1 & reglist_rs16_14 & hi_uoffset8_sl4     {k1 = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(14-rt1_raw));}
+reglist_rs16_12: k0                     is count = 13 - rt1_raw & rt1_raw & k0 & hi_uoffset8_sl4        {k0 = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(13-rt1_raw));}
+reglist_rs16_12: k0,reglist_rs16_13     is rt1_raw & k0 & reglist_rs16_13 & hi_uoffset8_sl4     {k0 = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(13-rt1_raw));}
+reglist_rs16_11: t9                     is count = 12 - rt1_raw & rt1_raw & t9 & hi_uoffset8_sl4        {t9 = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(12-rt1_raw));}
+reglist_rs16_11: t9,reglist_rs16_12     is rt1_raw & t9 & reglist_rs16_12 & hi_uoffset8_sl4     {t9 = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(12-rt1_raw));}
+reglist_rs16_10: t8                     is count = 11 - rt1_raw & rt1_raw & t8 & hi_uoffset8_sl4        {t8 = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(11-rt1_raw));}
+reglist_rs16_10: t8,reglist_rs16_11     is rt1_raw & t8 & reglist_rs16_11 & hi_uoffset8_sl4     {t8 = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(11-rt1_raw));}
+reglist_rs16_09: s7                     is count = 10 - rt1_raw & rt1_raw & s7 & hi_uoffset8_sl4        {s7 = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(10-rt1_raw));}
+reglist_rs16_09: s7,reglist_rs16_10     is rt1_raw & s7 & reglist_rs16_10 & hi_uoffset8_sl4     {s7 = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(10-rt1_raw));}
+reglist_rs16_08: s6                     is count = 9 - rt1_raw & rt1_raw & s6 & hi_uoffset8_sl4 {s6 = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(9-rt1_raw));}
+reglist_rs16_08: s6,reglist_rs16_09     is rt1_raw & s6 & reglist_rs16_09 & hi_uoffset8_sl4     {s6 = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(9-rt1_raw));}
+reglist_rs16_07: s5                     is count = 8 - rt1_raw & rt1_raw & s5 & hi_uoffset8_sl4 {s5 = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(8-rt1_raw));}
+reglist_rs16_07: s5,reglist_rs16_08     is rt1_raw & s5 & reglist_rs16_08 & hi_uoffset8_sl4     {s5 = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(8-rt1_raw));}
+reglist_rs16_06: s4                     is count = 7 - rt1_raw & rt1_raw & s4 & hi_uoffset8_sl4 {s4 = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(7-rt1_raw));}
+reglist_rs16_06: s4,reglist_rs16_07     is rt1_raw & s4 & reglist_rs16_07 & hi_uoffset8_sl4     {s4 = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(7-rt1_raw));}
+reglist_rs16_05: s3                     is count = 6 - rt1_raw & rt1_raw & s3 & hi_uoffset8_sl4 {s3 = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(6-rt1_raw));}
+reglist_rs16_05: s3,reglist_rs16_06     is rt1_raw & s3 & reglist_rs16_06 & hi_uoffset8_sl4     {s3 = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(6-rt1_raw));}
+reglist_rs16_04: s2                     is count = 5 - rt1_raw & rt1_raw & s2 & hi_uoffset8_sl4 {s2 = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(5-rt1_raw));}
+reglist_rs16_04: s2,reglist_rs16_05     is rt1_raw & s2 & reglist_rs16_05 & hi_uoffset8_sl4     {s2 = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(5-rt1_raw));}
+reglist_rs16_03: s1                     is count = 4 - rt1_raw & rt1_raw & s1 & hi_uoffset8_sl4 {s1 = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(4-rt1_raw));}
+reglist_rs16_03: s1,reglist_rs16_04     is rt1_raw & s1 & reglist_rs16_04 & hi_uoffset8_sl4     {s1 = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(4-rt1_raw));}
+reglist_rs16_02: s0                     is count = 3 - rt1_raw & rt1_raw & s0 & hi_uoffset8_sl4 {s0 = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(3-rt1_raw));}
+reglist_rs16_02: s0,reglist_rs16_03     is rt1_raw & s0 & reglist_rs16_03 & hi_uoffset8_sl4     {s0 = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(3-rt1_raw));}
+reglist_rs16_01: ra                     is count = 2 - rt1_raw & rt1_raw & ra & hi_uoffset8_sl4 {ra = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(2-rt1_raw));}
+reglist_rs16_01: ra,reglist_rs16_02     is rt1_raw & ra & reglist_rs16_02 & hi_uoffset8_sl4     {ra = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(2-rt1_raw));}
+reglist_rs16_00: fp                     is count = 1 - rt1_raw & rt1_raw & fp & hi_uoffset8_sl4 {fp = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(1-rt1_raw));}
+reglist_rs16_00: fp,reglist_rs16_01     is rt1_raw & fp & reglist_rs16_01 & hi_uoffset8_sl4     {fp = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*(1-rt1_raw));}
+reglist_rs16:                   is count = 0 {}
+reglist_rs16: ,reglist_rs16_01  is rt1_raw = 1 & reglist_rs16_01 {}
+reglist_rs16: ,reglist_rs16_00  is rt1_raw = 0 & reglist_rs16_00 {}
 
 :RESTORE.JRC hi_uoffset8_sl4^reglist_rs16 is
 	hi_pool10_6 = 0b000111 & hi_pool8_1 = 0b1 & hi_uoffset8_sl4 & reglist_rs16
 	{
+		load_multiple_base = sp;
 		build reglist_rs16;
 		# TODO effective_address
 		sp = sp + hi_uoffset8_sl4;
@@ -2600,143 +2601,143 @@ reglist_rs16: ,reglist_rs16_00	is rt1_raw = 0 & reglist_rs16_00 {}
 
 ## RESTORE[32]
 ### generated with data/sleigh_scripts/reglist_save32.py --restore
-reglist_rs32_45: gp					is count = 46 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(46-rt_raw));}
-reglist_rs32_45: sp					is count = 46 - rt_raw & rt_raw & sp; gp_end = 0 & lo_uimm12_sl3	{sp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(46-rt_raw));}
-reglist_rs32_44: gp					is count = 45 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(45-rt_raw));}
-reglist_rs32_44: gp					is count = 45 - rt_raw & rt_raw & gp; gp_end = 0 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(45-rt_raw));}
-reglist_rs32_44: gp,reglist_rs32_45	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_45 & gp				{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(45-rt_raw));}
-reglist_rs32_43: gp					is count = 44 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(44-rt_raw));}
-reglist_rs32_43: k1					is count = 44 - rt_raw & rt_raw & k1; gp_end = 0 & lo_uimm12_sl3	{k1 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(44-rt_raw));}
-reglist_rs32_43: k1,reglist_rs32_44	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_44 & k1				{k1 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(44-rt_raw));}
-reglist_rs32_42: gp					is count = 43 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(43-rt_raw));}
-reglist_rs32_42: k0					is count = 43 - rt_raw & rt_raw & k0; gp_end = 0 & lo_uimm12_sl3	{k0 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(43-rt_raw));}
-reglist_rs32_42: k0,reglist_rs32_43	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_43 & k0				{k0 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(43-rt_raw));}
-reglist_rs32_41: gp					is count = 42 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(42-rt_raw));}
-reglist_rs32_41: t9					is count = 42 - rt_raw & rt_raw & t9; gp_end = 0 & lo_uimm12_sl3	{t9 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(42-rt_raw));}
-reglist_rs32_41: t9,reglist_rs32_42	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_42 & t9				{t9 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(42-rt_raw));}
-reglist_rs32_40: gp					is count = 41 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(41-rt_raw));}
-reglist_rs32_40: t8					is count = 41 - rt_raw & rt_raw & t8; gp_end = 0 & lo_uimm12_sl3	{t8 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(41-rt_raw));}
-reglist_rs32_40: t8,reglist_rs32_41	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_41 & t8				{t8 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(41-rt_raw));}
-reglist_rs32_39: gp					is count = 40 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(40-rt_raw));}
-reglist_rs32_39: s7					is count = 40 - rt_raw & rt_raw & s7; gp_end = 0 & lo_uimm12_sl3	{s7 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(40-rt_raw));}
-reglist_rs32_39: s7,reglist_rs32_40	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_40 & s7				{s7 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(40-rt_raw));}
-reglist_rs32_38: gp					is count = 39 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(39-rt_raw));}
-reglist_rs32_38: s6					is count = 39 - rt_raw & rt_raw & s6; gp_end = 0 & lo_uimm12_sl3	{s6 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(39-rt_raw));}
-reglist_rs32_38: s6,reglist_rs32_39	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_39 & s6				{s6 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(39-rt_raw));}
-reglist_rs32_37: gp					is count = 38 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(38-rt_raw));}
-reglist_rs32_37: s5					is count = 38 - rt_raw & rt_raw & s5; gp_end = 0 & lo_uimm12_sl3	{s5 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(38-rt_raw));}
-reglist_rs32_37: s5,reglist_rs32_38	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_38 & s5				{s5 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(38-rt_raw));}
-reglist_rs32_36: gp					is count = 37 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(37-rt_raw));}
-reglist_rs32_36: s4					is count = 37 - rt_raw & rt_raw & s4; gp_end = 0 & lo_uimm12_sl3	{s4 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(37-rt_raw));}
-reglist_rs32_36: s4,reglist_rs32_37	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_37 & s4				{s4 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(37-rt_raw));}
-reglist_rs32_35: gp					is count = 36 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(36-rt_raw));}
-reglist_rs32_35: s3					is count = 36 - rt_raw & rt_raw & s3; gp_end = 0 & lo_uimm12_sl3	{s3 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(36-rt_raw));}
-reglist_rs32_35: s3,reglist_rs32_36	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_36 & s3				{s3 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(36-rt_raw));}
-reglist_rs32_34: gp					is count = 35 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(35-rt_raw));}
-reglist_rs32_34: s2					is count = 35 - rt_raw & rt_raw & s2; gp_end = 0 & lo_uimm12_sl3	{s2 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(35-rt_raw));}
-reglist_rs32_34: s2,reglist_rs32_35	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_35 & s2				{s2 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(35-rt_raw));}
-reglist_rs32_33: gp					is count = 34 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(34-rt_raw));}
-reglist_rs32_33: s1					is count = 34 - rt_raw & rt_raw & s1; gp_end = 0 & lo_uimm12_sl3	{s1 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(34-rt_raw));}
-reglist_rs32_33: s1,reglist_rs32_34	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_34 & s1				{s1 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(34-rt_raw));}
-reglist_rs32_32: gp					is count = 33 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(33-rt_raw));}
-reglist_rs32_32: s0					is count = 33 - rt_raw & rt_raw & s0; gp_end = 0 & lo_uimm12_sl3	{s0 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(33-rt_raw));}
-reglist_rs32_32: s0,reglist_rs32_33	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_33 & s0				{s0 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(33-rt_raw));}
-reglist_rs32_31: gp					is count = 32 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(32-rt_raw));}
-reglist_rs32_31: ra					is count = 32 - rt_raw & rt_raw & ra; gp_end = 0 & lo_uimm12_sl3	{ra = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(32-rt_raw));}
-reglist_rs32_31: ra,reglist_rs32_32	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_32 & ra				{ra = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(32-rt_raw));}
-reglist_rs32_30: gp					is count = 31 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(31-rt_raw));}
-reglist_rs32_30: fp					is count = 31 - rt_raw & rt_raw & fp; gp_end = 0 & lo_uimm12_sl3	{fp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(31-rt_raw));}
-reglist_rs32_30: fp,reglist_rs32_31	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_31 & fp				{fp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(31-rt_raw));}
-reglist_rs32_29: gp					is count = 30 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(30-rt_raw));}
-reglist_rs32_29: sp					is count = 30 - rt_raw & rt_raw & sp; gp_end = 0 & lo_uimm12_sl3	{sp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(30-rt_raw));}
-reglist_rs32_29: sp,reglist_rs32_30	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_30 & sp				{sp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(30-rt_raw));}
-reglist_rs32_28: gp					is count = 29 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(29-rt_raw));}
-reglist_rs32_28: gp					is count = 29 - rt_raw & rt_raw & gp; gp_end = 0 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(29-rt_raw));}
-reglist_rs32_28: gp,reglist_rs32_29	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_29 & gp				{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(29-rt_raw));}
-reglist_rs32_27: gp					is count = 28 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(28-rt_raw));}
-reglist_rs32_27: k1					is count = 28 - rt_raw & rt_raw & k1; gp_end = 0 & lo_uimm12_sl3	{k1 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(28-rt_raw));}
-reglist_rs32_27: k1,reglist_rs32_28	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_28 & k1				{k1 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(28-rt_raw));}
-reglist_rs32_26: gp					is count = 27 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(27-rt_raw));}
-reglist_rs32_26: k0					is count = 27 - rt_raw & rt_raw & k0; gp_end = 0 & lo_uimm12_sl3	{k0 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(27-rt_raw));}
-reglist_rs32_26: k0,reglist_rs32_27	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_27 & k0				{k0 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(27-rt_raw));}
-reglist_rs32_25: gp					is count = 26 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(26-rt_raw));}
-reglist_rs32_25: t9					is count = 26 - rt_raw & rt_raw & t9; gp_end = 0 & lo_uimm12_sl3	{t9 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(26-rt_raw));}
-reglist_rs32_25: t9,reglist_rs32_26	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_26 & t9				{t9 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(26-rt_raw));}
-reglist_rs32_24: gp					is count = 25 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(25-rt_raw));}
-reglist_rs32_24: t8					is count = 25 - rt_raw & rt_raw & t8; gp_end = 0 & lo_uimm12_sl3	{t8 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(25-rt_raw));}
-reglist_rs32_24: t8,reglist_rs32_25	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_25 & t8				{t8 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(25-rt_raw));}
-reglist_rs32_23: gp					is count = 24 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(24-rt_raw));}
-reglist_rs32_23: s7					is count = 24 - rt_raw & rt_raw & s7; gp_end = 0 & lo_uimm12_sl3	{s7 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(24-rt_raw));}
-reglist_rs32_23: s7,reglist_rs32_24	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_24 & s7				{s7 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(24-rt_raw));}
-reglist_rs32_22: gp					is count = 23 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(23-rt_raw));}
-reglist_rs32_22: s6					is count = 23 - rt_raw & rt_raw & s6; gp_end = 0 & lo_uimm12_sl3	{s6 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(23-rt_raw));}
-reglist_rs32_22: s6,reglist_rs32_23	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_23 & s6				{s6 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(23-rt_raw));}
-reglist_rs32_21: gp					is count = 22 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(22-rt_raw));}
-reglist_rs32_21: s5					is count = 22 - rt_raw & rt_raw & s5; gp_end = 0 & lo_uimm12_sl3	{s5 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(22-rt_raw));}
-reglist_rs32_21: s5,reglist_rs32_22	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_22 & s5				{s5 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(22-rt_raw));}
-reglist_rs32_20: gp					is count = 21 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(21-rt_raw));}
-reglist_rs32_20: s4					is count = 21 - rt_raw & rt_raw & s4; gp_end = 0 & lo_uimm12_sl3	{s4 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(21-rt_raw));}
-reglist_rs32_20: s4,reglist_rs32_21	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_21 & s4				{s4 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(21-rt_raw));}
-reglist_rs32_19: gp					is count = 20 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(20-rt_raw));}
-reglist_rs32_19: s3					is count = 20 - rt_raw & rt_raw & s3; gp_end = 0 & lo_uimm12_sl3	{s3 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(20-rt_raw));}
-reglist_rs32_19: s3,reglist_rs32_20	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_20 & s3				{s3 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(20-rt_raw));}
-reglist_rs32_18: gp					is count = 19 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(19-rt_raw));}
-reglist_rs32_18: s2					is count = 19 - rt_raw & rt_raw & s2; gp_end = 0 & lo_uimm12_sl3	{s2 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(19-rt_raw));}
-reglist_rs32_18: s2,reglist_rs32_19	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_19 & s2				{s2 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(19-rt_raw));}
-reglist_rs32_17: gp					is count = 18 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(18-rt_raw));}
-reglist_rs32_17: s1					is count = 18 - rt_raw & rt_raw & s1; gp_end = 0 & lo_uimm12_sl3	{s1 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(18-rt_raw));}
-reglist_rs32_17: s1,reglist_rs32_18	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_18 & s1				{s1 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(18-rt_raw));}
-reglist_rs32_16: gp					is count = 17 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(17-rt_raw));}
-reglist_rs32_16: s0					is count = 17 - rt_raw & rt_raw & s0; gp_end = 0 & lo_uimm12_sl3	{s0 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(17-rt_raw));}
-reglist_rs32_16: s0,reglist_rs32_17	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_17 & s0				{s0 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(17-rt_raw));}
-reglist_rs32_15: gp					is count = 16 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(16-rt_raw));}
-reglist_rs32_15: t3					is count = 16 - rt_raw & rt_raw & t3; gp_end = 0 & lo_uimm12_sl3	{t3 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(16-rt_raw));}
-reglist_rs32_15: t3,reglist_rs32_16	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_16 & t3				{t3 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(16-rt_raw));}
-reglist_rs32_14: gp					is count = 15 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(15-rt_raw));}
-reglist_rs32_14: t2					is count = 15 - rt_raw & rt_raw & t2; gp_end = 0 & lo_uimm12_sl3	{t2 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(15-rt_raw));}
-reglist_rs32_14: t2,reglist_rs32_15	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_15 & t2				{t2 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(15-rt_raw));}
-reglist_rs32_13: gp					is count = 14 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(14-rt_raw));}
-reglist_rs32_13: t1					is count = 14 - rt_raw & rt_raw & t1; gp_end = 0 & lo_uimm12_sl3	{t1 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(14-rt_raw));}
-reglist_rs32_13: t1,reglist_rs32_14	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_14 & t1				{t1 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(14-rt_raw));}
-reglist_rs32_12: gp					is count = 13 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(13-rt_raw));}
-reglist_rs32_12: t0					is count = 13 - rt_raw & rt_raw & t0; gp_end = 0 & lo_uimm12_sl3	{t0 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(13-rt_raw));}
-reglist_rs32_12: t0,reglist_rs32_13	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_13 & t0				{t0 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(13-rt_raw));}
-reglist_rs32_11: gp					is count = 12 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(12-rt_raw));}
-reglist_rs32_11: a7					is count = 12 - rt_raw & rt_raw & a7; gp_end = 0 & lo_uimm12_sl3	{a7 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(12-rt_raw));}
-reglist_rs32_11: a7,reglist_rs32_12	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_12 & a7				{a7 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(12-rt_raw));}
-reglist_rs32_10: gp					is count = 11 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(11-rt_raw));}
-reglist_rs32_10: a6					is count = 11 - rt_raw & rt_raw & a6; gp_end = 0 & lo_uimm12_sl3	{a6 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(11-rt_raw));}
-reglist_rs32_10: a6,reglist_rs32_11	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_11 & a6				{a6 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(11-rt_raw));}
-reglist_rs32_09: gp					is count = 10 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(10-rt_raw));}
-reglist_rs32_09: a5					is count = 10 - rt_raw & rt_raw & a5; gp_end = 0 & lo_uimm12_sl3	{a5 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(10-rt_raw));}
-reglist_rs32_09: a5,reglist_rs32_10	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_10 & a5				{a5 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(10-rt_raw));}
-reglist_rs32_08: gp					is count = 9 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(9-rt_raw));}
-reglist_rs32_08: a4					is count = 9 - rt_raw & rt_raw & a4; gp_end = 0 & lo_uimm12_sl3	{a4 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(9-rt_raw));}
-reglist_rs32_08: a4,reglist_rs32_09	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_09 & a4				{a4 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(9-rt_raw));}
-reglist_rs32_07: gp					is count = 8 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(8-rt_raw));}
-reglist_rs32_07: a3					is count = 8 - rt_raw & rt_raw & a3; gp_end = 0 & lo_uimm12_sl3	{a3 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(8-rt_raw));}
-reglist_rs32_07: a3,reglist_rs32_08	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_08 & a3				{a3 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(8-rt_raw));}
-reglist_rs32_06: gp					is count = 7 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(7-rt_raw));}
-reglist_rs32_06: a2					is count = 7 - rt_raw & rt_raw & a2; gp_end = 0 & lo_uimm12_sl3	{a2 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(7-rt_raw));}
-reglist_rs32_06: a2,reglist_rs32_07	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_07 & a2				{a2 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(7-rt_raw));}
-reglist_rs32_05: gp					is count = 6 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(6-rt_raw));}
-reglist_rs32_05: a1					is count = 6 - rt_raw & rt_raw & a1; gp_end = 0 & lo_uimm12_sl3	{a1 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(6-rt_raw));}
-reglist_rs32_05: a1,reglist_rs32_06	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_06 & a1				{a1 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(6-rt_raw));}
-reglist_rs32_04: gp					is count = 5 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(5-rt_raw));}
-reglist_rs32_04: a0					is count = 5 - rt_raw & rt_raw & a0; gp_end = 0 & lo_uimm12_sl3	{a0 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(5-rt_raw));}
-reglist_rs32_04: a0,reglist_rs32_05	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_05 & a0				{a0 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(5-rt_raw));}
-reglist_rs32_03: gp					is count = 4 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(4-rt_raw));}
-reglist_rs32_03: t5					is count = 4 - rt_raw & rt_raw & t5; gp_end = 0 & lo_uimm12_sl3	{t5 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(4-rt_raw));}
-reglist_rs32_03: t5,reglist_rs32_04	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_04 & t5				{t5 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(4-rt_raw));}
-reglist_rs32_02: gp					is count = 3 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(3-rt_raw));}
-reglist_rs32_02: t4					is count = 3 - rt_raw & rt_raw & t4; gp_end = 0 & lo_uimm12_sl3	{t4 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(3-rt_raw));}
-reglist_rs32_02: t4,reglist_rs32_03	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_03 & t4				{t4 = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(3-rt_raw));}
-reglist_rs32_01: gp					is count = 2 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(2-rt_raw));}
-reglist_rs32_01: at					is count = 2 - rt_raw & rt_raw & at; gp_end = 0 & lo_uimm12_sl3	{at = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(2-rt_raw));}
-reglist_rs32_01: at,reglist_rs32_02	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_02 & at				{at = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(2-rt_raw));}
-reglist_rs32_00: gp					is count = 1 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(1-rt_raw));}
-reglist_rs32_00: zero					is count = 1 - rt_raw & rt_raw & zero; gp_end = 0 & lo_uimm12_sl3	{zero = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(1-rt_raw));}
-reglist_rs32_00: zero,reglist_rs32_01	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_01 & zero				{zero = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*(1-rt_raw));}
+reglist_rs32_45: gp					is count = 46 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(46-rt_raw));}
+reglist_rs32_45: sp					is count = 46 - rt_raw & rt_raw & sp; gp_end = 0 & lo_uimm12_sl3	{sp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(46-rt_raw));}
+reglist_rs32_44: gp					is count = 45 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(45-rt_raw));}
+reglist_rs32_44: gp					is count = 45 - rt_raw & rt_raw & gp; gp_end = 0 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(45-rt_raw));}
+reglist_rs32_44: gp,reglist_rs32_45	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_45 & gp				{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(45-rt_raw));}
+reglist_rs32_43: gp					is count = 44 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(44-rt_raw));}
+reglist_rs32_43: k1					is count = 44 - rt_raw & rt_raw & k1; gp_end = 0 & lo_uimm12_sl3	{k1 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(44-rt_raw));}
+reglist_rs32_43: k1,reglist_rs32_44	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_44 & k1				{k1 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(44-rt_raw));}
+reglist_rs32_42: gp					is count = 43 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(43-rt_raw));}
+reglist_rs32_42: k0					is count = 43 - rt_raw & rt_raw & k0; gp_end = 0 & lo_uimm12_sl3	{k0 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(43-rt_raw));}
+reglist_rs32_42: k0,reglist_rs32_43	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_43 & k0				{k0 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(43-rt_raw));}
+reglist_rs32_41: gp					is count = 42 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(42-rt_raw));}
+reglist_rs32_41: t9					is count = 42 - rt_raw & rt_raw & t9; gp_end = 0 & lo_uimm12_sl3	{t9 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(42-rt_raw));}
+reglist_rs32_41: t9,reglist_rs32_42	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_42 & t9				{t9 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(42-rt_raw));}
+reglist_rs32_40: gp					is count = 41 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(41-rt_raw));}
+reglist_rs32_40: t8					is count = 41 - rt_raw & rt_raw & t8; gp_end = 0 & lo_uimm12_sl3	{t8 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(41-rt_raw));}
+reglist_rs32_40: t8,reglist_rs32_41	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_41 & t8				{t8 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(41-rt_raw));}
+reglist_rs32_39: gp					is count = 40 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(40-rt_raw));}
+reglist_rs32_39: s7					is count = 40 - rt_raw & rt_raw & s7; gp_end = 0 & lo_uimm12_sl3	{s7 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(40-rt_raw));}
+reglist_rs32_39: s7,reglist_rs32_40	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_40 & s7				{s7 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(40-rt_raw));}
+reglist_rs32_38: gp					is count = 39 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(39-rt_raw));}
+reglist_rs32_38: s6					is count = 39 - rt_raw & rt_raw & s6; gp_end = 0 & lo_uimm12_sl3	{s6 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(39-rt_raw));}
+reglist_rs32_38: s6,reglist_rs32_39	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_39 & s6				{s6 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(39-rt_raw));}
+reglist_rs32_37: gp					is count = 38 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(38-rt_raw));}
+reglist_rs32_37: s5					is count = 38 - rt_raw & rt_raw & s5; gp_end = 0 & lo_uimm12_sl3	{s5 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(38-rt_raw));}
+reglist_rs32_37: s5,reglist_rs32_38	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_38 & s5				{s5 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(38-rt_raw));}
+reglist_rs32_36: gp					is count = 37 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(37-rt_raw));}
+reglist_rs32_36: s4					is count = 37 - rt_raw & rt_raw & s4; gp_end = 0 & lo_uimm12_sl3	{s4 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(37-rt_raw));}
+reglist_rs32_36: s4,reglist_rs32_37	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_37 & s4				{s4 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(37-rt_raw));}
+reglist_rs32_35: gp					is count = 36 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(36-rt_raw));}
+reglist_rs32_35: s3					is count = 36 - rt_raw & rt_raw & s3; gp_end = 0 & lo_uimm12_sl3	{s3 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(36-rt_raw));}
+reglist_rs32_35: s3,reglist_rs32_36	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_36 & s3				{s3 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(36-rt_raw));}
+reglist_rs32_34: gp					is count = 35 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(35-rt_raw));}
+reglist_rs32_34: s2					is count = 35 - rt_raw & rt_raw & s2; gp_end = 0 & lo_uimm12_sl3	{s2 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(35-rt_raw));}
+reglist_rs32_34: s2,reglist_rs32_35	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_35 & s2				{s2 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(35-rt_raw));}
+reglist_rs32_33: gp					is count = 34 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(34-rt_raw));}
+reglist_rs32_33: s1					is count = 34 - rt_raw & rt_raw & s1; gp_end = 0 & lo_uimm12_sl3	{s1 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(34-rt_raw));}
+reglist_rs32_33: s1,reglist_rs32_34	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_34 & s1				{s1 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(34-rt_raw));}
+reglist_rs32_32: gp					is count = 33 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(33-rt_raw));}
+reglist_rs32_32: s0					is count = 33 - rt_raw & rt_raw & s0; gp_end = 0 & lo_uimm12_sl3	{s0 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(33-rt_raw));}
+reglist_rs32_32: s0,reglist_rs32_33	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_33 & s0				{s0 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(33-rt_raw));}
+reglist_rs32_31: gp					is count = 32 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(32-rt_raw));}
+reglist_rs32_31: ra					is count = 32 - rt_raw & rt_raw & ra; gp_end = 0 & lo_uimm12_sl3	{ra = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(32-rt_raw));}
+reglist_rs32_31: ra,reglist_rs32_32	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_32 & ra				{ra = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(32-rt_raw));}
+reglist_rs32_30: gp					is count = 31 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(31-rt_raw));}
+reglist_rs32_30: fp					is count = 31 - rt_raw & rt_raw & fp; gp_end = 0 & lo_uimm12_sl3	{fp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(31-rt_raw));}
+reglist_rs32_30: fp,reglist_rs32_31	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_31 & fp				{fp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(31-rt_raw));}
+reglist_rs32_29: gp					is count = 30 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(30-rt_raw));}
+reglist_rs32_29: sp					is count = 30 - rt_raw & rt_raw & sp; gp_end = 0 & lo_uimm12_sl3	{sp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(30-rt_raw));}
+reglist_rs32_29: sp,reglist_rs32_30	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_30 & sp				{sp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(30-rt_raw));}
+reglist_rs32_28: gp					is count = 29 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(29-rt_raw));}
+reglist_rs32_28: gp					is count = 29 - rt_raw & rt_raw & gp; gp_end = 0 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(29-rt_raw));}
+reglist_rs32_28: gp,reglist_rs32_29	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_29 & gp				{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(29-rt_raw));}
+reglist_rs32_27: gp					is count = 28 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(28-rt_raw));}
+reglist_rs32_27: k1					is count = 28 - rt_raw & rt_raw & k1; gp_end = 0 & lo_uimm12_sl3	{k1 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(28-rt_raw));}
+reglist_rs32_27: k1,reglist_rs32_28	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_28 & k1				{k1 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(28-rt_raw));}
+reglist_rs32_26: gp					is count = 27 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(27-rt_raw));}
+reglist_rs32_26: k0					is count = 27 - rt_raw & rt_raw & k0; gp_end = 0 & lo_uimm12_sl3	{k0 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(27-rt_raw));}
+reglist_rs32_26: k0,reglist_rs32_27	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_27 & k0				{k0 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(27-rt_raw));}
+reglist_rs32_25: gp					is count = 26 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(26-rt_raw));}
+reglist_rs32_25: t9					is count = 26 - rt_raw & rt_raw & t9; gp_end = 0 & lo_uimm12_sl3	{t9 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(26-rt_raw));}
+reglist_rs32_25: t9,reglist_rs32_26	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_26 & t9				{t9 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(26-rt_raw));}
+reglist_rs32_24: gp					is count = 25 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(25-rt_raw));}
+reglist_rs32_24: t8					is count = 25 - rt_raw & rt_raw & t8; gp_end = 0 & lo_uimm12_sl3	{t8 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(25-rt_raw));}
+reglist_rs32_24: t8,reglist_rs32_25	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_25 & t8				{t8 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(25-rt_raw));}
+reglist_rs32_23: gp					is count = 24 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(24-rt_raw));}
+reglist_rs32_23: s7					is count = 24 - rt_raw & rt_raw & s7; gp_end = 0 & lo_uimm12_sl3	{s7 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(24-rt_raw));}
+reglist_rs32_23: s7,reglist_rs32_24	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_24 & s7				{s7 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(24-rt_raw));}
+reglist_rs32_22: gp					is count = 23 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(23-rt_raw));}
+reglist_rs32_22: s6					is count = 23 - rt_raw & rt_raw & s6; gp_end = 0 & lo_uimm12_sl3	{s6 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(23-rt_raw));}
+reglist_rs32_22: s6,reglist_rs32_23	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_23 & s6				{s6 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(23-rt_raw));}
+reglist_rs32_21: gp					is count = 22 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(22-rt_raw));}
+reglist_rs32_21: s5					is count = 22 - rt_raw & rt_raw & s5; gp_end = 0 & lo_uimm12_sl3	{s5 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(22-rt_raw));}
+reglist_rs32_21: s5,reglist_rs32_22	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_22 & s5				{s5 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(22-rt_raw));}
+reglist_rs32_20: gp					is count = 21 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(21-rt_raw));}
+reglist_rs32_20: s4					is count = 21 - rt_raw & rt_raw & s4; gp_end = 0 & lo_uimm12_sl3	{s4 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(21-rt_raw));}
+reglist_rs32_20: s4,reglist_rs32_21	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_21 & s4				{s4 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(21-rt_raw));}
+reglist_rs32_19: gp					is count = 20 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(20-rt_raw));}
+reglist_rs32_19: s3					is count = 20 - rt_raw & rt_raw & s3; gp_end = 0 & lo_uimm12_sl3	{s3 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(20-rt_raw));}
+reglist_rs32_19: s3,reglist_rs32_20	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_20 & s3				{s3 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(20-rt_raw));}
+reglist_rs32_18: gp					is count = 19 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(19-rt_raw));}
+reglist_rs32_18: s2					is count = 19 - rt_raw & rt_raw & s2; gp_end = 0 & lo_uimm12_sl3	{s2 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(19-rt_raw));}
+reglist_rs32_18: s2,reglist_rs32_19	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_19 & s2				{s2 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(19-rt_raw));}
+reglist_rs32_17: gp					is count = 18 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(18-rt_raw));}
+reglist_rs32_17: s1					is count = 18 - rt_raw & rt_raw & s1; gp_end = 0 & lo_uimm12_sl3	{s1 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(18-rt_raw));}
+reglist_rs32_17: s1,reglist_rs32_18	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_18 & s1				{s1 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(18-rt_raw));}
+reglist_rs32_16: gp					is count = 17 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(17-rt_raw));}
+reglist_rs32_16: s0					is count = 17 - rt_raw & rt_raw & s0; gp_end = 0 & lo_uimm12_sl3	{s0 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(17-rt_raw));}
+reglist_rs32_16: s0,reglist_rs32_17	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_17 & s0				{s0 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(17-rt_raw));}
+reglist_rs32_15: gp					is count = 16 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(16-rt_raw));}
+reglist_rs32_15: t3					is count = 16 - rt_raw & rt_raw & t3; gp_end = 0 & lo_uimm12_sl3	{t3 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(16-rt_raw));}
+reglist_rs32_15: t3,reglist_rs32_16	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_16 & t3				{t3 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(16-rt_raw));}
+reglist_rs32_14: gp					is count = 15 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(15-rt_raw));}
+reglist_rs32_14: t2					is count = 15 - rt_raw & rt_raw & t2; gp_end = 0 & lo_uimm12_sl3	{t2 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(15-rt_raw));}
+reglist_rs32_14: t2,reglist_rs32_15	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_15 & t2				{t2 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(15-rt_raw));}
+reglist_rs32_13: gp					is count = 14 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(14-rt_raw));}
+reglist_rs32_13: t1					is count = 14 - rt_raw & rt_raw & t1; gp_end = 0 & lo_uimm12_sl3	{t1 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(14-rt_raw));}
+reglist_rs32_13: t1,reglist_rs32_14	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_14 & t1				{t1 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(14-rt_raw));}
+reglist_rs32_12: gp					is count = 13 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(13-rt_raw));}
+reglist_rs32_12: t0					is count = 13 - rt_raw & rt_raw & t0; gp_end = 0 & lo_uimm12_sl3	{t0 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(13-rt_raw));}
+reglist_rs32_12: t0,reglist_rs32_13	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_13 & t0				{t0 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(13-rt_raw));}
+reglist_rs32_11: gp					is count = 12 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(12-rt_raw));}
+reglist_rs32_11: a7					is count = 12 - rt_raw & rt_raw & a7; gp_end = 0 & lo_uimm12_sl3	{a7 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(12-rt_raw));}
+reglist_rs32_11: a7,reglist_rs32_12	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_12 & a7				{a7 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(12-rt_raw));}
+reglist_rs32_10: gp					is count = 11 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(11-rt_raw));}
+reglist_rs32_10: a6					is count = 11 - rt_raw & rt_raw & a6; gp_end = 0 & lo_uimm12_sl3	{a6 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(11-rt_raw));}
+reglist_rs32_10: a6,reglist_rs32_11	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_11 & a6				{a6 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(11-rt_raw));}
+reglist_rs32_09: gp					is count = 10 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(10-rt_raw));}
+reglist_rs32_09: a5					is count = 10 - rt_raw & rt_raw & a5; gp_end = 0 & lo_uimm12_sl3	{a5 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(10-rt_raw));}
+reglist_rs32_09: a5,reglist_rs32_10	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_10 & a5				{a5 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(10-rt_raw));}
+reglist_rs32_08: gp					is count = 9 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(9-rt_raw));}
+reglist_rs32_08: a4					is count = 9 - rt_raw & rt_raw & a4; gp_end = 0 & lo_uimm12_sl3	{a4 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(9-rt_raw));}
+reglist_rs32_08: a4,reglist_rs32_09	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_09 & a4				{a4 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(9-rt_raw));}
+reglist_rs32_07: gp					is count = 8 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(8-rt_raw));}
+reglist_rs32_07: a3					is count = 8 - rt_raw & rt_raw & a3; gp_end = 0 & lo_uimm12_sl3	{a3 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(8-rt_raw));}
+reglist_rs32_07: a3,reglist_rs32_08	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_08 & a3				{a3 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(8-rt_raw));}
+reglist_rs32_06: gp					is count = 7 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(7-rt_raw));}
+reglist_rs32_06: a2					is count = 7 - rt_raw & rt_raw & a2; gp_end = 0 & lo_uimm12_sl3	{a2 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(7-rt_raw));}
+reglist_rs32_06: a2,reglist_rs32_07	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_07 & a2				{a2 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(7-rt_raw));}
+reglist_rs32_05: gp					is count = 6 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(6-rt_raw));}
+reglist_rs32_05: a1					is count = 6 - rt_raw & rt_raw & a1; gp_end = 0 & lo_uimm12_sl3	{a1 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(6-rt_raw));}
+reglist_rs32_05: a1,reglist_rs32_06	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_06 & a1				{a1 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(6-rt_raw));}
+reglist_rs32_04: gp					is count = 5 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(5-rt_raw));}
+reglist_rs32_04: a0					is count = 5 - rt_raw & rt_raw & a0; gp_end = 0 & lo_uimm12_sl3	{a0 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(5-rt_raw));}
+reglist_rs32_04: a0,reglist_rs32_05	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_05 & a0				{a0 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(5-rt_raw));}
+reglist_rs32_03: gp					is count = 4 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(4-rt_raw));}
+reglist_rs32_03: t5					is count = 4 - rt_raw & rt_raw & t5; gp_end = 0 & lo_uimm12_sl3	{t5 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(4-rt_raw));}
+reglist_rs32_03: t5,reglist_rs32_04	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_04 & t5				{t5 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(4-rt_raw));}
+reglist_rs32_02: gp					is count = 3 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(3-rt_raw));}
+reglist_rs32_02: t4					is count = 3 - rt_raw & rt_raw & t4; gp_end = 0 & lo_uimm12_sl3	{t4 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(3-rt_raw));}
+reglist_rs32_02: t4,reglist_rs32_03	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_03 & t4				{t4 = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(3-rt_raw));}
+reglist_rs32_01: gp					is count = 2 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(2-rt_raw));}
+reglist_rs32_01: at					is count = 2 - rt_raw & rt_raw & at; gp_end = 0 & lo_uimm12_sl3	{at = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(2-rt_raw));}
+reglist_rs32_01: at,reglist_rs32_02	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_02 & at				{at = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(2-rt_raw));}
+reglist_rs32_00: gp					is count = 1 - rt_raw & rt_raw & gp; gp_end = 1 & lo_uimm12_sl3	{gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(1-rt_raw));}
+reglist_rs32_00: zero					is count = 1 - rt_raw & rt_raw & zero; gp_end = 0 & lo_uimm12_sl3	{zero = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(1-rt_raw));}
+reglist_rs32_00: zero,reglist_rs32_01	is (rt_raw; lo_uimm12_sl3) & reglist_rs32_01 & zero				{zero = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*(1-rt_raw));}
 reglist_rs32: 			is count = 0 {}
 reglist_rs32: ,reglist_rs32_31	is rt_raw = 31 ... & reglist_rs32_31 {}
 reglist_rs32: ,reglist_rs32_30	is rt_raw = 30 ... & reglist_rs32_30 {}
@@ -2776,6 +2777,7 @@ reglist_rs32: ,reglist_rs32_00	is rt_raw = 0 ... & reglist_rs32_00 {}
 	lo_pool12_4 = 0b0011 & lo_uimm12_sl3 & gp_end & lo_pool0_2 = 0b10)
 	& reglist_rs32
 	{
+		load_multiple_base = sp;
 		build reglist_rs32;
 		# TODO effective_address
 		sp = sp + lo_uimm12_sl3;
@@ -2787,6 +2789,7 @@ reglist_rs32: ,reglist_rs32_00	is rt_raw = 0 ... & reglist_rs32_00 {}
 	lo_pool12_4 = 0b0011 & lo_uimm12_sl3 & gp_end & lo_pool0_2 = 0b11)
 	& reglist_rs32
 	{
+		load_multiple_base = sp;
 		build reglist_rs32;
 		# TODO effective_address
 		sp = sp + lo_uimm12_sl3;

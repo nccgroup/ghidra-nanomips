@@ -32,9 +32,11 @@ def main():
         reg = f'{sv16_regs[i]}'
 
         if not args.restore:
+            # SAVE
             sp_write = f'*:$(REGSIZE) (sp - $(REGSIZE)*({i+1}-rt1_raw)) = {reg};'
         else:
-            sp_write = f'{reg} = *:$(REGSIZE) (sp + hi_uoffset8_sl4 - $(REGSIZE)*({i+1}-rt1_raw));'
+            # RESTORE
+            sp_write = f'{reg} = *:$(REGSIZE) (load_multiple_base + hi_uoffset8_sl4 - $(REGSIZE)*({i+1}-rt1_raw));'
 
         offs_pattern = ' & hi_uoffset8_sl4' if args.restore else ''
 

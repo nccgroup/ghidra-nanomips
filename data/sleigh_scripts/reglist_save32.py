@@ -34,11 +34,13 @@ def main():
         reg = f'{sv32_regs[i]}'
 
         if not args.restore:
+            # SAVE
             sp_write = f'*:$(REGSIZE) (sp - $(REGSIZE)*({i+1}-rt_raw)) = {reg};'
             sp_write_gp = f'*:$(REGSIZE) (sp - $(REGSIZE)*({i+1}-rt_raw)) = gp;'
         else:
-            sp_write = f'{reg} = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*({i+1}-rt_raw));'
-            sp_write_gp = f'gp = *:$(REGSIZE) (sp + lo_uimm12_sl3 - $(REGSIZE)*({i+1}-rt_raw));'
+            # RESTORE
+            sp_write = f'{reg} = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*({i+1}-rt_raw));'
+            sp_write_gp = f'gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*({i+1}-rt_raw));'
 
         offs_pattern = ' & lo_uimm12_sl3' if args.restore else ''
 
