@@ -849,11 +849,14 @@ lo_uimm12_sl3: uimm12 is
 	}
 
 ## ADDIU[NEG]
-:ADDIU rt, rs, lo_uimm0_12 is
+:ADDIU rt, rs, u_neg is
 	hi_pool10_6 = 0b100000 & rt & rs;
 	lo_pool12_4 = 0b1000 & lo_uimm0_12
+	[
+		u_neg = -lo_uimm0_12;
+	]
 	{
-		rt = rs - lo_uimm0_12;
+		rt = rs + u_neg;
 	}
 
 
