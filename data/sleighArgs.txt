@@ -4,3 +4,4 @@
 #
 # IMPORTANT: The -a option should NOT be specified
 #
+-t
