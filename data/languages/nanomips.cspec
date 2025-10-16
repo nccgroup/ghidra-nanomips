@@ -19,28 +19,28 @@
   <default_proto>
     <prototype name="__stdcall" extrapop="0" stackshift="0" strategy="standard">
       <input>
-        <pentry minsize="4" maxsize="4" extension="inttype">
+        <pentry minsize="1" maxsize="4" extension="inttype">
           <register name="a0"/>
         </pentry>
-        <pentry minsize="4" maxsize="4" extension="inttype">
+        <pentry minsize="1" maxsize="4" extension="inttype">
           <register name="a1"/>
         </pentry>
-        <pentry minsize="4" maxsize="4" extension="inttype">
+        <pentry minsize="1" maxsize="4" extension="inttype">
           <register name="a2"/>
         </pentry>
-        <pentry minsize="4" maxsize="4" extension="inttype">
+        <pentry minsize="1" maxsize="4" extension="inttype">
           <register name="a3"/>
         </pentry>
-        <pentry minsize="4" maxsize="4" extension="inttype">
+        <pentry minsize="1" maxsize="4" extension="inttype">
           <register name="a4"/>
         </pentry>
-        <pentry minsize="4" maxsize="4" extension="inttype">
+        <pentry minsize="1" maxsize="4" extension="inttype">
           <register name="a5"/>
         </pentry>
-        <pentry minsize="4" maxsize="4" extension="inttype">
+        <pentry minsize="1" maxsize="4" extension="inttype">
           <register name="a6"/>
         </pentry>
-        <pentry minsize="4" maxsize="4" extension="inttype">
+        <pentry minsize="1" maxsize="4" extension="inttype">
           <register name="a7"/>
         </pentry>
         <pentry minsize="1" maxsize="16384" align="16">
@@ -48,10 +48,10 @@
         </pentry>
       </input>
       <output>
-        <pentry minsize="4" maxsize="4" extension="inttype">
+        <pentry minsize="1" maxsize="4" extension="inttype">
           <register name="a0"/>
         </pentry>
-        <pentry minsize="4" maxsize="4" extension="inttype">
+        <pentry minsize="1" maxsize="4" extension="inttype">
           <register name="a1"/>
         </pentry>
       </output>
