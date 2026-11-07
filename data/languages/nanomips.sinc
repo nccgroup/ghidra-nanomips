@@ -3774,7 +3774,9 @@ stype_implicit_zero: hi_uimm0_5 is hi_uimm0_5 {}
 	hi_pool10_6 = 0b001000 & rt & rs;
 	lo_uimm11_5 & lo_pool10_1 = 0b0 & lo_pool3_7 = 0b0000000 & lo_pool0_3 = 0b000
 	{
+		if (rs != rt) goto <skip>;
 		trap(lo_uimm11_5:1);
+		<skip>
 	}
 
 
@@ -3825,7 +3827,9 @@ stype_implicit_zero: hi_uimm0_5 is hi_uimm0_5 {}
 	hi_pool10_6 = 0b001000 & rt & rs;
 	lo_uimm11_5 & lo_pool10_1 = 0b1 & lo_pool3_7 = 0b0000000 & lo_pool0_3 = 0b000
 	{
+		if (rs == rt) goto <skip>;
 		trap(lo_uimm11_5:1);
+		<skip>
 	}
 
 
