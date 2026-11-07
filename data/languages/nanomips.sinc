@@ -167,6 +167,7 @@ define token instrlo(16)
 	stripe = (6, 6)
 	gp_end = (2, 2)
 	shift = (0, 4)
+	extw_shift = (6, 10)  # EXTW bit position (ISA MD01247: instr[10:6])
 	
 	rd_att = (11, 15)
 	rd_raw = (11, 15)
@@ -1577,11 +1578,11 @@ lo_uimm12_sl3: uimm12 is
 
 
 # EXTW rd, rs, rt, shift
-:EXTW rd, rs, rt, shift is
+:EXTW rd, rs, rt, extw_shift is
 	hi_pool10_6 = 0b001000 & rt & rs;
-	rd & shift & lo_pool3_3 = 0b011 & lo_pool0_3 = 0b111
+	rd & extw_shift & lo_pool3_3 = 0b011 & lo_pool0_3 = 0b111
 	{
-		local tmp:8 = ((zext(rt:4) << 32) | zext(rs:4)) >> shift;
+		local tmp:8 = ((zext(rt:4) << 32) | zext(rs:4)) >> extw_shift;
 		rd = sext(tmp:4);
 	}
 
