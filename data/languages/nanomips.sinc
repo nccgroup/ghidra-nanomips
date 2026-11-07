@@ -1622,7 +1622,7 @@ lo_uimm12_sl3: uimm12 is
 # JALRC dst, src
 ## JALRC[32]
 :JALRC rt, rs is
-	hi_pool10_6 = 0b010010 & rt & rs;
+	hi_pool10_6 = 0b010010 & rt & rt_raw != 0 & rs;
 	lo_pool12_4 = 0b0000
 	{
 		rt = inst_next;
@@ -1640,7 +1640,7 @@ lo_uimm12_sl3: uimm12 is
 
 # JALRC.HB rt, rs
 :JALRC.HB rt, rs is
-	hi_pool10_6 = 0b010010 & rt & rs;
+	hi_pool10_6 = 0b010010 & rt & rt_raw != 0 & rs;
 	lo_pool12_4 = 0b0001
 	{
 		rt = inst_next;
@@ -3942,4 +3942,37 @@ stype_implicit_zero: hi_uimm0_5 is hi_uimm0_5 {}
 	lo_pool12_4 = 0b0001 & lo_uimm0_12
 	{
 		rt = rs ^ lo_uimm0_12;
+	}
+
+# A zero link register turns JALRC into an indirect jump.
+:JALRC rt, rs is
+	hi_pool10_6 = 0b010010 & rt & rt_raw = 0 & rs & rs_raw != 31;
+	lo_pool12_4 = 0b0000
+	{
+		goto [rs];
+	}
+
+:JALRC.HB rt, rs is
+	hi_pool10_6 = 0b010010 & rt & rt_raw = 0 & rs & rs_raw != 31;
+	lo_pool12_4 = 0b0001
+	{
+		clear_instruction_hazards();
+		clear_execution_hazards();
+		goto [rs];
+	}
+
+:JALRC rt, rs is
+	hi_pool10_6 = 0b010010 & rt & rt_raw = 0 & rs & rs_raw = 31;
+	lo_pool12_4 = 0b0000
+	{
+		return [rs];
+	}
+
+:JALRC.HB rt, rs is
+	hi_pool10_6 = 0b010010 & rt & rt_raw = 0 & rs & rs_raw = 31;
+	lo_pool12_4 = 0b0001
+	{
+		clear_instruction_hazards();
+		clear_execution_hazards();
+		return [rs];
 	}
