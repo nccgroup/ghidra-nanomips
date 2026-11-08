@@ -1962,8 +1962,9 @@ lo_uimm12_sl3: uimm12 is
 	{
 		C0.LLAddr.LLB = 1;
 
-		rt = sext(*[ram]:4 rs);
-		ru = sext(*[ram]:4 (rs + 4));
+		local base:4 = rs;
+		rt = sext(*[ram]:4 base);
+		ru = sext(*[ram]:4 (base + 4));
 	}
 
 
@@ -1975,8 +1976,9 @@ lo_uimm12_sl3: uimm12 is
 		# TODO EVA addressing
 		C0.LLAddr.LLB = 1;
 
-		rt = sext(*[ram]:4 rs);
-		ru = sext(*[ram]:4 (rs + 4));
+		local base:4 = rs;
+		rt = sext(*[ram]:4 base);
+		ru = sext(*[ram]:4 (base + 4));
 	}
 
 
