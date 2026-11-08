@@ -344,6 +344,7 @@ define pcodeop cacheop;
 define pcodeop clear_execution_hazards;
 define pcodeop clear_instruction_hazards;
 define pcodeop crc32;
+define pcodeop debug_break;
 define pcodeop disable_virtual_processors;
 define pcodeop enable_virtual_processors;
 define pcodeop ginvi;
@@ -2530,6 +2531,22 @@ reglist_lwm_pre: reglist_lwm is (rt_raw; count3) & reglist_lwm [count3_mapped = 
 		rt = zext(C0.EBase.CPUNum);
 	}
 
+## hs = 2, sel = 0 (Count); guest Count and access checks are not modeled
+:RDHWR rt, hs is
+	hi_pool10_6 = 0b001000 & rt & hs & hs2 = 2;
+	sel = 0 & lo_pool3_7 = 0b0111000 & lo_pool0_3 = 0b000
+	{
+		rt = C0.Count:4;
+	}
+
+## hs = 29, sel = 0 (UserLocal); ULRI and access checks are not modeled
+:RDHWR rt, hs is
+	hi_pool10_6 = 0b001000 & rt & hs & hs2 = 29;
+	sel = 0 & lo_pool3_7 = 0b0111000 & lo_pool0_3 = 0b000
+	{
+		rt = C0.UserLocal:4;
+	}
+
 ## unhandled cases
 :RDHWR rt, hs, sel is
 	hi_pool10_6 = 0b001000 & rt & hs;
@@ -3209,12 +3226,18 @@ reglist_sv32: ,reglist_sv32_00	is rt_raw = 0 ... & reglist_sv32_00 {}
 	[
 		code = (hi_uimm0_3 << 16) | uimm16;
 	]
-	unimpl
+	{
+		debug_break(code:$(REGSIZE));
+		goto inst_start;
+	}
 
 ## SDBBP[16]
 :SDBBP hi_uimm0_3 is
 	hi_pool10_6 = 0b000100 & hi_pool5_5 = 0b00000 & hi_pool3_2 = 0b11 & hi_uimm0_3
-	unimpl
+	{
+		debug_break(hi_uimm0_3:$(REGSIZE));
+		goto inst_start;
+	}
 
 
 # SEB rt, rs
