@@ -2819,7 +2819,41 @@ reglist_rs32: ,reglist_rs32_00	is rt_raw = 0 ... & reglist_rs32_00 {}
 :ROTX rt, rs, shift, shiftx, stripe is
 	hi_pool10_6 = 0b100000 & rt & rs;
 	lo_pool12_4 = 0b1101 & lo_pool11_1 = 0b0 & shiftx & stripe & lo_pool5_1 = 0b0 & shift
-	unimpl
+	{
+		local s:4 = shift;
+		local sx:4 = shiftx;
+		local stripe_bit:4 = stripe;
+		local sh16:8 = zext((s & 16) != 0);
+		local sx16:8 = zext((sx & 16) != 0);
+		local st:8 = zext(stripe_bit != 0);
+		local sh8:8 = zext((s & 8) != 0);
+		local sx8:8 = zext((sx & 8) != 0);
+		local sh4:8 = zext((s & 4) != 0);
+		local sx4:8 = zext((sx & 4) != 0);
+		local sh2:8 = zext((s & 2) != 0);
+		local sx2:8 = zext((sx & 2) != 0);
+		local sh1:8 = zext((s & 1) != 0);
+		# Mask bit i selects old bit i+distance; the patterns choose shift or shiftx by i.
+		local m16:8 = ((0:8 - sh16) & 0xff00ff00ff00ff00:8) |
+		              ((0:8 - sx16) & 0x00ff00ff00ff00ff:8);
+		# stripe complements the 16-bit choice where i[2] is zero.
+		m16 = m16 ^ ((0:8 - st) & 0x0f0f0f0f0f0f0f0f:8);
+		local m8:8 = ((0:8 - sh8) & 0xf0f0f0f0f0f0f0f0:8) |
+		             ((0:8 - sx8) & 0x0f0f0f0f0f0f0f0f:8);
+		local m4:8 = ((0:8 - sh4) & 0xcccccccccccccccc:8) |
+		             ((0:8 - sx4) & 0x3333333333333333:8);
+		local m2:8 = ((0:8 - sh2) & 0xaaaaaaaaaaaaaaaa:8) |
+		             ((0:8 - sx2) & 0x5555555555555555:8);
+		local m1:8 = 0:8 - sh1;
+		# Duplicate rs as in the ISA so right shifts can read source bits 32..63.
+		local bits0:8 = (zext(rs) << 32) | zext(rs);
+		local bits1:8 = (bits0 & ~m16) | ((bits0 >> 16) & m16);
+		local bits2:8 = (bits1 & ~m8) | ((bits1 >> 8) & m8);
+		local bits3:8 = (bits2 & ~m4) | ((bits2 >> 4) & m4);
+		local bits4:8 = (bits3 & ~m2) | ((bits3 >> 2) & m2);
+		local bits5:8 = (bits4 & ~m1) | ((bits4 >> 1) & m1);
+		rt = bits5:4;
+	}
 
 
 # SAVE u[, src1 [, src2 [, ...]]]
