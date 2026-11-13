@@ -35,11 +35,13 @@ def main():
 
         if not args.restore:
             # SAVE
-            sp_write = f'*:$(REGSIZE) (sp - $(REGSIZE)*({i+1}-rt_raw)) = {reg};'
+            src = '0' if reg == 'zero' else reg
+            sp_write = f'*:$(REGSIZE) (sp - $(REGSIZE)*({i+1}-rt_raw)) = {src};'
             sp_write_gp = f'*:$(REGSIZE) (sp - $(REGSIZE)*({i+1}-rt_raw)) = gp;'
         else:
             # RESTORE
-            sp_write = f'{reg} = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*({i+1}-rt_raw));'
+            dst = 'local zero_write:$(REGSIZE)' if reg == 'zero' else reg
+            sp_write = f'{dst} = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*({i+1}-rt_raw));'
             sp_write_gp = f'gp = *:$(REGSIZE) (load_multiple_base + lo_uimm12_sl3 - $(REGSIZE)*({i+1}-rt_raw));'
 
         offs_pattern = ' & lo_uimm12_sl3' if args.restore else ''
