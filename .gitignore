@@ -1,3 +1,8 @@
+# Eclipse project files modified by linking a project to a Ghidra installation
+.project
+.classpath
+.antProperties.xml
+
 .gradle/
 build/
 dist/
@@ -61,7 +66,3 @@ local.properties
 .cache-main
 .scala_dependencies
 .worksheet
-
-# Uncomment this line if you wish to ignore the project description file.
-# Typically, this file would be tracked if it contains build/dependency configurations:
-#.project
